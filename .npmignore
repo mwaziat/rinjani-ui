@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# source & tooling
+src/
+.storybook/
+stories/
+.github/
+.vscode/
+
+# tests
+*.stories.tsx
+*.test.ts
+*.test.tsx
+vitest.config.ts
+vitest.setup.ts
+vitest.shims.d.ts
+playwright/
+
+# configs not needed at runtime
+tsconfig.json
+postcss.config.js
+tailwind.config.js
+
+# misc
+.DS_Store
+.env*
