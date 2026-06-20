@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { toastManager } from './toast-manager'
 import type { ToastItem, ToastPlacement } from './Toast.types'
 import { ToastMessage } from './ToastMessage'
+import { placementClasses } from './Toast.styles'
 
 export const ToastContainer = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([])
@@ -16,16 +17,7 @@ export const ToastContainer = () => {
 
   const placements: ToastPlacement[] = ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center', 'top-full', 'bottom-full']
 
-  const placementClasses: Record<ToastPlacement, string> = {
-    'top-right': 'top-0 right-0 max-w-sm',
-    'top-left': 'top-0 left-0 max-w-sm',
-    'bottom-right': 'bottom-0 right-0 max-w-sm',
-    'bottom-left': 'bottom-0 left-0 max-w-sm',
-    'top-center': 'top-0 left-1/2 -translate-x-1/2 max-w-sm',
-    'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 max-w-sm',
-    'top-full': 'top-0 left-0',
-    'bottom-full': 'bottom-0 left-0'
-  }
+
 
   const getToastsByPlacement = (placement: ToastPlacement) => {
     return toasts.filter((t) => (t.placement || 'top-right') === placement)

@@ -5,6 +5,7 @@ import { CheckCircleIcon, XCircleIcon, AlertTriangleIcon, InfoIcon, HelpCircleIc
 import { Button } from '../Button'
 import type { DialogItem } from './Dialog.types'
 import { dialogManager } from './dialog-manager'
+import { backdropClasses, modalClasses } from './Dialog.styles'
 
 export const DialogModal = ({ dialog }: { dialog: DialogItem }) => {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -63,10 +64,7 @@ export const DialogModal = ({ dialog }: { dialog: DialogItem }) => {
 
   const type = dialog.type || 'default'
 
-  const backdropClasses = "absolute inset-0 bg-neutral-900/40 backdrop-blur-sm transition-opacity duration-200"
   const backdropState = (hasEntered && !isLeaving) ? "opacity-100" : "opacity-0"
-  
-  const modalClasses = "relative flex w-full max-w-md flex-col items-center justify-center rounded-2xl bg-white p-8 text-center shadow-2xl transition-all duration-300 ease-out"
   const modalState = (hasEntered && !isLeaving) ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
 
   return (

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { ModalProps } from './Modal.types'
+import { sizeClasses } from './Modal.styles'
 
 let contentScrollLockCount = 0
 let modalZIndexSeed = 9999
@@ -53,13 +54,7 @@ export const Modal = ({
     return () => window.removeEventListener('keydown', handleEsc)
   }, [isOpen, onClose])
 
-  const sizeClasses: Record<string, string> = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-xl',
-    xl: 'max-w-3xl',
-    full: 'max-w-[95%] h-[95%]'
-  }
+
 
   const wrapperClasses = scrollMode === 'dialog'
     ? 'fixed inset-0 p-4 overflow-y-auto'

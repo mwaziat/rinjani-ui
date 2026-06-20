@@ -5,6 +5,7 @@ import { XIcon } from '../Icons/action'
 import { CheckCircleIcon, XCircleIcon, AlertTriangleIcon, InfoIcon } from '../Icons/status'
 import type { ToastItem } from './Toast.types'
 import { toastManager } from './toast-manager'
+import { bgColors, barColors, baseToastClasses } from './Toast.styles'
 
 export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
   const [progress, setProgress] = useState(100)
@@ -51,21 +52,7 @@ export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
     default: null
   }
 
-  const bgColors = {
-    success: 'bg-success-50 border-success-200',
-    error: 'bg-danger-50 border-danger-200',
-    warning: 'bg-warning-50 border-warning-200',
-    info: 'bg-info-50 border-info-200',
-    default: 'bg-white border-neutral-200'
-  }
 
-  const barColors = {
-    success: 'bg-success-500',
-    error: 'bg-danger-500',
-    warning: 'bg-warning-500',
-    info: 'bg-info-500',
-    default: 'bg-neutral-400'
-  }
 
   const type = toast.type || 'default'
   const placement = toast.placement || 'top-right'
@@ -85,7 +72,7 @@ export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
     return () => cancelAnimationFrame(timer)
   }, [])
 
-  const baseClasses = "relative w-full overflow-hidden rounded-xl border p-4 shadow-xl pointer-events-auto transition-all duration-300 ease-out"
+
   const stateClasses = isLeaving 
     ? `opacity-0 scale-95` 
     : hasEntered 
@@ -93,7 +80,7 @@ export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
       : `${enterClass} scale-95`
 
   return (
-    <div className={`${baseClasses} ${stateClasses} ${bgColors[type]}`}>
+    <div className={`${baseToastClasses} ${stateClasses} ${bgColors[type]}`}>
       <div className="flex items-start gap-3 w-full pr-6">
         {toast.icon || icons[type]}
         <div className="flex-1 pt-0.5">
