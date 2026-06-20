@@ -4,34 +4,57 @@ A modern, customizable UI component library built with React and TailwindCSS. De
 
 ## Features
 
-- 🚀 Built with React 18+ and TypeScript
-- 🎨 Powered by TailwindCSS for styling
-- 📦 Tree-shakable and optimized for production
-- ♿ Accessible components following WCAG guidelines
-- 🛠️ Highly customizable with extensive props
-- 📚 Comprehensive documentation with Storybook
+- Built with React 18+ and TypeScript
+- Powered by TailwindCSS for styling
+- Tree-shakable and optimized for production
+- Accessible components following WCAG guidelines
+- Highly customizable with extensive props
+- Comprehensive documentation with Storybook
 
 ## Installation
 
-Install Rinjani UI and its peer dependencies:
+### For Existing React Projects
+
+If you already have a React project with TailwindCSS set up:
 
 ```bash
-npm install rinjani-ui react react-dom tailwindcss
+npm install rinjani-ui
 ```
 
 Or with yarn:
 
 ```bash
-yarn add rinjani-ui react react-dom tailwindcss
+yarn add rinjani-ui
 ```
 
-### Peer Dependencies
-
-Make sure you have these packages installed:
+Make sure you have these peer dependencies installed:
 
 - `react: ^18.0.0 || ^19.0.0`
 - `react-dom: ^18.0.0 || ^19.0.0`
 - `tailwindcss: >=4.0.0`
+
+### For New Projects
+
+To create a new project with React, TailwindCSS, and Rinjani UI from scratch:
+
+1. **Create a new React project:**
+   ```bash
+   npx create-react-app my-app
+   cd my-app
+   ```
+
+2. **Install TailwindCSS:**
+   ```bash
+   npm install -D tailwindcss postcss autoprefixer
+   npx tailwindcss init -p
+   ```
+
+3. **Install Rinjani UI:**
+   ```bash
+   npm install rinjani-ui
+   ```
+
+4. **Configure TailwindCSS** (see the [Styling](#styling) section below for details)
 
 ## Quick Start
 
@@ -90,17 +113,23 @@ For more details, see the [Button documentation](./src/components/Button/README.
 
 ## Styling
 
-Rinjani UI uses TailwindCSS classes internally. Make sure your TailwindCSS configuration includes the necessary content paths:
+Rinjani UI uses TailwindCSS classes internally. For existing projects, update your `postcss.config.js` to include Rinjani UI in the content paths:
 
 ```js
-// tailwind.config.js
 module.exports = {
-  content: [
-    // ... your existing content
-    './node_modules/rinjani-ui/dist/**/*.{js,ts,jsx,tsx}',
-  ],
+  plugins: {
+    tailwindcss: {
+      content: [
+        // ... your existing content
+        "./node_modules/rinjani-ui/dist/**/*.{js,ts,jsx,tsx}",
+      ],
+    },
+    autoprefixer: {},
+  },
 }
 ```
+
+**Note:** Rinjani UI requires TailwindCSS v4.0.0 or higher. If you're using an older version, please upgrade to ensure compatibility.
 
 ## Development
 
@@ -140,10 +169,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](https://github.com/mwaziat/rinjani-ui#readme)
-- 🐛 [Issues](https://github.com/mwaziat/rinjani-ui/issues)
-- 💬 [Discussions](https://github.com/mwaziat/rinjani-ui/discussions)
+- [Documentation](https://github.com/mwaziat/rinjani-ui#readme)
+- [Issues](https://github.com/mwaziat/rinjani-ui/issues)
+- [Discussions](https://github.com/mwaziat/rinjani-ui/discussions)
 
 ---
 
-Built with ❤️ by [mwaziat](https://github.com/mwaziat)
+Built with love by [mwaziat](https://github.com/mwaziat)

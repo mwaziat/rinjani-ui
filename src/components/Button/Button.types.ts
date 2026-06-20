@@ -1,24 +1,25 @@
 import React from 'react'
 
-export type ButtonVariant = 'solid' | 'outline' | 'surface' | 'subtle'
+export type ButtonVariant = 'filled' | 'outlined' | 'soft' | 'text'
+export type ButtonSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type ButtonColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'
 
-export type ButtonColor =
-  | 'gray' | 'red' | 'green' | 'blue'
-  | 'teal' | 'pink' | 'purple' | 'cyan'
-  | 'orange' | 'yellow' | 'indigo'
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  color?: ButtonColor
+  isLoading?: boolean
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
+  fullWidth?: boolean
+  isPill?: boolean
+}
 
-export type ButtonSize =
-  | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-
-export type ButtonProps =
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    children: React.ReactNode
-    color?: ButtonColor
-    variant?: ButtonVariant
-    size?: ButtonSize
-    className?: string
-    startIcon?: React.ReactNode
-    endIcon?: React.ReactNode
-    isLoading?: boolean
-    loadingIndicator?: React.ReactNode
-  }
+export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  color?: ButtonColor
+  isLoading?: boolean
+  icon?: React.ReactNode
+  isPill?: boolean
+}

@@ -1,82 +1,70 @@
-import type { ButtonColor, ButtonSize, ButtonVariant } from './Button.types'
+import type { ButtonSize, ButtonVariant, ButtonColor } from './Button.types'
 
-export const baseStyles =
-  'inline-flex items-center justify-center gap-2 rounded font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none'
+export const baseButtonStyles = "inline-flex items-center justify-center font-semibold tracking-wide transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer"
+export const baseIconButtonStyles = "inline-flex items-center justify-center transition-all active:scale-90 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer shrink-0"
 
-export const sizeStyles: Record<ButtonSize, string> = {
-  '2xs': 'text-xs px-2 py-1',
-  xs: 'text-xs px-2.5 py-1.5',
-  sm: 'text-sm px-3 py-1.5',
-  md: 'text-sm px-4 py-2',
-  lg: 'text-base px-5 py-2.5',
-  xl: 'text-base px-6 py-3',
-  '2xl': 'text-lg px-7 py-3.5',
+export const buttonSizes: Record<ButtonSize, string> = {
+  xxs: "min-h-7 px-2 py-1 text-[10px] gap-1",
+  xs: "min-h-8 px-2.5 py-1.5 text-xs gap-1.5",
+  sm: "min-h-9 px-3 py-2 text-sm gap-1.5",
+  md: "min-h-11 px-4 py-2.5 text-base gap-2",
+  lg: "min-h-[52px] px-5 py-3 text-lg gap-2.5",
+  xl: "min-h-14 px-6 py-3.5 text-xl gap-3"
 }
 
-export const iconSizeMap: Record<ButtonSize, string> = {
-  '2xs': 'text-xs',
-  xs: 'text-xs',
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-  xl: 'text-lg',
-  '2xl': 'text-xl',
+export const iconButtonSizes: Record<ButtonSize, string> = {
+  xxs: "h-7 w-7 text-[14px]",
+  xs: "h-8 w-8 text-[16px]",
+  sm: "h-9 w-9 text-[18px]",
+  md: "h-11 w-11 text-[22px]",
+  lg: "h-[52px] w-[52px] text-[26px]",
+  xl: "h-14 w-14 text-[30px]"
 }
 
-export const buttonStyles: Record<
-  ButtonVariant,
-  Record<ButtonColor, string>
-> = {
-  solid: {
-    gray: 'bg-gray-500 text-white hover:bg-gray-600',
-    red: 'bg-red-500 text-white hover:bg-red-600',
-    green: 'bg-green-500 text-white hover:bg-green-600',
-    blue: 'bg-blue-500 text-white hover:bg-blue-600',
-    teal: 'bg-teal-500 text-white hover:bg-teal-600',
-    pink: 'bg-pink-500 text-white hover:bg-pink-600',
-    purple: 'bg-purple-500 text-white hover:bg-purple-600',
-    cyan: 'bg-cyan-500 text-white hover:bg-cyan-600',
-    orange: 'bg-orange-500 text-white hover:bg-orange-600',
-    yellow: 'bg-yellow-500 text-white hover:bg-yellow-600',
-    indigo: 'bg-indigo-500 text-white hover:bg-indigo-600',
+export const radiusBySize: Record<ButtonSize, string> = {
+  xxs: 'rounded-md',
+  xs: 'rounded-md',
+  sm: 'rounded-lg',
+  md: 'rounded-lg',
+  lg: 'rounded-xl',
+  xl: 'rounded-xl',
+}
+
+export const variants: Record<ButtonVariant, Record<ButtonColor, string>> = {
+  filled: {
+    primary: "bg-primary-500 text-white hover:bg-primary-600 shadow-sm",
+    secondary: "bg-secondary-500 text-white hover:bg-secondary-600 shadow-sm",
+    success: "bg-success-500 text-white hover:bg-success-600 shadow-sm",
+    warning: "bg-warning-500 text-white hover:bg-warning-600 shadow-sm",
+    danger: "bg-danger-500 text-white hover:bg-danger-600 shadow-sm",
+    info: "bg-info-500 text-white hover:bg-info-600 shadow-sm",
+    neutral: "bg-neutral-800 text-white hover:bg-neutral-900 shadow-sm",
   },
-  outline: {
-    gray: 'border border-gray-500 text-gray-500 hover:bg-gray-100',
-    red: 'border border-red-500 text-red-500 hover:bg-red-100',
-    green: 'border border-green-500 text-green-500 hover:bg-green-100',
-    blue: 'border border-blue-500 text-blue-500 hover:bg-blue-100',
-    teal: 'border border-teal-500 text-teal-500 hover:bg-teal-100',
-    pink: 'border border-pink-500 text-pink-500 hover:bg-pink-100',
-    purple: 'border border-purple-500 text-purple-500 hover:bg-purple-100',
-    cyan: 'border border-cyan-500 text-cyan-500 hover:bg-cyan-100',
-    orange: 'border border-orange-500 text-orange-500 hover:bg-orange-100',
-    yellow: 'border border-yellow-500 text-yellow-500 hover:bg-yellow-100',
-    indigo: 'border border-indigo-500 text-indigo-500 hover:bg-indigo-100',
+  outlined: {
+    primary: "border-2 border-primary-500 text-primary-600 hover:bg-primary-50",
+    secondary: "border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50",
+    success: "border-2 border-success-500 text-success-600 hover:bg-success-50",
+    warning: "border-2 border-warning-500 text-warning-600 hover:bg-warning-50",
+    danger: "border-2 border-danger-500 text-danger-600 hover:bg-danger-50",
+    info: "border-2 border-info-500 text-info-600 hover:bg-info-50",
+    neutral: "border-2 border-neutral-300 text-neutral-700 hover:bg-neutral-50",
   },
-  surface: {
-    gray: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-    red: 'bg-red-100 text-red-800 hover:bg-red-200',
-    green: 'bg-green-100 text-green-800 hover:bg-green-200',
-    blue: 'bg-blue-100 text-blue-800 hover:bg-blue-200',
-    teal: 'bg-teal-100 text-teal-800 hover:bg-teal-200',
-    pink: 'bg-pink-100 text-pink-800 hover:bg-pink-200',
-    purple: 'bg-purple-100 text-purple-800 hover:bg-purple-200',
-    cyan: 'bg-cyan-100 text-cyan-800 hover:bg-cyan-200',
-    orange: 'bg-orange-100 text-orange-800 hover:bg-orange-200',
-    yellow: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
-    indigo: 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200',
+  soft: {
+    primary: "bg-primary-50 text-primary-600 hover:bg-primary-100",
+    secondary: "bg-secondary-50 text-secondary-600 hover:bg-secondary-100",
+    success: "bg-success-50 text-success-600 hover:bg-success-100",
+    warning: "bg-warning-50 text-warning-600 hover:bg-warning-100",
+    danger: "bg-danger-50 text-danger-600 hover:bg-danger-100",
+    info: "bg-info-50 text-info-600 hover:bg-info-100",
+    neutral: "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
   },
-  subtle: {
-    gray: 'bg-gray-50 text-gray-800 hover:bg-gray-100',
-    red: 'bg-red-50 text-red-800 hover:bg-red-100',
-    green: 'bg-green-50 text-green-800 hover:bg-green-100',
-    blue: 'bg-blue-50 text-blue-800 hover:bg-blue-100',
-    teal: 'bg-teal-50 text-teal-800 hover:bg-teal-100',
-    pink: 'bg-pink-50 text-pink-800 hover:bg-pink-100',
-    purple: 'bg-purple-50 text-purple-800 hover:bg-purple-100',
-    cyan: 'bg-cyan-50 text-cyan-800 hover:bg-cyan-100',
-    orange: 'bg-orange-50 text-orange-800 hover:bg-orange-100',
-    yellow: 'bg-yellow-50 text-yellow-800 hover:bg-yellow-100',
-    indigo: 'bg-indigo-50 text-indigo-800 hover:bg-indigo-100',
-  },
+  text: {
+    primary: "bg-transparent text-primary-600 hover:bg-primary-50",
+    secondary: "bg-transparent text-secondary-600 hover:bg-secondary-50",
+    success: "bg-transparent text-success-600 hover:bg-success-50",
+    warning: "bg-transparent text-warning-600 hover:bg-warning-50",
+    danger: "bg-transparent text-danger-600 hover:bg-danger-50",
+    info: "bg-transparent text-info-600 hover:bg-info-50",
+    neutral: "bg-transparent text-neutral-600 hover:bg-neutral-50",
+  }
 }
