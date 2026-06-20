@@ -12,4 +12,8 @@ export interface LightboxProps {
   slides: LightboxSlide[]
   showThumbnails?: boolean
   showZoom?: boolean
+  autoplay?: boolean
+  autoplayDuration?: number
+  isDraggable?: boolean
+  loop?: boolean
 }

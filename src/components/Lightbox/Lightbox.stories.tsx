@@ -14,12 +14,20 @@ const meta: Meta<typeof Lightbox> = {
     showThumbnails: { control: 'boolean' },
     showZoom: { control: 'boolean' },
     index: { control: 'number' },
+    autoplay: { control: 'boolean' },
+    autoplayDuration: { control: 'number' },
+    isDraggable: { control: 'boolean' },
+    loop: { control: 'boolean' },
   },
   args: {
     open: false,
     showThumbnails: true,
     showZoom: true,
     index: 0,
+    autoplay: false,
+    autoplayDuration: 3000,
+    isDraggable: true,
+    loop: true,
   },
 }
 
@@ -58,12 +66,20 @@ const DemoLightbox = ({
   title, 
   slides = sampleSlides, 
   showThumbnails = true, 
-  showZoom = true 
+  showZoom = true,
+  autoplay = false,
+  autoplayDuration = 3000,
+  isDraggable = true,
+  loop = true,
 }: { 
   title: string, 
   slides?: LightboxSlide[],
   showThumbnails?: boolean,
-  showZoom?: boolean
+  showZoom?: boolean,
+  autoplay?: boolean,
+  autoplayDuration?: number,
+  isDraggable?: boolean,
+  loop?: boolean,
 }) => {
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
@@ -105,6 +121,10 @@ const DemoLightbox = ({
         slides={slides}
         showThumbnails={showThumbnails}
         showZoom={showZoom}
+        autoplay={autoplay}
+        autoplayDuration={autoplayDuration}
+        isDraggable={isDraggable}
+        loop={loop}
       />
     </div>
   )
@@ -128,6 +148,19 @@ export const Showcase: Story = {
         <DemoLightbox 
           title="Single Image (No Navigation)" 
           slides={sampleSlides.slice(0, 1)} 
+        />
+        <DemoLightbox 
+          title="Autoplay Slider (Auto Loop)" 
+          autoplay={true}
+          autoplayDuration={2000}
+        />
+        <DemoLightbox 
+          title="No Looping (Stops at ends)" 
+          loop={false} 
+        />
+        <DemoLightbox 
+          title="Non-Draggable (Buttons Only)" 
+          isDraggable={false} 
         />
       </div>
     )

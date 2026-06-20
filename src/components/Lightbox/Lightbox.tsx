@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon } from '../Icons'
+import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, PlayIcon, PauseIcon } from '../Icons'
 import type { LightboxProps } from './Lightbox.types'
+import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
 
 export const Lightbox = ({
   open,
@@ -12,6 +13,10 @@ export const Lightbox = ({
   slides,
   showThumbnails = true,
   showZoom = true,
+  autoplay = false,
+  autoplayDuration = 3000,
+  isDraggable = true,
+  loop = true,
 }: LightboxProps) => {
   const [currentIndex, setCurrentIndex] = useState(index)
   const [scale, setScale] = useState(1)
@@ -20,6 +25,10 @@ export const Lightbox = ({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 })
+  const isDragAction = useRef(false)
+  const [isPlaying, setIsPlaying] = useState(autoplay)
+
+  const actualLoop = autoplay || loop
 
   useEffect(() => {
     setMounted(true)
@@ -30,8 +39,9 @@ export const Lightbox = ({
       setCurrentIndex(index)
       setScale(1)
       setDragOffset({ x: 0, y: 0 })
+      setIsPlaying(autoplay)
     }
-  }, [open, index])
+  }, [open, index, autoplay])
 
   useEffect(() => {
     if (open) {
@@ -45,16 +55,18 @@ export const Lightbox = ({
   }, [open])
 
   const handleNext = useCallback(() => {
+    if (!canGoNext(currentIndex, slides.length, actualLoop)) return
     setScale(1)
     setDragOffset({ x: 0, y: 0 })
-    setCurrentIndex((prev) => (prev + 1 === slides.length ? 0 : prev + 1))
-  }, [slides.length])
+    setCurrentIndex((prev) => getNextIndex(prev, slides.length, actualLoop))
+  }, [slides.length, currentIndex, actualLoop])
 
   const handlePrev = useCallback(() => {
+    if (!canGoPrev(currentIndex, slides.length, actualLoop)) return
     setScale(1)
     setDragOffset({ x: 0, y: 0 })
-    setCurrentIndex((prev) => (prev - 1 < 0 ? slides.length - 1 : prev - 1))
-  }, [slides.length])
+    setCurrentIndex((prev) => getPrevIndex(prev, slides.length, actualLoop))
+  }, [slides.length, currentIndex, actualLoop])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -70,6 +82,16 @@ export const Lightbox = ({
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
+
+  useEffect(() => {
+    if (!open || !isPlaying || isDragging || scale > 1) return
+    
+    const timer = setInterval(() => {
+      handleNext()
+    }, autoplayDuration)
+    
+    return () => clearInterval(timer)
+  }, [open, isPlaying, autoplayDuration, isDragging, scale, handleNext])
 
   if (!mounted) return null
 
@@ -91,14 +113,17 @@ export const Lightbox = ({
   }
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggable && scale === 1) return
     if (e.button !== 0 && e.pointerType === 'mouse') return
     setIsDragging(true)
+    isDragAction.current = false
     setDragStartPos({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y })
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging) return
+    isDragAction.current = true
     const newX = e.clientX - dragStartPos.x
     const newY = scale > 1 ? e.clientY - dragStartPos.y : 0
     setDragOffset({ x: newX, y: newY })
@@ -110,9 +135,9 @@ export const Lightbox = ({
     e.currentTarget.releasePointerCapture(e.pointerId)
 
     if (scale === 1) {
-      if (dragOffset.x < -100) {
+      if (dragOffset.x < -100 && canGoNext(currentIndex, slides.length, actualLoop)) {
         handleNext()
-      } else if (dragOffset.x > 100) {
+      } else if (dragOffset.x > 100 && canGoPrev(currentIndex, slides.length, actualLoop)) {
         handlePrev()
       } else {
         setDragOffset({ x: 0, y: 0 })
@@ -124,7 +149,6 @@ export const Lightbox = ({
     <div className={`fixed inset-0 z-9999 flex flex-col ${open ? 'visible' : 'invisible delay-300'}`}>
       <div 
         className={`absolute inset-0 bg-black/95 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`} 
-        onClick={close}
       />
       
       <div 
@@ -164,6 +188,15 @@ export const Lightbox = ({
               </button>
             </>
           )}
+          {autoplay && (
+            <button
+              type="button"
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="rounded-full p-2 transition-colors hover:bg-white/10"
+            >
+              {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
+            </button>
+          )}
           <button
             type="button"
             onClick={close}
@@ -175,7 +208,7 @@ export const Lightbox = ({
       </div>
 
       <div className={`relative z-40 flex-1 overflow-hidden flex items-center justify-center transition-all duration-300 ease-out ${open ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}>
-        {slides.length > 1 && (
+        {slides.length > 1 && canGoPrev(currentIndex, slides.length, actualLoop) && (
           <button
             type="button"
             onClick={(e) => {
@@ -197,9 +230,6 @@ export const Lightbox = ({
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
             onPointerLeave={handlePointerUp}
-            onClick={(e) => {
-              if (e.target === e.currentTarget && dragOffset.x === 0 && dragOffset.y === 0) close()
-            }}
           >
             <img
               src={slide.src}
@@ -220,7 +250,7 @@ export const Lightbox = ({
           </div>
         )}
 
-        {slides.length > 1 && (
+        {slides.length > 1 && canGoNext(currentIndex, slides.length, actualLoop) && (
           <button
             type="button"
             onClick={(e) => {
