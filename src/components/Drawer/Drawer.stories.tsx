@@ -36,11 +36,11 @@ const positions: DrawerPosition[] = ['left', 'right', 'top', 'bottom']
 
 const DemoDrawer = ({ size, position }: { size: DrawerSize; position: DrawerPosition }) => {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   return (
     <>
-      <Button 
-        variant="soft" 
+      <Button
+        variant="soft"
         onClick={() => setIsOpen(true)}
         className="w-full justify-center"
       >
@@ -52,10 +52,10 @@ const DemoDrawer = ({ size, position }: { size: DrawerSize; position: DrawerPosi
         size={size}
         position={position}
       >
-        <DrawerHeader 
-          title={`Drawer ${size} at ${position}`} 
-          subtitle="Matrix demonstration" 
-          onClose={() => setIsOpen(false)} 
+        <DrawerHeader
+          title={`Drawer ${size} at ${position}`}
+          subtitle="Matrix demonstration"
+          onClose={() => setIsOpen(false)}
         />
         <DrawerContent>
           <div className="space-y-4">
@@ -83,7 +83,7 @@ export const Showcase: Story = {
   render: () => {
     return (
       <div className="flex flex-col gap-8 w-full">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 overflow-x-auto">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full overflow-x-auto">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Drawer Matrix (Position x Size)</h2>
           <table className="w-full text-left border-collapse min-w-max">
             <thead>
@@ -120,7 +120,7 @@ export const Showcase: Story = {
 export const Playground: Story = {
   render: (args) => {
     const [isOpen, setIsOpen] = useState(args.isOpen)
-    
+
     return (
       <>
         <Button variant="filled" color="primary" onClick={() => setIsOpen(true)}>
@@ -131,10 +131,10 @@ export const Playground: Story = {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
         >
-          <DrawerHeader 
-            title="Playground Drawer" 
-            subtitle="Test different controls" 
-            onClose={() => setIsOpen(false)} 
+          <DrawerHeader
+            title="Playground Drawer"
+            subtitle="Test different controls"
+            onClose={() => setIsOpen(false)}
           />
           <DrawerContent>
             <div className="p-4 bg-primary-50 text-primary-800 rounded-lg text-sm">

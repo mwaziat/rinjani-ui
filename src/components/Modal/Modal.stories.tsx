@@ -5,7 +5,7 @@ import type { ModalSize } from './Modal.types'
 import { Button } from '../Button'
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components/Layout/Modal',
+  title: 'Components/Modal',
   component: Modal,
   tags: ['autodocs'],
   argTypes: {
@@ -35,11 +35,11 @@ const sizes: ModalSize[] = ['sm', 'md', 'lg', 'xl', 'full']
 
 const DemoModal = ({ size }: { size: ModalSize }) => {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   return (
     <>
-      <Button 
-        variant="soft" 
+      <Button
+        variant="soft"
         onClick={() => setIsOpen(true)}
       >
         Size {size}
@@ -49,10 +49,10 @@ const DemoModal = ({ size }: { size: ModalSize }) => {
         onClose={() => setIsOpen(false)}
         size={size}
       >
-        <ModalHeader 
-          title={`Modal ${size}`} 
-          subtitle="Declarative modal demonstration" 
-          onClose={() => setIsOpen(false)} 
+        <ModalHeader
+          title={`Modal ${size}`}
+          subtitle="Declarative modal demonstration"
+          onClose={() => setIsOpen(false)}
         />
         <ModalContent>
           <div className="space-y-4">
@@ -77,7 +77,7 @@ export const Showcase: Story = {
   render: () => {
     return (
       <div className="flex flex-col gap-8 w-full">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 overflow-x-auto">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full overflow-x-auto">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Modal Sizes</h2>
           <table className="w-full text-left border-collapse min-w-max">
             <thead>
@@ -112,7 +112,7 @@ export const Showcase: Story = {
 export const Playground: Story = {
   render: (args) => {
     const [isOpen, setIsOpen] = useState(args.isOpen)
-    
+
     return (
       <>
         <Button variant="filled" color="primary" onClick={() => setIsOpen(true)}>
@@ -123,10 +123,10 @@ export const Playground: Story = {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
         >
-          <ModalHeader 
-            title="Playground Modal" 
-            subtitle="Test different controls" 
-            onClose={() => setIsOpen(false)} 
+          <ModalHeader
+            title="Playground Modal"
+            subtitle="Test different controls"
+            onClose={() => setIsOpen(false)}
           />
           <ModalContent>
             <div className="p-4 bg-primary-50 text-primary-800 rounded-lg text-sm mb-4">

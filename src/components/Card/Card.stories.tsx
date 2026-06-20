@@ -16,7 +16,7 @@ const meta: Meta<typeof Card> = {
     noPadding: false,
   },
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
 }
 

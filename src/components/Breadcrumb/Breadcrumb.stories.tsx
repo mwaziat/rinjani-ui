@@ -51,7 +51,7 @@ const MOCK_PATHS = [
 export const Showcase: Story = {
   render: () => (
     <div className="flex flex-col gap-6 w-full">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Breadcrumb Variants & Colors</h2>
         <div className="flex flex-col gap-12">
           {variants.map((variant) => (
@@ -92,7 +92,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Breadcrumb Sizes (Contained)</h2>
         <div className="flex flex-col gap-6">
           {sizes.map((size) => (
@@ -110,7 +110,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="p-6 rounded-xl shadow-sm border border-neutral-200 bg-neutral-50">
+      <div className="p-6 rounded-xl shadow-sm border border-neutral-200 bg-neutral-50 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Breadcrumb Without Card (contained=false)</h2>
         <div className="flex flex-col gap-4">
           <Breadcrumb
@@ -123,7 +123,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Custom Separator</h2>
         <div className="flex flex-col gap-4">
           <Breadcrumb

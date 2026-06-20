@@ -8,7 +8,7 @@ const meta: Meta = {
   title: 'Components/Feedback/Toast',
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   decorators: [
     (Story) => (
@@ -31,8 +31,8 @@ export const Showcase: Story = {
     ]
     
     return (
-      <div className="flex flex-col gap-6 w-full max-w-4xl">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="flex flex-col gap-6 w-full">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Toast Types</h2>
           <div className="flex flex-wrap gap-4">
             <Button
@@ -73,7 +73,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">All Toast Placements</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {placements.map(placement => (
@@ -93,7 +93,7 @@ export const Showcase: Story = {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Advanced Features</h2>
           <div className="flex flex-wrap gap-4">
             <Button

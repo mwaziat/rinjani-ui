@@ -38,7 +38,7 @@ const meta: Meta<typeof Tooltip> = {
     showArrow: true,
   },
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
 }
 
@@ -52,7 +52,7 @@ const sizes: TooltipSize[] = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl']
 export const Showcase: Story = {
   render: () => (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Tooltip Matrix (Variant x Color)</h2>
         <div className="overflow-x-auto pb-12">
           <table className="w-full text-left border-collapse">
@@ -86,7 +86,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Tooltip Sizes</h2>
         <div className="flex items-center gap-6 flex-wrap py-4">
           {sizes.map((size) => (
@@ -99,7 +99,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Placements & Auto (Collision)</h2>
         <div className="flex items-center justify-center gap-8 flex-wrap py-12">
           <Tooltip content="Tooltip on Top" placement="top" color="secondary" variant="filled">
@@ -126,7 +126,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">Pill Tooltips (isPill)</h2>
         <div className="flex items-center gap-6 flex-wrap py-4">
           {sizes.map((size) => (
@@ -139,7 +139,7 @@ export const Showcase: Story = {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
         <h2 className="text-xl font-bold text-neutral-800 mb-6">MaxWidth & Text Wrapping</h2>
         <div className="flex items-center gap-8 flex-wrap py-4">
           <Tooltip 

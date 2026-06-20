@@ -47,7 +47,7 @@ export const Showcase: Story = {
   render: () => {
     return (
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Badge Matrix (Variant x Color)</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -79,7 +79,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Badge Sizes</h2>
           <div className="flex items-center gap-4 flex-wrap">
             <Badge size="xxs" color="primary">XXS</Badge>
@@ -91,7 +91,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Badges with Icons</h2>
           <div className="flex items-center gap-4 flex-wrap">
             <Badge leftIcon={<CheckIcon />} color="success">Active</Badge>
@@ -100,7 +100,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Pill Badges</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

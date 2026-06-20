@@ -44,7 +44,7 @@ export const Showcase: Story = {
   render: () => {
     return (
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Button Matrix (Variant x Color)</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -76,7 +76,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Button Sizes</h2>
           <div className="flex items-center gap-4 flex-wrap">
             <Button size="xxs" color="primary">Size XXS</Button>
@@ -88,7 +88,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Buttons with Icons & Loading</h2>
           <div className="flex items-center gap-4 flex-wrap">
             <Button leftIcon={<PlusIcon />} color="primary">Add New</Button>
@@ -97,7 +97,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Icon Buttons</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -126,7 +126,7 @@ export const Showcase: Story = {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 xl:col-span-2">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full xl:col-span-2">
           <h2 className="text-xl font-bold text-neutral-800 mb-6">Pill Buttons (isPill)</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
