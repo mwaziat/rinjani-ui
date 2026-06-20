@@ -1,0 +1,5 @@
+export * from './PlusIcon'
+export * from './TrashIcon'
+export * from './SettingsIcon'
+export * from './XIcon'
+export * from './MinusIcon'

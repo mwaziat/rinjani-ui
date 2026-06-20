@@ -1,1 +1,150 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f6faf2;
+  --color-primary-100: #ebf5e3;
+  --color-primary-200: #d8ebca;
+  --color-primary-300: #b9db9f;
+  --color-primary-400: #93c56b;
+  --color-primary-500: #6cb33f;
+  --color-primary-600: #55912f;
+  --color-primary-700: #427028;
+  --color-primary-800: #375924;
+  --color-primary-900: #304d22;
+  --color-primary-950: #172b0f;
+
+  --color-secondary-50: #f1f7fd;
+  --color-secondary-100: #e0eef9;
+  --color-secondary-200: #badcf2;
+  --color-secondary-300: #7ebce7;
+  --color-secondary-400: #389ad6;
+  --color-secondary-500: #005daa;
+  --color-secondary-600: #006eb5;
+  --color-secondary-700: #005893;
+  --color-secondary-800: #044b7a;
+  --color-secondary-900: #093f66;
+  --color-secondary-950: #062844;
+
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065f46;
+  --color-success-900: #064e3b;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  --color-info-50: #f0f9ff;
+  --color-info-100: #e0f2fe;
+  --color-info-200: #bae6fd;
+  --color-info-300: #7dd3fc;
+  --color-info-400: #38bdf8;
+  --color-info-500: #0ea5e9;
+  --color-info-600: #0284c7;
+  --color-info-700: #0369a1;
+  --color-info-800: #075985;
+  --color-info-900: #0c4a6e;
+
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-neutral-950: #020617;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-500;
+  }
+
+  .btn-neutral {
+    @apply bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-400;
+  }
+
+  .btn-info {
+    @apply bg-info-500 text-white hover:bg-info-600 focus:ring-info-500;
+  }
+
+  .btn-warning {
+    @apply bg-warning-500 text-white hover:bg-warning-600 focus:ring-warning-500;
+  }
+
+  .btn-danger {
+    @apply bg-danger-500 text-white hover:bg-danger-600 focus:ring-danger-500;
+  }
+
+  .btn-success {
+    @apply bg-success-500 text-white hover:bg-success-600 focus:ring-success-500;
+  }
+
+  .alert {
+    @apply flex items-start gap-3 p-4 rounded-lg text-sm border;
+  }
+
+  .alert-info {
+    @apply bg-info-50 text-info-800 border-info-200;
+  }
+
+  .alert-success {
+    @apply bg-success-50 text-success-800 border-success-200;
+  }
+
+  .alert-warning {
+    @apply bg-warning-50 text-warning-800 border-warning-200;
+  }
+
+  .alert-danger {
+    @apply bg-danger-50 text-danger-800 border-danger-200;
+  }
+}
+
+@layer base {
+
+  input:focus,
+  textarea:focus,
+  select:focus,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
