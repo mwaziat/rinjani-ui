@@ -4,7 +4,7 @@ import React from 'react'
 import { TabsProvider } from './Tabs.context'
 import type { TabsProps } from './Tabs.types'
 
-export const TabsRoot = ({
+export const TabsRoot = React.forwardRef<HTMLDivElement, TabsProps>(({
   activeTab,
   onChange,
   color = 'primary',
@@ -15,7 +15,7 @@ export const TabsRoot = ({
   placement = 'horizontal-top',
   className = '',
   children,
-}: TabsProps) => {
+}, ref) => {
   const isVertical = placement === 'vertical-left' || placement === 'vertical-right'
   const providerValue = { activeTab, onChange, color, size, variant, align, alignLabel, placement }
 
@@ -25,9 +25,11 @@ export const TabsRoot = ({
 
   return (
     <TabsProvider value={providerValue}>
-      <div className={wrapperClass}>
+      <div ref={ref} className={wrapperClass}>
         {children}
       </div>
     </TabsProvider>
   )
-}
+})
+
+TabsRoot.displayName = 'TabsRoot'

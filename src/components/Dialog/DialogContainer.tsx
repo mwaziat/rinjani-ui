@@ -5,7 +5,7 @@ import { dialogManager } from './dialog-manager'
 import type { DialogItem } from './Dialog.types'
 import { DialogModal } from './DialogModal'
 
-export const DialogContainer = () => {
+export const DialogContainer: React.FC = () => {
   const [dialogs, setDialogs] = useState<DialogItem[]>([])
 
   useEffect(() => {

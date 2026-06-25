@@ -62,7 +62,18 @@ const sampleSlides: LightboxSlide[] = [
   },
 ]
 
-const DemoLightbox = ({ 
+interface DemoLightboxProps {
+  title: string
+  slides?: LightboxSlide[]
+  showThumbnails?: boolean
+  showZoom?: boolean
+  autoplay?: boolean
+  autoplayDuration?: number
+  isDraggable?: boolean
+  loop?: boolean
+}
+
+const DemoLightbox: React.FC<DemoLightboxProps> = ({ 
   title, 
   slides = sampleSlides, 
   showThumbnails = true, 
@@ -71,15 +82,6 @@ const DemoLightbox = ({
   autoplayDuration = 3000,
   isDraggable = true,
   loop = true,
-}: { 
-  title: string, 
-  slides?: LightboxSlide[],
-  showThumbnails?: boolean,
-  showZoom?: boolean,
-  autoplay?: boolean,
-  autoplayDuration?: number,
-  isDraggable?: boolean,
-  loop?: boolean,
 }) => {
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
@@ -167,25 +169,27 @@ export const Showcase: Story = {
   }
 }
 
-export const Playground: Story = {
-  render: (args) => {
-    const [open, setOpen] = useState(args.open)
+const PlaygroundLightbox: React.FC<React.ComponentProps<typeof Lightbox>> = (args) => {
+  const [open, setOpen] = useState(args.open)
 
-    return (
-      <div className="flex flex-col items-center justify-center p-12 border border-neutral-200 border-dashed rounded-xl bg-neutral-50 w-full">
-        <p className="text-sm text-neutral-500 mb-6">
-          Use the Controls tab in Storybook to modify `showThumbnails`, `showZoom`, etc.
-        </p>
-        <Button variant="filled" color="primary" onClick={() => setOpen(true)}>
-          Open Lightbox Playground
-        </Button>
-        <Lightbox
-          {...args}
-          open={open}
-          close={() => setOpen(false)}
-          slides={sampleSlides}
-        />
-      </div>
-    )
-  }
+  return (
+    <div className="flex flex-col items-center justify-center p-12 border border-neutral-200 border-dashed rounded-xl bg-neutral-50 w-full">
+      <p className="text-sm text-neutral-500 mb-6">
+        Use the Controls tab in Storybook to modify `showThumbnails`, `showZoom`, etc.
+      </p>
+      <Button variant="filled" color="primary" onClick={() => setOpen(true)}>
+        Open Lightbox Playground
+      </Button>
+      <Lightbox
+        {...args}
+        open={open}
+        close={() => setOpen(false)}
+        slides={sampleSlides}
+      />
+    </div>
+  )
+}
+
+export const Playground: Story = {
+  render: (args) => <PlaygroundLightbox {...args} />
 }

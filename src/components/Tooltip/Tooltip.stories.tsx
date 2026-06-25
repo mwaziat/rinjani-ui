@@ -178,7 +178,7 @@ export const Showcase: Story = {
             color="warning"
           >
             <div className="cursor-pointer bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Raw ('15rem')
+              Raw (&apos;15rem&apos;)
             </div>
           </Tooltip>
         </div>

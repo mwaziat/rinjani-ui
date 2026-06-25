@@ -6,7 +6,7 @@ import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, Play
 import type { LightboxProps } from './Lightbox.types'
 import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
 
-export const Lightbox = ({
+export const Lightbox: React.FC<LightboxProps> = ({
   open,
   close,
   index = 0,
@@ -17,10 +17,9 @@ export const Lightbox = ({
   autoplayDuration = 3000,
   isDraggable = true,
   loop = true,
-}: LightboxProps) => {
+}) => {
   const [currentIndex, setCurrentIndex] = useState(index)
   const [scale, setScale] = useState(1)
-  const [mounted, setMounted] = useState(false)
 
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -30,18 +29,23 @@ export const Lightbox = ({
 
   const actualLoop = autoplay || loop
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
-  useEffect(() => {
+  const [prevProps, setPrevProps] = useState({ open, index, autoplay })
+  
+  if (
+    open !== prevProps.open ||
+    index !== prevProps.index ||
+    autoplay !== prevProps.autoplay
+  ) {
+    setPrevProps({ open, index, autoplay })
+    
     if (open) {
       setCurrentIndex(index)
       setScale(1)
       setDragOffset({ x: 0, y: 0 })
       setIsPlaying(autoplay)
     }
-  }, [open, index, autoplay])
+  }
 
   useEffect(() => {
     if (open) {
@@ -93,7 +97,7 @@ export const Lightbox = ({
     return () => clearInterval(timer)
   }, [open, isPlaying, autoplayDuration, isDragging, scale, handleNext])
 
-  if (!mounted) return null
+  if (typeof document === 'undefined') return null
 
   const slide = slides[currentIndex] || slides[0]
 

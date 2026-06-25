@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ChevronDownIcon } fro
 import { useTabsContext } from './Tabs.context'
 import type { TabsListProps } from './Tabs.types'
 
-export const TabsList = ({ className = '', scrollable = false, children }: TabsListProps) => {
+export const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(({ className = '', scrollable = false, children }, ref) => {
   const { variant, placement, align } = useTabsContext()
   const isVerticalMode = placement === 'vertical-left' || placement === 'vertical-right'
   const isHorizontalMode = placement === 'horizontal-top' || placement === 'horizontal-bottom'
@@ -44,7 +44,7 @@ export const TabsList = ({ className = '', scrollable = false, children }: TabsL
     : `flex flex-row items-center ${mainAxisAlign} ${scrollable ? 'overflow-x-auto overflow-y-hidden no-scrollbar' : 'overflow-visible'}`
 
   return (
-    <div className={`relative flex ${isVerticalMode ? 'flex-col' : 'flex-row'} items-center gap-1 ${containerBorderClass} ${className}`}>
+    <div ref={ref} className={`relative flex ${isVerticalMode ? 'flex-col' : 'flex-row'} items-center gap-1 ${containerBorderClass} ${className}`}>
       {scrollable && (
         <button
           type="button"
@@ -72,4 +72,6 @@ export const TabsList = ({ className = '', scrollable = false, children }: TabsL
       )}
     </div>
   )
-}
+})
+
+TabsList.displayName = 'TabsList'

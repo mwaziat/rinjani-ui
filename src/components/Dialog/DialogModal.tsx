@@ -7,7 +7,7 @@ import type { DialogItem } from './Dialog.types'
 import { dialogManager } from './dialog-manager'
 import { backdropClasses, modalClasses } from './Dialog.styles'
 
-export const DialogModal = ({ dialog }: { dialog: DialogItem }) => {
+export const DialogModal: React.FC<{ dialog: DialogItem }> = ({ dialog }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
   const [hasEntered, setHasEntered] = useState(false)
@@ -23,7 +23,7 @@ export const DialogModal = ({ dialog }: { dialog: DialogItem }) => {
     setIsLeaving(true)
     setTimeout(() => {
       dialogManager.remove(dialog.id)
-    }, 200) // Duration of CSS exit transition
+    }, 200)
   }
 
   const handleCancel = () => {

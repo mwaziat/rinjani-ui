@@ -12,7 +12,7 @@ import {
 } from './Breadcrumb.styles'
 import { ChevronRightIcon } from '../Icons'
 
-export const Breadcrumb = ({
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   activeLabel,
   activeIcon,
   paths,

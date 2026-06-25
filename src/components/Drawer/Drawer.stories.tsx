@@ -34,7 +34,7 @@ type Story = StoryObj<typeof Drawer>
 const sizes: DrawerSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '1/4', '1/3', '1/2', '2/3', '3/4', 'full']
 const positions: DrawerPosition[] = ['left', 'right', 'top', 'bottom']
 
-const DemoDrawer = ({ size, position }: { size: DrawerSize; position: DrawerPosition }) => {
+const DemoDrawer: React.FC<{ size: DrawerSize; position: DrawerPosition }> = ({ size, position }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -117,35 +117,37 @@ export const Showcase: Story = {
   }
 }
 
-export const Playground: Story = {
-  render: (args) => {
-    const [isOpen, setIsOpen] = useState(args.isOpen)
+const PlaygroundDrawer: React.FC<React.ComponentProps<typeof Drawer>> = (args) => {
+  const [isOpen, setIsOpen] = useState(args.isOpen)
 
-    return (
-      <>
-        <Button variant="filled" color="primary" onClick={() => setIsOpen(true)}>
-          Open Drawer
-        </Button>
-        <Drawer
-          {...args}
-          isOpen={isOpen}
+  return (
+    <>
+      <Button variant="filled" color="primary" onClick={() => setIsOpen(true)}>
+        Open Drawer
+      </Button>
+      <Drawer
+        {...args}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <DrawerHeader
+          title="Playground Drawer"
+          subtitle="Test different controls"
           onClose={() => setIsOpen(false)}
-        >
-          <DrawerHeader
-            title="Playground Drawer"
-            subtitle="Test different controls"
-            onClose={() => setIsOpen(false)}
-          />
-          <DrawerContent>
-            <div className="p-4 bg-primary-50 text-primary-800 rounded-lg text-sm">
-              Use the Controls tab in Storybook to change the position and size of this drawer in real-time.
-            </div>
-          </DrawerContent>
-          <DrawerFooter>
-            <Button variant="soft" color="neutral" onClick={() => setIsOpen(false)}>Close</Button>
-          </DrawerFooter>
-        </Drawer>
-      </>
-    )
-  }
+        />
+        <DrawerContent>
+          <div className="p-4 bg-primary-50 text-primary-800 rounded-lg text-sm">
+            Use the Controls tab in Storybook to change the position and size of this drawer in real-time.
+          </div>
+        </DrawerContent>
+        <DrawerFooter>
+          <Button variant="soft" color="neutral" onClick={() => setIsOpen(false)}>Close</Button>
+        </DrawerFooter>
+      </Drawer>
+    </>
+  )
+}
+
+export const Playground: Story = {
+  render: (args) => <PlaygroundDrawer {...args} />
 }

@@ -68,12 +68,12 @@ const DemoTabs = ({ title, scrollable = false, ...props }: Partial<import('./Tab
   )
 }
 
-const DemoIconTabs = ({ title, variant, children }: any) => {
+const DemoIconTabs: React.FC<{ title: string, variant?: import('./Tabs.types').TabsProps['variant'], children: React.ReactNode }> = ({ title, variant, children }) => {
   const [active, setActive] = useState('tab1')
   return (
     <div className="p-6 border border-neutral-200 rounded-xl bg-white w-full">
       <h3 className="text-lg font-bold text-neutral-800 mb-6">{title}</h3>
-      <Tabs activeTab={active} onChange={setActive} variant={variant}>
+      <Tabs activeTab={active} onChange={setActive} variant={variant || 'line'}>
         <Tabs.List>
           {children}
         </Tabs.List>
@@ -136,30 +136,32 @@ export const Showcase: Story = {
   ),
 }
 
+const PlaygroundTabs: React.FC<import('./Tabs.types').TabsProps> = (args) => {
+  const [active, setActive] = useState('tab1')
+
+  return (
+    <div className="w-full">
+      <Tabs {...args} activeTab={active} onChange={setActive}>
+        <Tabs.List>
+          <Tabs.Item value="tab1">Overview</Tabs.Item>
+          <Tabs.Item value="tab2">Analytics</Tabs.Item>
+          <Tabs.Item value="tab3">Reports</Tabs.Item>
+        </Tabs.List>
+
+        <Tabs.Content value="tab1" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
+          <p className="text-neutral-600">Overview content goes here. Try changing controls below.</p>
+        </Tabs.Content>
+        <Tabs.Content value="tab2" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
+          <p className="text-neutral-600">Analytics data and charts.</p>
+        </Tabs.Content>
+        <Tabs.Content value="tab3" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
+          <p className="text-neutral-600">Downloadable reports.</p>
+        </Tabs.Content>
+      </Tabs>
+    </div>
+  )
+}
+
 export const Playground: Story = {
-  render: (args) => {
-    const [active, setActive] = useState('tab1')
-
-    return (
-      <div className="w-full">
-        <Tabs {...args} activeTab={active} onChange={setActive}>
-          <Tabs.List>
-            <Tabs.Item value="tab1">Overview</Tabs.Item>
-            <Tabs.Item value="tab2">Analytics</Tabs.Item>
-            <Tabs.Item value="tab3">Reports</Tabs.Item>
-          </Tabs.List>
-
-          <Tabs.Content value="tab1" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
-            <p className="text-neutral-600">Overview content goes here. Try changing controls below.</p>
-          </Tabs.Content>
-          <Tabs.Content value="tab2" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
-            <p className="text-neutral-600">Analytics data and charts.</p>
-          </Tabs.Content>
-          <Tabs.Content value="tab3" className="p-6 border border-dashed border-neutral-200 rounded-lg bg-neutral-50 min-h-[200px]">
-            <p className="text-neutral-600">Downloadable reports.</p>
-          </Tabs.Content>
-        </Tabs>
-      </div>
-    )
-  },
+  render: (args) => <PlaygroundTabs {...args} />
 }

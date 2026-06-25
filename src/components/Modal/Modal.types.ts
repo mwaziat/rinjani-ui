@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+export type ModalSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full'
 export type ModalScrollMode = 'dialog' | 'content'
 
 export interface ModalProps {

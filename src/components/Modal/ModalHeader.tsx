@@ -3,7 +3,7 @@ import { XIcon } from '../Icons'
 import { IconButton } from '../Button'
 import type { ModalHeaderProps } from './Modal.types'
 
-export const ModalHeader = ({ title, subtitle, onClose }: ModalHeaderProps) => {
+export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, subtitle, onClose }) => {
   return (
     <div className="flex items-center justify-between border-b border-neutral-100 px-6 py-5 shrink-0">
       <div className="flex flex-col">

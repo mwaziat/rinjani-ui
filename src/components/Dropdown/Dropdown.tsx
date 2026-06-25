@@ -4,12 +4,12 @@ import React, { useEffect, useId, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '../Icons/general'
-import type { DropdownPlacement, DropdownProps, DropdownContentPosition } from './Dropdown.types'
+import type { DropdownProps, DropdownContentPosition } from './Dropdown.types'
 
 import { baseStyles, sizes, radiusBySize, variants } from './Dropdown.styles'
 import { VIEWPORT_PADDING, getPlacementCandidates, getPositionForPlacement, getOverflowScore, clampPosition } from './Dropdown.utils'
 
-export const Dropdown = ({
+export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
   label,
   icon,
   children,
@@ -24,14 +24,14 @@ export const Dropdown = ({
   classNameList = '',
   id,
   isPill = false,
-}: DropdownProps) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const [contentPosition, setContentPosition] = useState<DropdownContentPosition>({
     top: 0,
     left: 0,
     isPositioned: false,
   })
-  const triggerRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const generatedId = useId()
   const dropdownId = id || generatedId
@@ -113,8 +113,6 @@ export const Dropdown = ({
     }
   }, [isOpen, placement, offset, children])
 
-
-
   const selectedVariant = variants[variant][color]
   const radiusStyle = isPill ? 'rounded-full' : radiusBySize[size]
 
@@ -155,10 +153,19 @@ export const Dropdown = ({
     setIsOpen(true)
   }
 
+  const setRefs = (node: HTMLButtonElement | null) => {
+    triggerRef.current = node
+    if (typeof ref === 'function') {
+      ref(node)
+    } else if (ref) {
+      ref.current = node
+    }
+  }
+
   return (
     <>
       <button
-        ref={triggerRef}
+        ref={setRefs}
         id={dropdownId}
         type="button"
         className={`${baseStyles} ${sizes[size]} ${radiusStyle} ${selectedVariant} ${className}`}
@@ -191,4 +198,6 @@ export const Dropdown = ({
       )}
     </>
   )
-}
+})
+
+Dropdown.displayName = 'Dropdown'
