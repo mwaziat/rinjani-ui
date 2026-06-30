@@ -1,16 +1,17 @@
-import React, { useRef } from 'react'
-import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon } from '../Icons'
+import React, { useRef, useState } from 'react'
+import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon, SaveIcon } from '../Icons'
 import { Button } from '../Button'
 import { InputField } from '../Form'
-import type { ToolbarConfig } from './DataTable.types'
-import { iconSizeClasses } from './DataTable.styles'
+import type { ToolbarConfig } from './EditDataTable.types'
+import { iconSizeClasses } from './EditDataTable.styles'
 
-interface ToolbarProps {
-  config: ToolbarConfig
+interface ToolbarProps<T> {
+  config: ToolbarConfig<T>
   selectedRowKeys?: (string | number)[]
+  activeEditRows?: T[]
 }
 
-export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
+export function Toolbar<T>({ config, selectedRowKeys = [], activeEditRows = [] }: ToolbarProps<T>) {
   const {
     title,
     description,
@@ -25,6 +26,8 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
     onDeleteAll,
     showEditAll = false,
     onEditAll,
+    showSaveAll = false,
+    onSaveAll,
     variant = 'filled',
     color = 'primary',
     size = 'sm',
@@ -32,6 +35,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
     customElements,
   } = config
 
+  const [isSavingAll, setIsSavingAll] = useState(false)
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,9 +60,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
   }, [])
 
 
-
-
-  const currentIconSize: number = iconSizeClasses[size] || iconSizeClasses.md || 16
+  const currentIconSize: number = iconSizeClasses[size || 'sm'] || iconSizeClasses.sm || 16
   const inputVariant = (variant === 'soft' || variant === 'text') ? 'outlined' : variant
 
   const customElementsMap: Record<string, React.ReactNode> = {}
@@ -135,6 +137,34 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
           }
 
           if (key === 'editAll') {
+            if (activeEditRows.length > 0 && showSaveAll) {
+              return (
+                <Button
+                  key="saveAll"
+                  leftIcon={<SaveIcon size={currentIconSize} />}
+                  variant="filled"
+                  color="success"
+                  size={size}
+                  disabled={isSavingAll}
+                  onClick={async () => {
+                    if (onSaveAll) {
+                      setIsSavingAll(true)
+                      try {
+                        await onSaveAll(activeEditRows)
+                      } finally {
+                        setIsSavingAll(false)
+                      }
+                    }
+                  }}
+                >
+                  {isSavingAll ? 'Saving...' : 'Save All'}
+                </Button>
+              )
+            }
+
+            const hasSelection = selectedRowKeys.length > 0
+            const editLabel = hasSelection ? 'Edit Selected' : 'Edit All'
+
             return showEditAll && (
               <Button
                 key="editAll"
@@ -142,10 +172,9 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                 variant={variant}
                 color={color}
                 size={size}
-                disabled={selectedRowKeys.length === 0}
                 onClick={() => onEditAll?.(selectedRowKeys)}
               >
-                Edit All
+                {editLabel}
               </Button>
             )
           }

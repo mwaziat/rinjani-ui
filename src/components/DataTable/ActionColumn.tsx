@@ -1,6 +1,5 @@
 import React from 'react'
-import { EyeIcon } from '../Icons/general'
-import { PencilIcon, TrashIcon, MoreVerticalIcon } from '../Icons/action'
+import { EyeIcon, PencilIcon, TrashIcon, MoreVerticalIcon } from '../Icons'
 import { IconButton } from '../Button'
 import { Dropdown, DropdownList, DropdownItem } from '../Dropdown'
 import type { ActionColumnConfig } from './DataTable.types'

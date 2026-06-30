@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
-import { DataTable } from './DataTable'
-import type { ColumnDef, DataTableProps, PaginationState, PaginationConfig } from './DataTable.types'
-import { UserIcon, SearchIcon, CheckIcon } from '../Icons'
+import { EditDataTable } from './EditDataTable'
+import type { ColumnDef, DataTableProps, PaginationState, PaginationConfig } from './EditDataTable.types'
+import { UserIcon, SearchIcon } from '../Icons'
 import { Badge } from '../Badge'
-import { Button, IconButton } from '../Button'
+import { InputField } from '../Form'
 
-const meta: Meta<typeof DataTable> = {
-  title: 'Components/DataTable',
-  component: DataTable,
+const meta: Meta<typeof EditDataTable> = {
+  title: 'Components/EditDataTable',
+  component: EditDataTable,
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -32,7 +32,7 @@ const meta: Meta<typeof DataTable> = {
 }
 
 export default meta
-type Story = StoryObj<typeof DataTable>
+type Story = StoryObj<typeof EditDataTable>
 
 interface UserData {
   id: string
@@ -62,6 +62,15 @@ const columns: ColumnDef<UserData>[] = [
   {
     header: 'User Profile',
     accessorKey: 'name',
+    editable: true,
+    editComponent: (value, onChange) => (
+      <InputField
+        value={value as string}
+        onChange={(e) => onChange(e.target.value)}
+        size="sm"
+        placeholder="Enter name"
+      />
+    ),
     cell: (row: UserData) => (
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-500 shrink-0">
@@ -78,10 +87,27 @@ const columns: ColumnDef<UserData>[] = [
     header: 'Department',
     accessorKey: 'department',
     align: 'center',
+    editable: true,
+    editComponent: (value, onChange) => (
+      <InputField
+        value={value as string}
+        onChange={(e) => onChange(e.target.value)}
+        size="sm"
+        placeholder="Enter department"
+      />
+    ),
   },
   {
     header: 'Role',
+    accessorKey: 'role',
     align: 'center',
+    editable: true,
+    type: 'select',
+    options: [
+      { value: 'Admin', label: 'Admin' },
+      { value: 'Editor', label: 'Editor' },
+      { value: 'Viewer', label: 'Viewer' },
+    ],
     cell: (row: UserData) => (
       <Badge variant="soft" color={row.role === 'Admin' ? 'primary' : 'neutral'}>
         {row.role}
@@ -90,7 +116,15 @@ const columns: ColumnDef<UserData>[] = [
   },
   {
     header: 'Status',
+    accessorKey: 'status',
     align: 'right',
+    editable: true,
+    type: 'select',
+    options: [
+      { value: 'Active', label: 'Active' },
+      { value: 'Inactive', label: 'Inactive' },
+      { value: 'Pending', label: 'Pending' },
+    ],
     cell: (row: UserData) => {
       let badgeColor: 'success' | 'danger' | 'warning' = 'success'
       if (row.status === 'Inactive') badgeColor = 'danger'
@@ -104,7 +138,7 @@ const columns: ColumnDef<UserData>[] = [
   },
 ]
 
-interface TableWrapperProps extends Omit<DataTableProps<UserData>, 'data' | 'pagination' | 'columns'> {
+interface TableWrapperProps extends Omit<DataTableProps<UserData>, 'data' | 'pagination' | 'columns' | 'rowKey'> {
   initialLimit?: number
   withPagination?: boolean
   pagination?: Partial<PaginationConfig>
@@ -124,19 +158,20 @@ const TableWrapper = ({
   const [limit, setLimit] = useState(initialLimit)
   const [search, setSearch] = useState('')
   const [selectedKeys, setSelectedKeys] = useState<(string | number)[]>([])
+  const [data, setData] = useState(mockData)
 
-  const filteredData = mockData.filter(item =>
+  const filteredData = data.filter(item =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.email.toLowerCase().includes(search.toLowerCase())
   )
 
   const displayData = withPagination
     ? filteredData.slice((page - 1) * limit, page * limit)
-    : filteredData.slice(0, 5) // Just show a few for non-paginated
+    : filteredData.slice(0, 5)
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm border border-neutral-200">
-      <DataTable<UserData>
+      <EditDataTable<UserData>
         data={displayData}
         columns={customColumns || columns}
         contained={contained}
@@ -146,7 +181,7 @@ const TableWrapper = ({
           onSelectionChange: setSelectedKeys,
         }}
         toolbar={{
-          title: 'Users Directory',
+          title: 'Users Directory (Editable)',
           description: 'Manage your team members and permissions.',
           showSearch: true,
           searchPlaceholder: 'Search by name or email...',
@@ -155,17 +190,39 @@ const TableWrapper = ({
             setPage(1)
           },
           showAdd: true,
-          onAdd: () => alert('Add new user'),
+          onAdd: () => {
+            const newId = `new-${Math.random().toString(36).substring(7)}`
+            const newUser: UserData = {
+              id: newId,
+              name: '',
+              email: '',
+              role: 'User',
+              department: '',
+              status: 'Active'
+            }
+            setData(prev => [newUser, ...prev])
+          },
           showRefresh: true,
           showDeleteAll: true,
           showEditAll: true,
+          showSaveAll: true,
+          onSaveAll: async (rows) => {
+            alert('Saved rows: ' + rows.map(r => r.id).join(', '))
+          },
           ...props.toolbar
         }}
         actionColumn={{
-          type: 'dropdown',
+          type: 'inline',
           onDetail: (row: UserData) => alert(`Detail for ${row.name}`),
-          onEdit: (row: UserData) => alert(`Edit ${row.name}`),
-          onDelete: (row: UserData) => alert(`Delete ${row.name}`),
+          onEdit: () => undefined,
+          onDelete: (row: UserData) => {
+            setData(prev => prev.filter(r => r.id !== row.id))
+            alert(`Deleted ${row.name}`)
+          },
+          onSave: async (row: UserData) => {
+            setData(prev => prev.map(r => r.id === row.id ? row : r))
+            alert(`Saved ${row.name}`)
+          },
           ...props.actionColumn
         }}
         {...(withPagination ? {
@@ -236,10 +293,11 @@ export const WithoutPagination: Story = {
 export const EmptyState: Story = {
   render: () => (
     <div className="p-6 bg-white rounded-xl shadow-sm border border-neutral-200">
-      <DataTable
+      <EditDataTable
         data={[]}
         columns={columns}
         contained={false}
+        rowKey={(row) => row.id}
         emptyDisplay={
           <div className="flex flex-col items-center justify-center py-12">
             <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-4 text-neutral-400">
@@ -249,137 +307,6 @@ export const EmptyState: Story = {
             <p className="text-neutral-500 text-sm">There are no records to display at this moment.</p>
           </div>
         }
-      />
-    </div>
-  ),
-}
-
-export const LoadingStates: Story = {
-  render: () => (
-    <div className="space-y-8">
-      <TableWrapper loading={true} loadingVariant="spinner" toolbar={{ title: 'Loading Spinner' }} />
-      <TableWrapper loading={true} loadingVariant="skeleton" toolbar={{ title: 'Loading Skeleton' }} />
-    </div>
-  ),
-}
-
-export const ExpandableRows: Story = {
-  render: () => (
-    <TableWrapper
-      toolbar={{ title: 'Expandable Rows' }}
-      expandable={{
-        rowExpandable: (row: UserData) => row.status !== 'Inactive',
-        expandedRowRender: (row: UserData) => (
-          <div className="p-6 bg-neutral-50 border-t border-neutral-200">
-            <h4 className="font-semibold text-neutral-800 mb-4">Additional Details for {row.name}</h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div><span className="text-neutral-500 font-medium">User ID:</span> {row.id}</div>
-              <div><span className="text-neutral-500 font-medium">Department:</span> {row.department}</div>
-              <div><span className="text-neutral-500 font-medium">Email:</span> {row.email}</div>
-              <div>
-                <span className="text-neutral-500 font-medium">Active Status:</span>
-                {' '}
-                {row.status === 'Active' ? <span className="text-success-600 font-medium">Yes</span> : 'No'}
-              </div>
-            </div>
-          </div>
-        )
-      }}
-    />
-  ),
-}
-
-export const GroupedHeaders: Story = {
-  render: () => {
-    const groupedColumns: ColumnDef<UserData>[] = [
-      {
-        header: 'Identity',
-        align: 'center',
-        columns: [
-          {
-            header: 'No.',
-            width: '60px',
-            align: 'center',
-            cell: (_, index) => <span className="text-neutral-500 font-medium">{index + 1}</span>,
-          },
-          {
-            header: 'Profile',
-            accessorKey: 'name',
-          }
-        ]
-      },
-      {
-        header: 'Work Information',
-        align: 'center',
-        columns: [
-          { header: 'Department', accessorKey: 'department', align: 'center' },
-          { header: 'Role', accessorKey: 'role', align: 'center' },
-        ]
-      },
-      {
-        header: 'Status',
-        accessorKey: 'status',
-        align: 'center',
-        cell: (row) => <Badge variant="soft" color={row.status === 'Active' ? 'success' : 'neutral'}>{row.status}</Badge>
-      }
-    ]
-
-    return (
-      <TableWrapper
-        columns={groupedColumns}
-        toolbar={{ title: 'Grouped Headers (ColSpan)' }}
-      />
-    )
-  }
-}
-
-export const CustomToolbarAndInlineActions: Story = {
-  render: () => (
-    <TableWrapper
-      toolbar={{
-        title: 'Custom Layout',
-        sortOrder: ['search', 'refresh', 'add'],
-        customElements: [
-          <Button key="filter" variant="outlined" color="neutral" size="sm">
-            Filter
-          </Button>
-        ]
-      }}
-      actionColumn={{
-        type: 'inline',
-        variant: 'soft',
-        size: 'sm',
-        onDetail: (row: UserData) => alert(`Detail for ${row.name}`),
-        onEdit: (row: UserData) => alert(`Edit ${row.name}`),
-        onDelete: (row: UserData) => alert(`Delete ${row.name}`),
-        customActions: (row: UserData) => [
-          row.status === 'Pending' ? (
-            <IconButton
-              key="approve"
-              icon={<CheckIcon size={14} />}
-              onClick={() => alert('Approved')}
-              variant="soft"
-              color="success"
-              size="sm"
-              title="Approve"
-            />
-          ) : null
-        ],
-        sortOrder: ['custom', 'edit', 'delete']
-      }}
-    />
-  ),
-}
-
-export const Playground: Story = {
-  render: (args) => (
-    <div className="p-6 bg-white rounded-xl shadow-sm border border-neutral-200">
-      <DataTable<UserData>
-        {...args}
-        data={mockData.slice(0, 5)}
-        columns={columns}
-        contained={false}
-        rowKey={(row) => row.id}
       />
     </div>
   ),

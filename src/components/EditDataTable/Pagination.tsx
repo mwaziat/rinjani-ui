@@ -1,8 +1,8 @@
 import React from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icons'
-import type { PaginationConfig } from './DataTable.types'
-import { sizeClasses, selectSizeClasses, radiusBySize, activeVariants, selectColorMap, iconSizeClasses } from './DataTable.styles'
-import { getPageNumbers } from './DataTable.utils'
+import type { PaginationConfig } from './EditDataTable.types'
+import { sizeClasses, selectSizeClasses, radiusBySize, activeVariants, selectColorMap, iconSizeClasses } from './EditDataTable.styles'
+import { getPageNumbers } from './EditDataTable.utils'
 
 interface PaginationProps {
   config: PaginationConfig
@@ -34,6 +34,8 @@ export const Pagination = ({ config }: PaginationProps) => {
   const startItem = (page - 1) * limit + 1
   const endItem = Math.min(page * limit, totalItems)
 
+
+
   const currentSizeClass = sizeClasses[size || 'sm'] || sizeClasses.sm
   const currentRadiusClass = radiusBySize[size || 'sm'] || radiusBySize.sm
   const activeClass = activeVariants[variant || 'filled']?.[color || 'primary'] || activeVariants.filled?.primary || ''
@@ -43,7 +45,6 @@ export const Pagination = ({ config }: PaginationProps) => {
 
   const currentIconSize: number = iconSizeClasses[size || 'sm'] || iconSizeClasses.sm || 16
   const inputVariant = (variant === 'soft' || variant === 'text') ? 'outlined' : variant
-
 
   const selectVariantClasses = 
     inputVariant === 'outlined' 
