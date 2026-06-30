@@ -17,6 +17,32 @@ import {
   radiusMap
 } from './Autocomplete.styles'
 
+/**
+ * A highly interactive searchable dropdown component.
+ * 
+ * Functions similarly to a Select, but includes a search input to filter options.
+ * It also supports dynamically adding new items if they don't exist in the list.
+ * 
+ * @example
+ * ```tsx
+ * const [framework, setFramework] = useState<string | number>('')
+ * 
+ * return (
+ *   <Autocomplete 
+ *     label="Favorite Framework"
+ *     value={framework}
+ *     onChange={setFramework}
+ *     options={[
+ *       { label: 'React', value: 'react' },
+ *       { label: 'Vue', value: 'vue' },
+ *       { label: 'Angular', value: 'angular' }
+ *     ]}
+ *     enableAddItem={true}
+ *     floating
+ *   />
+ * )
+ * ```
+ */
 export const Autocomplete = ({
   label,
   options,

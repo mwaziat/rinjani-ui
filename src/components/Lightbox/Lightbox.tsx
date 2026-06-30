@@ -6,6 +6,32 @@ import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, Play
 import type { LightboxProps } from './Lightbox.types'
 import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
 
+/**
+ * A highly interactive, full-screen image gallery and image viewing component.
+ * 
+ * Supports zooming, dragging/swiping, autoplaying slideshows, keyboard navigation, and thumbnail previews.
+ * Renders into a portal at the root body level to ensure it overlays all other content.
+ * 
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false)
+ * 
+ * return (
+ *   <>
+ *     <Button onClick={() => setIsOpen(true)}>View Gallery</Button>
+ *     <Lightbox 
+ *       open={isOpen} 
+ *       close={() => setIsOpen(false)} 
+ *       autoplay={true}
+ *       slides={[
+ *         { src: '/images/photo1.jpg', title: 'Mountain View', description: 'Captured in 2023' },
+ *         { src: '/images/photo2.jpg', title: 'Ocean Waves' }
+ *       ]} 
+ *     />
+ *   </>
+ * )
+ * ```
+ */
 export const Lightbox: React.FC<LightboxProps> = ({
   open,
   close,

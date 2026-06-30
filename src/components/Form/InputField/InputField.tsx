@@ -6,6 +6,24 @@ import type { InputFieldProps } from './InputField.types'
 import { colorMap, lineFocus, textSizeMap, labelSizeMap, floatingActiveSizeMap, sizeMap, radiusMap } from './InputField.styles'
 import { formatCurrency, parseCurrency, useStableInputId } from '../shared'
 
+/**
+ * A highly versatile text input component for forms.
+ * 
+ * Supports single-line text, multi-line textareas, password toggles, floating labels, 
+ * and automatic currency formatting.
+ * 
+ * @example
+ * ```tsx
+ * // Simple input with floating label
+ * <InputField label="Email Address" floating type="email" />
+ * 
+ * // Currency formatting
+ * <InputField label="Price" format="currency" currency="USD" />
+ * 
+ * // Password with built-in toggle
+ * <InputField label="Password" isPassword />
+ * ```
+ */
 export const InputField = ({
   label,
   format = 'text',

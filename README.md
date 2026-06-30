@@ -9,7 +9,7 @@ A modern, customizable UI component library built with React and TailwindCSS v4.
 
 - Built with React 18+ and TypeScript
 - Powered by native **TailwindCSS v4** for styling
-- A growing collection of **12+ production-ready components** (Buttons, Badges, Tabs, Dialogs, etc.)
+- A growing collection of **18+ production-ready components** (Forms, Buttons, Modals, Tabs, etc.)
 - Tree-shakable and optimized for performance
 - Accessible components following WCAG guidelines
 - Highly customizable using modern `@theme` CSS variables
@@ -98,6 +98,7 @@ Rinjani UI has grown from a simple Button library into a comprehensive UI kit. H
 - **Dropdown**: Floating menus for actions or selections.
 - **Breadcrumb**: Navigation trails for deep architectures.
 - **Lightbox**: Beautiful image galleries and carousels.
+- **Forms**: Comprehensive, accessible form inputs including `InputField`, `Select`, `Autocomplete`, `Checkbox`, `Radio`, `Switch`, and `MultiTagInput`.
 
 ## Component Examples
 

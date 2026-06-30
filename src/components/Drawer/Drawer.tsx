@@ -6,6 +6,32 @@ import type { DrawerProps } from './Drawer.types'
 import { positionStyles, baseBackdropClasses, baseDrawerClasses } from './Drawer.styles'
 import { getSizeClasses, getTransformClass } from './Drawer.utils'
 
+/**
+ * A slide-out panel component used for navigation, filtering, or detailed views.
+ * 
+ * Drawers render into a portal at the root body level and trap scrolling underneath when open.
+ * Can be positioned on any edge of the screen.
+ * 
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false)
+ * 
+ * return (
+ *   <>
+ *     <Button onClick={() => setIsOpen(true)}>Open Filters</Button>
+ *     <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)} position="right" size="sm">
+ *       <Drawer.Header title="Filter Products" onClose={() => setIsOpen(false)} />
+ *       <Drawer.Content>
+ *         <Checkbox label="In Stock Only" />
+ *       </Drawer.Content>
+ *       <Drawer.Footer>
+ *         <Button fullWidth>Apply Filters</Button>
+ *       </Drawer.Footer>
+ *     </Drawer>
+ *   </>
+ * )
+ * ```
+ */
 export const Drawer: React.FC<DrawerProps> = ({
   isOpen,
   onClose,

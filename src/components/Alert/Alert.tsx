@@ -11,6 +11,24 @@ import {
 } from '../Icons/status'
 import { XIcon, MinusIcon, PlusIcon as ExpandIcon } from '../Icons/action'
 
+/**
+ * A feedback component to communicate information, success, warnings, or errors to the user.
+ * 
+ * Supports auto-dismissal (duration), manual closing, minimizing, and customizable icons.
+ * 
+ * @example
+ * ```tsx
+ * <Alert 
+ *   color="success" 
+ *   variant="soft" 
+ *   title="Update Successful"
+ *   duration={5000}
+ *   onClose={() => console.log('Alert closed')}
+ * >
+ *   Your profile has been updated successfully.
+ * </Alert>
+ * ```
+ */
 export const Alert: React.FC<AlertProps> = ({
   variant = 'soft',
   color = 'info',

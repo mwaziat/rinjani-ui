@@ -8,6 +8,33 @@ import { sizeClasses } from './Modal.styles'
 let contentScrollLockCount = 0
 let modalZIndexSeed = 9999
 
+/**
+ * A highly customizable modal dialog component.
+ * 
+ * Modals overlay the main interface to focus the user's attention on a specific task or piece of information.
+ * Supports dynamic stacking (multiple modals) with proper z-index management and scroll locking.
+ * 
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false)
+ * 
+ * return (
+ *   <>
+ *     <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+ *     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="md">
+ *       <Modal.Header title="Terms of Service" onClose={() => setIsOpen(false)} />
+ *       <Modal.Content>
+ *         <p>Please read our terms carefully before proceeding...</p>
+ *       </Modal.Content>
+ *       <Modal.Footer>
+ *         <Button variant="soft" onClick={() => setIsOpen(false)}>Decline</Button>
+ *         <Button onClick={() => setIsOpen(false)}>Accept</Button>
+ *       </Modal.Footer>
+ *     </Modal>
+ *   </>
+ * )
+ * ```
+ */
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(({ 
   isOpen, 
   onClose, 

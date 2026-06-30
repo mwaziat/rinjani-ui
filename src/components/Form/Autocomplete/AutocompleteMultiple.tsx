@@ -18,6 +18,32 @@ import {
   chipSizes
 } from './AutocompleteMultiple.styles'
 
+/**
+ * A highly interactive searchable dropdown that allows selecting multiple options.
+ * 
+ * Selected options are displayed as "chips" or tags inside the input area.
+ * Functions similarly to a SelectMultiple, but includes a search input to filter options.
+ * 
+ * @example
+ * ```tsx
+ * const [tags, setTags] = useState<SelectMultipleValue>([])
+ * 
+ * return (
+ *   <AutocompleteMultiple 
+ *     label="Tags"
+ *     value={tags}
+ *     onChange={setTags}
+ *     options={[
+ *       { label: 'React', value: 'react' },
+ *       { label: 'Vue', value: 'vue' },
+ *       { label: 'Angular', value: 'angular' }
+ *     ]}
+ *     enableAddItem={true}
+ *     isClearable
+ *   />
+ * )
+ * ```
+ */
 export const AutocompleteMultiple = ({
   label,
   options,

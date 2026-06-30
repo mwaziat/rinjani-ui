@@ -5,6 +5,25 @@ import { AlertCircleIcon } from '../../Icons'
 import type { SwitchProps } from './Switch.types'
 import { sizeClasses, colorClasses, focusClasses, placementClasses } from './Switch.styles'
 
+/**
+ * A toggle switch component used to switch between two states (e.g., on/off, enable/disable).
+ * 
+ * Best used for settings or preferences that take immediate effect when toggled.
+ * 
+ * @example
+ * ```tsx
+ * const [notifications, setNotifications] = useState(true)
+ * 
+ * return (
+ *   <Switch 
+ *     label="Enable Email Notifications"
+ *     checked={notifications}
+ *     onChange={setNotifications}
+ *     color="success"
+ *   />
+ * )
+ * ```
+ */
 export const Switch = ({
   checked,
   onChange,

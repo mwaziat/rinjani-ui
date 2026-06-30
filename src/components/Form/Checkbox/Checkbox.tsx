@@ -5,6 +5,31 @@ import { CheckIcon, AlertCircleIcon } from '../../Icons'
 import type { CheckboxProps } from './Checkbox.types'
 import { sizeClasses, colors } from './Checkbox.styles'
 
+/**
+ * A group of checkbox inputs that allows users to select multiple options from a list.
+ * 
+ * Includes built-in support for labels, error states, and responsive layouts (vertical/horizontal).
+ * 
+ * @example
+ * ```tsx
+ * const [selectedHobbies, setSelectedHobbies] = useState<string[]>([])
+ * 
+ * return (
+ *   <Checkbox 
+ *     label="What are your hobbies?"
+ *     name="hobbies"
+ *     options={[
+ *       { label: 'Reading', value: 'reading' },
+ *       { label: 'Gaming', value: 'gaming' },
+ *       { label: 'Sleeping', value: 'sleeping' }
+ *     ]}
+ *     values={selectedHobbies}
+ *     onChange={setSelectedHobbies}
+ *     orientation="row"
+ *   />
+ * )
+ * ```
+ */
 export const Checkbox = ({
   label,
   options,

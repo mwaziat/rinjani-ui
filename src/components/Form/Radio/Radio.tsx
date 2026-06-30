@@ -5,6 +5,31 @@ import { AlertCircleIcon } from '../../Icons'
 import type { RadioProps } from './Radio.types'
 import { sizeClasses, colors } from './Radio.styles'
 
+/**
+ * A group of radio buttons that allows users to select exactly one option from a list.
+ * 
+ * Includes built-in support for labels, error states, and responsive layouts (vertical/horizontal).
+ * 
+ * @example
+ * ```tsx
+ * const [paymentMethod, setPaymentMethod] = useState<string | number>('card')
+ * 
+ * return (
+ *   <Radio 
+ *     label="Payment Method"
+ *     name="payment"
+ *     options={[
+ *       { label: 'Credit Card', value: 'card' },
+ *       { label: 'Bank Transfer', value: 'transfer' },
+ *       { label: 'Cash on Delivery', value: 'cod', disabled: true }
+ *     ]}
+ *     value={paymentMethod}
+ *     onChange={setPaymentMethod}
+ *     orientation="col"
+ *   />
+ * )
+ * ```
+ */
 export const Radio = ({
   label,
   options,

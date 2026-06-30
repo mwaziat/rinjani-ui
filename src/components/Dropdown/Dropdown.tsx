@@ -9,6 +9,24 @@ import type { DropdownProps, DropdownContentPosition } from './Dropdown.types'
 import { baseStyles, sizes, radiusBySize, variants } from './Dropdown.styles'
 import { VIEWPORT_PADDING, getPlacementCandidates, getPositionForPlacement, getOverflowScore, clampPosition } from './Dropdown.utils'
 
+/**
+ * A highly versatile Dropdown menu component with smart positioning.
+ * 
+ * Automatically calculates the best position on screen to prevent overflowing the viewport.
+ * Menus are rendered in a portal to prevent CSS clipping issues.
+ * 
+ * @example
+ * ```tsx
+ * <Dropdown label="Options" variant="soft" color="primary">
+ *   <Dropdown.List>
+ *     <Dropdown.Item leftIcon={<UserIcon size={16} />}>Profile</Dropdown.Item>
+ *     <Dropdown.Item leftIcon={<SettingsIcon size={16} />}>Settings</Dropdown.Item>
+ *     <Dropdown.Divider />
+ *     <Dropdown.Item color="danger" leftIcon={<LogOutIcon size={16} />}>Logout</Dropdown.Item>
+ *   </Dropdown.List>
+ * </Dropdown>
+ * ```
+ */
 export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
   label,
   icon,

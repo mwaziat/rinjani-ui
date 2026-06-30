@@ -2,6 +2,18 @@ import React from 'react'
 import type { BadgeProps } from './Badge.types'
 import { baseStyles, sizes, radiusBySize, variants } from './Badge.styles'
 
+/**
+ * A small label component used to highlight status, tags, or categories.
+ * 
+ * Badges are non-interactive elements that provide visual metadata.
+ * 
+ * @example
+ * ```tsx
+ * <Badge color="warning" variant="soft" isPill leftIcon={<AlertTriangleIcon size={12} />}>
+ *   Pending Review
+ * </Badge>
+ * ```
+ */
 export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({
   children,
   variant = 'soft',

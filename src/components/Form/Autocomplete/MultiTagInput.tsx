@@ -18,6 +18,27 @@ import {
   iconSizes
 } from './MultiTagInput.styles'
 
+/**
+ * An input field designed for capturing multiple arbitrary text values as tags.
+ * 
+ * Unlike Autocomplete, this component does not have a dropdown list. 
+ * Users simply type text and press Enter to add a new tag.
+ * 
+ * @example
+ * ```tsx
+ * const [emails, setEmails] = useState<MultiTagValue[]>([])
+ * 
+ * return (
+ *   <MultiTagInput 
+ *     label="Invite Team Members"
+ *     placeholder="Type email address and press Enter"
+ *     values={emails}
+ *     onChange={setEmails}
+ *     maxTags={5}
+ *   />
+ * )
+ * ```
+ */
 export const MultiTagInput = ({
   label,
   values = [],

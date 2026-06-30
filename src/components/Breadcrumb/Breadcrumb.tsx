@@ -12,6 +12,26 @@ import {
 } from './Breadcrumb.styles'
 import { ChevronRightIcon } from '../Icons'
 
+/**
+ * A navigational component that helps users understand their current location within a website's hierarchy.
+ * 
+ * It visually separates the historical path (clickable links) from the active page 
+ * and can optionally be wrapped in a prominent container box.
+ * 
+ * @example
+ * ```tsx
+ * <Breadcrumb 
+ *   activeLabel="Product Details"
+ *   activeIcon={<PackageIcon size={24} />}
+ *   color="primary"
+ *   variant="soft"
+ *   paths={[
+ *     { label: 'Home', href: '/' },
+ *     { label: 'Inventory', href: '/inventory' }
+ *   ]}
+ * />
+ * ```
+ */
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   activeLabel,
   activeIcon,

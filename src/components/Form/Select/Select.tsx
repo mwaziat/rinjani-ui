@@ -16,6 +16,31 @@ import {
   radiusMap
 } from './Select.styles'
 
+/**
+ * A custom dropdown select component designed as an elegant alternative to the native `<select>`.
+ * 
+ * Features smart positioning via portals to avoid being cut off by overflow containers,
+ * floating labels, and support for object-based values.
+ * 
+ * @example
+ * ```tsx
+ * const [role, setRole] = useState<string | number>('user')
+ * 
+ * return (
+ *   <Select 
+ *     label="User Role"
+ *     value={role}
+ *     onChange={setRole}
+ *     options={[
+ *       { label: 'Administrator', value: 'admin' },
+ *       { label: 'Standard User', value: 'user' },
+ *       { label: 'Guest', value: 'guest', disabled: true }
+ *     ]}
+ *     floating
+ *   />
+ * )
+ * ```
+ */
 export const Select = ({
   label,
   options,
