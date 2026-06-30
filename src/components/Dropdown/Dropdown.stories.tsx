@@ -47,7 +47,7 @@ const colors: DropdownColor[] = ['primary', 'secondary', 'success', 'warning', '
 const variants: DropdownVariant[] = ['filled', 'soft', 'outlined', 'text']
 const placements: DropdownPlacement[] = ['bottom-start', 'bottom', 'bottom-end', 'top-start', 'top', 'top-end', 'right-start', 'right', 'right-end', 'left-start', 'left', 'left-end']
 
-const DropdownMenuDemo = () => (
+const DropdownMenuDemo: React.FC = () => (
   <DropdownList>
     <DropdownItem leftIcon={<UserIcon size={16} />}>Profile</DropdownItem>
     <DropdownItem leftIcon={<SettingsIcon size={16} />}>Settings</DropdownItem>

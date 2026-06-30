@@ -1,23 +1,23 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { XIcon } from '../Icons/action'
 import { CheckCircleIcon, XCircleIcon, AlertTriangleIcon, InfoIcon } from '../Icons/status'
 import type { ToastItem } from './Toast.types'
 import { toastManager } from './toast-manager'
 import { bgColors, barColors, baseToastClasses } from './Toast.styles'
 
-export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
+export const ToastMessage: React.FC<{ toast: ToastItem }> = ({ toast }) => {
   const [progress, setProgress] = useState(100)
   const [isLeaving, setIsLeaving] = useState(false)
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsLeaving(true)
     setTimeout(() => {
       toastManager.remove(toast.id)
       toast.onClose?.()
     }, 300)
-  }
+  }, [toast])
 
   useEffect(() => {
     if (toast.duration && toast.duration > 0) {
@@ -42,7 +42,7 @@ export const ToastMessage = ({ toast }: { toast: ToastItem }) => {
 
       return () => cancelAnimationFrame(animationFrame)
     }
-  }, [toast.duration, toast.id, toast, isLeaving])
+  }, [toast.duration, isLeaving, handleClose])
 
   const icons = {
     success: <CheckCircleIcon size={22} className="text-success-600" />,

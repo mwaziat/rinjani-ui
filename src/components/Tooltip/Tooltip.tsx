@@ -6,7 +6,22 @@ import type { TooltipProps, ContentPosition } from './Tooltip.types'
 import { baseTooltipStyles, radiusBySize, sizes, variants, maxWidths } from './Tooltip.styles'
 import { clampPosition, getOverflowScore, getPlacementCandidates, getPositionForPlacement } from './Tooltip.utils'
 
-export const Tooltip = ({
+/**
+ * A small pop-up box that appears when hovering or focusing on an element.
+ * 
+ * Used to provide brief, supplementary information (like explaining an icon button).
+ * Automatically calculates its position to stay within the viewport using portals.
+ * 
+ * @example
+ * ```tsx
+ * <Tooltip content="This action cannot be undone" placement="top" color="danger">
+ *   <Button variant="outlined" color="danger">
+ *     Delete Account
+ *   </Button>
+ * </Tooltip>
+ * ```
+ */
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
   children,
   content,
   color = 'neutral',
@@ -19,7 +34,7 @@ export const Tooltip = ({
   isPill = false,
   delay = 200,
   maxWidth,
-}: TooltipProps) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const [contentPosition, setContentPosition] = useState<ContentPosition>({
     top: 0,
@@ -28,6 +43,15 @@ export const Tooltip = ({
     currentPlacement: placement === 'auto' ? 'top' : placement,
   })
   const triggerRef = useRef<HTMLDivElement>(null)
+
+  const setRefs = (node: HTMLDivElement | null) => {
+    ;(triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+    if (typeof ref === 'function') {
+      ref(node)
+    } else if (ref) {
+      ;(ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+    }
+  }
   const contentRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -104,7 +128,7 @@ export const Tooltip = ({
   return (
     <>
       <div
-        ref={triggerRef}
+        ref={setRefs}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}
@@ -158,6 +182,8 @@ export const Tooltip = ({
       )}
     </>
   )
-}
+})
+
+Tooltip.displayName = 'Tooltip'
 
 export default Tooltip

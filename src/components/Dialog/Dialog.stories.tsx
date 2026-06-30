@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { DialogContainer } from './DialogContainer'
 import { Dialog } from './Dialog'
 import { Button } from '../Button'
+import type { DialogOptions } from './Dialog.types'
 
 const meta: Meta = {
   title: 'Components/Feedback/Dialog',
@@ -126,7 +127,7 @@ export const Showcase: Story = {
                     variant: 'filled', 
                     color: 'warning',
                     closeAfter: false,
-                    onClick: () => console.log('Action triggered but dialog remains open!')
+                    onClick: () => console.warn('Action triggered but dialog remains open!')
                   }
                 ]
               })}
@@ -167,7 +168,7 @@ export const Playground: Story = {
       <Button 
         variant="filled" 
         color="primary" 
-        onClick={() => Dialog.show(args as any)}
+        onClick={() => Dialog.show(args as DialogOptions)}
       >
         Trigger Playground Dialog
       </Button>

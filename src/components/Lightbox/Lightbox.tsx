@@ -6,7 +6,33 @@ import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, Play
 import type { LightboxProps } from './Lightbox.types'
 import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
 
-export const Lightbox = ({
+/**
+ * A highly interactive, full-screen image gallery and image viewing component.
+ * 
+ * Supports zooming, dragging/swiping, autoplaying slideshows, keyboard navigation, and thumbnail previews.
+ * Renders into a portal at the root body level to ensure it overlays all other content.
+ * 
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false)
+ * 
+ * return (
+ *   <>
+ *     <Button onClick={() => setIsOpen(true)}>View Gallery</Button>
+ *     <Lightbox 
+ *       open={isOpen} 
+ *       close={() => setIsOpen(false)} 
+ *       autoplay={true}
+ *       slides={[
+ *         { src: '/images/photo1.jpg', title: 'Mountain View', description: 'Captured in 2023' },
+ *         { src: '/images/photo2.jpg', title: 'Ocean Waves' }
+ *       ]} 
+ *     />
+ *   </>
+ * )
+ * ```
+ */
+export const Lightbox: React.FC<LightboxProps> = ({
   open,
   close,
   index = 0,
@@ -17,10 +43,9 @@ export const Lightbox = ({
   autoplayDuration = 3000,
   isDraggable = true,
   loop = true,
-}: LightboxProps) => {
+}) => {
   const [currentIndex, setCurrentIndex] = useState(index)
   const [scale, setScale] = useState(1)
-  const [mounted, setMounted] = useState(false)
 
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -30,18 +55,23 @@ export const Lightbox = ({
 
   const actualLoop = autoplay || loop
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
-  useEffect(() => {
+  const [prevProps, setPrevProps] = useState({ open, index, autoplay })
+  
+  if (
+    open !== prevProps.open ||
+    index !== prevProps.index ||
+    autoplay !== prevProps.autoplay
+  ) {
+    setPrevProps({ open, index, autoplay })
+    
     if (open) {
       setCurrentIndex(index)
       setScale(1)
       setDragOffset({ x: 0, y: 0 })
       setIsPlaying(autoplay)
     }
-  }, [open, index, autoplay])
+  }
 
   useEffect(() => {
     if (open) {
@@ -93,7 +123,7 @@ export const Lightbox = ({
     return () => clearInterval(timer)
   }, [open, isPlaying, autoplayDuration, isDragging, scale, handleNext])
 
-  if (!mounted) return null
+  if (typeof document === 'undefined') return null
 
   const slide = slides[currentIndex] || slides[0]
 

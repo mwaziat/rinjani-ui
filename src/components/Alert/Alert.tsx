@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import type { AlertProps } from './Alert.types'
+import type { AlertProps, AlertColor } from './Alert.types'
 import { baseAlertClasses, colorStyles } from './Alert.styles'
 import { 
   CheckCircleIcon, 
@@ -11,7 +11,25 @@ import {
 } from '../Icons/status'
 import { XIcon, MinusIcon, PlusIcon as ExpandIcon } from '../Icons/action'
 
-export const Alert = ({
+/**
+ * A feedback component to communicate information, success, warnings, or errors to the user.
+ * 
+ * Supports auto-dismissal (duration), manual closing, minimizing, and customizable icons.
+ * 
+ * @example
+ * ```tsx
+ * <Alert 
+ *   color="success" 
+ *   variant="soft" 
+ *   title="Update Successful"
+ *   duration={5000}
+ *   onClose={() => console.log('Alert closed')}
+ * >
+ *   Your profile has been updated successfully.
+ * </Alert>
+ * ```
+ */
+export const Alert: React.FC<AlertProps> = ({
   variant = 'soft',
   color = 'info',
   title,
@@ -66,13 +84,14 @@ export const Alert = ({
   const showCloseButton = action === 'close' || (!action && !!onClose)
   const showMinimizeButton = action === 'minimize'
 
-  const defaultIcons: Record<string, React.ReactNode> = {
+  const defaultIcons: Record<AlertColor, React.ReactNode> = {
     success: <CheckCircleIcon size={20} />,
     danger: <XCircleIcon size={20} />,
     warning: <AlertTriangleIcon size={20} />,
     info: <InfoIcon size={20} />,
     primary: <InfoIcon size={20} />,
     neutral: <InfoIcon size={20} />,
+    secondary: <InfoIcon size={20} />,
   }
 
   const renderedIcon = icon || defaultIcons[color] || defaultIcons['info']

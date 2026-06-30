@@ -3,6 +3,25 @@ import type { ButtonProps } from './Button.types'
 import { baseButtonStyles, buttonSizes, radiusBySize, variants } from './Button.styles'
 import { LoaderIcon } from '../Icons'
 
+/**
+ * A highly customizable Button component for triggering actions or submitting forms.
+ * 
+ * Supports various aesthetic variants, sizes, colors, and includes a built-in loading state
+ * that automatically disables user interaction when active.
+ * 
+ * @example
+ * ```tsx
+ * <Button 
+ *   variant="filled" 
+ *   color="primary" 
+ *   isLoading={isSubmitting} 
+ *   leftIcon={<SaveIcon size={16} />}
+ *   onClick={handleSave}
+ * >
+ *   Save Changes
+ * </Button>
+ * ```
+ */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   variant = 'filled',
@@ -30,15 +49,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading ? (
-        <LoaderIcon className="animate-spin" size={loaderSize} />
-      ) : (
-        <>
-          {leftIcon && <span className="shrink-0 flex items-center">{leftIcon}</span>}
-          {children}
-          {rightIcon && <span className="shrink-0 flex items-center">{rightIcon}</span>}
-        </>
-      )}
+      {isLoading && <LoaderIcon className="animate-spin" size={loaderSize} />}
+      {!isLoading && leftIcon && <span className="shrink-0 flex items-center">{leftIcon}</span>}
+      {children}
+      {!isLoading && rightIcon && <span className="shrink-0 flex items-center">{rightIcon}</span>}
     </button>
   )
 })

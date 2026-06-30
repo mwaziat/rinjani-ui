@@ -6,7 +6,7 @@ import type { ToastItem, ToastPlacement } from './Toast.types'
 import { ToastMessage } from './ToastMessage'
 import { placementClasses } from './Toast.styles'
 
-export const ToastContainer = () => {
+export const ToastContainer: React.FC = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([])
 
   useEffect(() => {

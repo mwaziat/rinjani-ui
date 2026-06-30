@@ -6,7 +6,7 @@ import type { TabsItemProps } from './Tabs.types'
 import { getTriggerClass } from './Tabs.utils'
 import { justifyMap } from './Tabs.styles'
 
-export const TabsItem = ({ value, children, icon, iconPosition = 'start', disabled = false, className = '' }: TabsItemProps) => {
+export const TabsItem = React.forwardRef<HTMLButtonElement, TabsItemProps>(({ value, children, icon, iconPosition = 'start', disabled = false, className = '' }, ref) => {
   const { activeTab, onChange, color, size, variant, placement, align, alignLabel } = useTabsContext()
   const isActive = activeTab === value
 
@@ -22,6 +22,7 @@ export const TabsItem = ({ value, children, icon, iconPosition = 'start', disabl
 
   return (
     <button
+      ref={ref}
       type="button"
       role="tab"
       aria-selected={isActive}
@@ -36,4 +37,6 @@ export const TabsItem = ({ value, children, icon, iconPosition = 'start', disabl
       {children && <span className={labelAlignClass}>{children}</span>}
     </button>
   )
-}
+})
+
+TabsItem.displayName = 'TabsItem'

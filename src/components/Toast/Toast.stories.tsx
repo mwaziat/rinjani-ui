@@ -21,7 +21,7 @@ const meta: Meta = {
 }
 
 export default meta
-type Story = StoryObj
+type Story = StoryObj<typeof ToastContainer>
 
 export const Showcase: Story = {
   render: () => {
@@ -168,7 +168,7 @@ export const Playground: Story = {
       <Button 
         variant="filled" 
         color="primary" 
-        onClick={() => Toast.show(args as any)}
+        onClick={() => Toast.show(args as import('./Toast.types').ToastOptions)}
       >
         Trigger Playground Toast
       </Button>

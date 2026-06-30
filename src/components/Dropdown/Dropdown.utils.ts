@@ -1,5 +1,9 @@
 import type { DropdownPlacement } from './Dropdown.types'
 
+/**
+ * The minimum distance (in pixels) the dropdown must maintain from the edge of the screen.
+ * Prevents the menu from hugging the exact edge of the viewport.
+ */
 export const VIEWPORT_PADDING = 12
 
 export const normalizePlacement = (placement: DropdownPlacement) => {
@@ -9,6 +13,11 @@ export const normalizePlacement = (placement: DropdownPlacement) => {
   return placement
 }
 
+/**
+ * Given a placement preference (like 'auto' or 'bottom'), this function returns an array
+ * of fallback positions to try in order of priority.
+ * Used to intelligently move the dropdown if the preferred spot goes off-screen.
+ */
 export const getPlacementCandidates = (placement: DropdownPlacement): Exclude<DropdownPlacement, 'auto'>[] => {
   if (placement !== 'auto') {
     return [normalizePlacement(placement) as Exclude<DropdownPlacement, 'auto'>]
@@ -17,6 +26,15 @@ export const getPlacementCandidates = (placement: DropdownPlacement): Exclude<Dr
   return ['bottom-start', 'bottom-end', 'top-start', 'top-end', 'right-start', 'left-start']
 }
 
+/**
+ * Calculates the exact pixel coordinates (top/left) for placing the dropdown menu.
+ * It uses the bounding rectangles of the trigger button and the menu itself.
+ * 
+ * @param triggerRect The bounding rect of the button that opened the dropdown.
+ * @param contentRect The bounding rect of the dropdown menu content.
+ * @param placement The specific alignment strategy to calculate for.
+ * @param offset The gap distance between the trigger and the menu.
+ */
 export const getPositionForPlacement = (
   triggerRect: DOMRect,
   contentRect: DOMRect,
@@ -56,6 +74,11 @@ export const getPositionForPlacement = (
   }
 }
 
+/**
+ * Calculates a "penalty score" for how much a specific position would overflow the screen.
+ * A score of 0 means it fits perfectly. Higher scores mean more clipping.
+ * This is used to rank which placement candidate is the best.
+ */
 export const getOverflowScore = (top: number, left: number, contentRect: DOMRect) => {
   const right = left + contentRect.width
   const bottom = top + contentRect.height
@@ -68,6 +91,10 @@ export const getOverflowScore = (top: number, left: number, contentRect: DOMRect
   ].reduce((score, value) => score + Math.max(0, value), 0)
 }
 
+/**
+ * Forces the final coordinates to stay strictly within the visible boundaries of the screen.
+ * Acts as a final safety net even if the best placement still slightly overflows.
+ */
 export const clampPosition = (top: number, left: number, contentRect: DOMRect) => {
   const maxLeft = Math.max(VIEWPORT_PADDING, window.innerWidth - contentRect.width - VIEWPORT_PADDING)
   const maxTop = Math.max(VIEWPORT_PADDING, window.innerHeight - contentRect.height - VIEWPORT_PADDING)

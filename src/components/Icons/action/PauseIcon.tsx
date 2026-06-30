@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import { SvgIcon, type SvgIconProps } from '../SvgIcon'
 
-export const PauseIcon = forwardRef<SVGSVGElement, Omit<SvgIconProps, 'ref'>>((props, ref) => (
+export const PauseIcon = React.forwardRef<SVGSVGElement, SvgIconProps>((props, ref) => (
   <SvgIcon ref={ref} {...props} viewBox="0 0 24 24" fill="currentColor">
     <rect x="6" y="4" width="4" height="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     <rect x="14" y="4" width="4" height="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
