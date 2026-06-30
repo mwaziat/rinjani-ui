@@ -1,0 +1,186 @@
+import React, { useRef } from 'react'
+import { SearchIcon } from '../Icons/general'
+import { PlusIcon, RefreshIcon, TrashIcon as LuTrash2, PencilIcon as LuPencil } from '../Icons/action'
+import { Button } from '../Button'
+import { InputField } from '../Form'
+import type { ToolbarConfig } from './DataTable.types'
+import { iconSizeClasses } from './DataTable.styles'
+
+interface ToolbarProps {
+  config: ToolbarConfig
+  selectedRowKeys?: (string | number)[]
+}
+
+export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
+  const {
+    title,
+    description,
+    showSearch = true,
+    searchPlaceholder = 'Search...',
+    onSearchChange,
+    showAdd = false,
+    onAdd,
+    showRefresh = false,
+    onRefresh,
+    showDeleteAll = false,
+    onDeleteAll,
+    showEditAll = false,
+    onEditAll,
+    variant = 'filled',
+    color = 'primary',
+    size = 'sm',
+    sortOrder = ['search', 'add', 'refresh', 'editAll', 'deleteAll'],
+    customElements,
+  } = config
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      if (onSearchChange) {
+        onSearchChange(value)
+      }
+    }, 500)
+  }
+
+  React.useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current)
+      }
+    }
+  }, [])
+
+
+
+
+  const currentIconSize: number = iconSizeClasses[size] || iconSizeClasses.md || 16
+  const inputVariant = (variant === 'soft' || variant === 'text') ? 'outlined' : variant
+
+  const customElementsMap: Record<string, React.ReactNode> = {}
+  if (customElements) {
+    if (Array.isArray(customElements)) {
+      customElements.forEach((el, index) => {
+        if (React.isValidElement(el) && el.key != null) {
+          const keyStr = String(el.key).replace(/^\.\$/, '')
+          customElementsMap[keyStr] = el
+        } else {
+          customElementsMap[`custom-${index}`] = el
+        }
+      })
+    } else if (React.isValidElement(customElements) && customElements.key != null) {
+      const keyStr = String(customElements.key).replace(/^\.\$/, '')
+      customElementsMap[keyStr] = customElements
+    } else {
+      customElementsMap['customElements'] = customElements
+    }
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 gap-4">
+      <div className="flex-1 w-full sm:w-auto">
+        {title && <h3 className="text-lg font-bold text-neutral-800">{title}</h3>}
+        {description && <p className="text-sm text-neutral-500 mt-0.5">{description}</p>}
+      </div>
+
+      <div className="flex flex-wrap gap-3 items-center w-full sm:w-auto justify-start sm:justify-end">
+        {sortOrder.map(key => {
+          if (key === 'search') {
+            return showSearch && (
+              <div key="search" className="w-full sm:w-64 shrink-0">
+                <InputField
+                  placeholder={searchPlaceholder}
+                  onChange={handleSearch}
+                  leftIcon={<SearchIcon />}
+                  size={size}
+                  variant={inputVariant}
+                  color={color}
+                />
+              </div>
+            )
+          }
+
+          if (key === 'refresh') {
+            return showRefresh && (
+              <Button
+                key="refresh"
+                leftIcon={<RefreshIcon size={currentIconSize} />}
+                variant={variant}
+                color={color}
+                size={size}
+                onClick={onRefresh}
+              >
+                Refresh
+              </Button>
+            )
+          }
+
+          if (key === 'add') {
+            return showAdd && (
+              <Button
+                key="add"
+                leftIcon={<PlusIcon size={currentIconSize} />}
+                variant={variant}
+                color={color}
+                size={size}
+                onClick={onAdd}
+              >
+                Add New
+              </Button>
+            )
+          }
+
+          if (key === 'editAll') {
+            return showEditAll && (
+              <Button
+                key="editAll"
+                leftIcon={<LuPencil size={currentIconSize} />}
+                variant={variant}
+                color={color}
+                size={size}
+                disabled={selectedRowKeys.length === 0}
+                onClick={() => onEditAll?.(selectedRowKeys)}
+              >
+                Edit All
+              </Button>
+            )
+          }
+
+          if (key === 'deleteAll') {
+            return showDeleteAll && (
+              <Button
+                key="deleteAll"
+                leftIcon={<LuTrash2 size={currentIconSize} />}
+                variant={variant}
+                color={color}
+                size={size}
+                disabled={selectedRowKeys.length === 0}
+                onClick={() => onDeleteAll?.(selectedRowKeys)}
+              >
+                Delete All
+              </Button>
+            )
+          }
+
+          if (customElementsMap[key]) {
+            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+          }
+
+          return null
+        })}
+
+        {Object.keys(customElementsMap).map(key => {
+          if (!sortOrder.includes(key)) {
+            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+          }
+          return null
+        })}
+      </div>
+    </div>
+  )
+}
