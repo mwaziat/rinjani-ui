@@ -6,32 +6,8 @@ import type { PanelLayoutProps } from './Panel.types'
 
 export const PanelLayout = ({ 
   children, 
-  menuItems,
-  activeMenuIds,
-  logo,
-  collapsedLogo,
-  userProfile,
-  notifications,
-  activeModuleChildren,
-  businessContextNode,
-  switchLocaleNode,
-  onLogout,
-  onSettingsClick,
-  onUserGuideClick,
-  onViewAllNotifications,
-  renderUserGuideModal,
-  isLoggingOut,
-  textSignOut,
-  textSigningOut,
-  textAccount,
-  textSettings,
-  textUserGuide,
-  textAllManual,
-  textModuleGuides,
-  textNotifications,
-  textViewAllActivities,
-  textNew,
-  LinkComponent
+  sidebar,
+  navbar
 }: PanelLayoutProps) => {
   const [isMinimized, setIsMinimized] = useState(false)
   const [isOpenMobile, setIsOpenMobile] = useState(false)
@@ -68,42 +44,13 @@ export const PanelLayout = ({
         isMinimized={isMinimized} 
         isOpenMobile={isOpenMobile} 
         toggleMobile={() => setIsOpenMobile(false)} 
-        menuItems={menuItems}
-        activeMenuIds={activeMenuIds}
-        logo={logo}
-        collapsedLogo={collapsedLogo}
-        onLogout={onLogout}
-        isLoggingOut={isLoggingOut}
-        textSignOut={textSignOut}
-        textSigningOut={textSigningOut}
-        LinkComponent={LinkComponent}
+        {...sidebar}
       />
       <div className={`transition-all duration-300 min-h-screen flex flex-col ${isMinimized ? 'lg:pl-20' : 'lg:pl-72'} pl-0`}>
         <PanelNavbar 
           isMinimized={isMinimized} 
           toggleSidebar={handleToggleMenuMobileDesk} 
-          userProfile={userProfile}
-          notifications={notifications}
-          activeModuleChildren={activeModuleChildren}
-          businessContextNode={businessContextNode}
-          switchLocaleNode={switchLocaleNode}
-          onLogout={onLogout}
-          onSettingsClick={onSettingsClick}
-          onUserGuideClick={onUserGuideClick}
-          onViewAllNotifications={onViewAllNotifications}
-          renderUserGuideModal={renderUserGuideModal}
-          isLoggingOut={isLoggingOut}
-          textSignOut={textSignOut}
-          textSigningOut={textSigningOut}
-          textAccount={textAccount}
-          textSettings={textSettings}
-          textUserGuide={textUserGuide}
-          textAllManual={textAllManual}
-          textModuleGuides={textModuleGuides}
-          textNotifications={textNotifications}
-          textViewAllActivities={textViewAllActivities}
-          textNew={textNew}
-          LinkComponent={LinkComponent}
+          {...navbar}
         />
         <main className="p-4 lg:p-8 flex-1 overflow-x-hidden">
           <div className="w-full">

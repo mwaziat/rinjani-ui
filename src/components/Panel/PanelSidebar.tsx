@@ -7,7 +7,7 @@ export const PanelSidebar = ({
   isMinimized = false,
   isOpenMobile = false,
   toggleMobile,
-  menuItems,
+  menuItems = [],
   activeMenuIds = new Set(),
   onLogout,
   isLoggingOut,

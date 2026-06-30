@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Dispatch, SetStateAction, ElementType, RefObject } from 'react'
 
 export type SidebarMenuNode = {
   id: number
@@ -21,7 +21,7 @@ export interface PanelSidebarProps {
   isMinimized?: boolean | undefined
   isOpenMobile?: boolean | undefined
   toggleMobile?: (() => void) | undefined
-  menuItems: SidebarMenuNode[]
+  menuItems?: SidebarMenuNode[] | undefined
   activeMenuIds?: Set<number> | undefined
   onLogout?: (() => void) | undefined
   isLoggingOut?: boolean | undefined
@@ -29,12 +29,34 @@ export interface PanelSidebarProps {
   textSigningOut?: string | undefined
   logo?: ReactNode | undefined
   collapsedLogo?: ReactNode | undefined
-  LinkComponent?: React.ElementType | undefined
+  LinkComponent?: ElementType | undefined
 }
 
-export interface PanelNavbarProps {
-  isMinimized?: boolean | undefined
-  toggleSidebar?: (() => void) | undefined
+export type NavbarPlacement = 'left' | 'center' | 'right'
+
+export type NavbarElement = {
+  key: string
+  order: number
+  placement?: NavbarPlacement
+  isActive?: boolean
+  element: ReactNode
+}
+
+export interface NavbarNotificationProps {
+  isActive?: boolean | undefined
+  order?: number | undefined
+  placement?: NavbarPlacement | undefined
+  notifications?: PanelNotificationItem[] | undefined
+  onViewAllNotifications?: (() => void) | undefined
+  textNotifications?: string | undefined
+  textViewAllActivities?: string | undefined
+  textNew?: string | undefined
+}
+
+export interface NavbarUserAccountProps {
+  isActive?: boolean | undefined
+  order?: number | undefined
+  placement?: NavbarPlacement | undefined
   userProfile?: {
     displayName?: string
     initials?: string
@@ -47,23 +69,25 @@ export interface PanelNavbarProps {
   textSigningOut?: string | undefined
   textAccount?: string | undefined
   textSettings?: string | undefined
-  textUserGuide?: string | undefined
-  textAllManual?: string | undefined
-  textModuleGuides?: string | undefined
-  activeModuleChildren?: SidebarMenuNode[] | undefined
-  businessContextNode?: ReactNode | undefined
-  switchLocaleNode?: ReactNode | undefined
-  notifications?: PanelNotificationItem[] | undefined
-  onViewAllNotifications?: (() => void) | undefined
-  textNotifications?: string | undefined
-  textViewAllActivities?: string | undefined
-  textNew?: string | undefined
-  onUserGuideClick?: ((menu: SidebarMenuNode) => void) | undefined
   onSettingsClick?: (() => void) | undefined
-  LinkComponent?: React.ElementType | undefined
-  renderUserGuideModal?: ((props: { isOpen: boolean, onClose: () => void, menuNode: SidebarMenuNode | null }) => ReactNode) | undefined
 }
 
-export interface PanelLayoutProps extends Omit<PanelSidebarProps, 'isMinimized' | 'isOpenMobile' | 'toggleMobile'>, Omit<PanelNavbarProps, 'isMinimized' | 'toggleSidebar'> {
+export interface PanelNavbarProps {
+  isMinimized?: boolean | undefined
+  toggleSidebar?: (() => void) | undefined
+  userAccount?: NavbarUserAccountProps | undefined
+  notification?: NavbarNotificationProps | undefined
+  customElements?: NavbarElement[] | undefined
+}
+
+export interface PanelLayoutProps {
   children: ReactNode
+  sidebar?: Omit<PanelSidebarProps, 'isMinimized' | 'isOpenMobile' | 'toggleMobile'> | undefined
+  navbar?: Omit<PanelNavbarProps, 'isMinimized' | 'toggleSidebar'> | undefined
+}
+
+export interface NavbarDropdownContextType {
+  isOpen: boolean
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+  triggerRef: RefObject<HTMLDivElement | null>
 }
