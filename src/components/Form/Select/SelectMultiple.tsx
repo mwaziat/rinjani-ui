@@ -172,7 +172,7 @@ export const SelectMultiple = ({
 
           <div className="flex flex-1 flex-wrap gap-1.5">
             {selectedOptions.length === 0 && (
-              <span className="font-light text-neutral-300">
+              <span className="font-normal text-neutral-400">
                 {floating ? (isFloating ? placeholder : '\u00a0') : placeholder}
               </span>
             )}

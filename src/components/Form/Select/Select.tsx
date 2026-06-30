@@ -142,7 +142,7 @@ export const Select = ({
             </div>
           )}
 
-          <span className={`flex-1 ${!selectedOption ? 'font-light text-neutral-300' : ''}`}>
+          <span className={`flex-1 ${!selectedOption ? 'font-normal text-neutral-400' : ''}`}>
             {selectedOption ? selectedOption.label : (floating ? (isFloating ? placeholder : '\u00a0') : placeholder)}
           </span>
 
