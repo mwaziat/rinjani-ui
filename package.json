@@ -13,15 +13,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./style.css": "./dist/index.css"
   },
@@ -32,8 +32,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --minify --clean && tsup src/index.css --format esm",
-    "dev:tsup": "tsup src/index.ts src/index.css --format cjs,esm --watch --dts",
+    "build": "tsup",
+    "dev:tsup": "tsup --watch",
     "dev": "npm run storybook",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
