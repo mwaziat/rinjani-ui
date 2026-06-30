@@ -5,7 +5,7 @@ import type { DrawerSize, DrawerPosition } from './Drawer.types'
 import { Button } from '../Button'
 
 const meta: Meta<typeof Drawer> = {
-  title: 'Components/Layout/Drawer',
+  title: 'Components/Drawer',
   component: Drawer,
   tags: ['autodocs'],
   argTypes: {
