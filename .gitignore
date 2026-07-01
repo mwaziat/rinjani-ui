@@ -47,3 +47,8 @@ storybook-static/
 .storyBOOK/cache/
 
 docs
+
+# Next.js
+.next/
+out/
+.vercel/
