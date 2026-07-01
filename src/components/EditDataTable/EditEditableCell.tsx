@@ -1,8 +1,8 @@
 import React from 'react'
 import { InputField, Checkbox, Select } from '../Form'
-import type { EditableCellProps } from './EditDataTable.types'
+import type { EditEditableCellProps } from './EditDataTable.types'
 
-export function EditableCell<T>({ column, rowState, onChange }: EditableCellProps<T>) {
+export function EditEditableCell<T>({ column, rowState, onChange }: EditEditableCellProps<T>) {
   const { accessorKey, type = 'string', editComponent } = column
   const cellValue = accessorKey ? rowState.edited[accessorKey] : undefined
 

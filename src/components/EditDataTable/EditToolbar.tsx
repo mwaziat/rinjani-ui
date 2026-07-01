@@ -2,16 +2,16 @@ import React, { useRef, useState } from 'react'
 import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon, SaveIcon } from '../Icons'
 import { Button } from '../Button'
 import { InputField } from '../Form'
-import type { ToolbarConfig } from './EditDataTable.types'
+import type { EditToolbarConfig } from './EditDataTable.types'
 import { iconSizeClasses } from './EditDataTable.styles'
 
-interface ToolbarProps<T> {
-  config: ToolbarConfig<T>
+interface EditToolbarProps<T> {
+  config: EditToolbarConfig<T>
   selectedRowKeys?: (string | number)[]
   activeEditRows?: T[]
 }
 
-export function Toolbar<T>({ config, selectedRowKeys = [], activeEditRows = [] }: ToolbarProps<T>) {
+export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = [] }: EditToolbarProps<T>) {
   const {
     title,
     description,

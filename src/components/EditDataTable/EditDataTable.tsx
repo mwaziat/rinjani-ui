@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Toolbar } from './Toolbar'
-import { Pagination } from './Pagination'
-import { ActionColumn } from './ActionColumn'
+import { EditToolbar } from './EditToolbar'
+import { EditPagination } from './EditPagination'
+import { EditActionColumn } from './EditActionColumn'
 import { CheckIcon } from '../Icons'
-import { EditableCell } from './EditableCell'
-import { TableHeader } from './TableHeader'
-import { TableLoading } from './TableLoading'
-import type { DataTableProps, TableRowState } from './EditDataTable.types'
+import { EditEditableCell } from './EditEditableCell'
+import { EditTableHeader } from './EditTableHeader'
+import { EditTableLoading } from './EditTableLoading'
+import type { EditDataTableProps, EditTableRowState } from './EditDataTable.types'
 import { paddingClasses, hoverColorClasses, stripedColorClasses, checkboxColorClasses, alignClasses } from './EditDataTable.styles'
 import { getLeafColumns } from './EditDataTable.utils'
 
@@ -26,12 +26,12 @@ export function EditDataTable<T>({
   emptyDisplay,
   rowSelection,
   contained = true,
-}: DataTableProps<T>) {
+}: EditDataTableProps<T>) {
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [isScrolledX, setIsScrolledX] = useState(false)
   const [localSelectedKeys, setLocalSelectedKeys] = useState<(string | number)[]>([])
 
-  const [tableData, setTableData] = useState<TableRowState<T>[]>(() => {
+  const [tableData, setTableData] = useState<EditTableRowState<T>[]>(() => {
     return data.map(row => ({
       original: row,
       edited: { ...row },
@@ -42,13 +42,15 @@ export function EditDataTable<T>({
     }))
   })
 
+  const pendingAddRef = useRef(false)
   const [prevData, setPrevData] = useState(data)
+  const [deletionErrorKeys, setDeletionErrorKeys] = useState<(string | number)[]>([])
   
   if (data !== prevData) {
     setPrevData(data)
     setTableData(prev => {
       const prevMap = new Map(prev.map(p => [p.action.key, p]))
-      return data.map(row => {
+      const newData = data.map(row => {
         const key = rowKey(row)
         const existing = prevMap.get(key)
         return {
@@ -56,10 +58,12 @@ export function EditDataTable<T>({
           edited: existing ? existing.edited : { ...row },
           action: {
             key,
-            mode: existing ? existing.action.mode : 'new'
+            mode: existing ? existing.action.mode : (pendingAddRef.current ? 'new' : 'view')
           }
         }
       })
+      pendingAddRef.current = false
+      return newData
     })
   }
 
@@ -139,10 +143,16 @@ export function EditDataTable<T>({
     <div className={containerClasses}>
 
       {toolbar && (
-        <Toolbar
+        <EditToolbar
           config={{
             color,
             ...toolbar,
+            onAdd: () => {
+              pendingAddRef.current = true
+              if (toolbar.onAdd) {
+                toolbar.onAdd()
+              }
+            },
             onEditAll: (keys) => {
               const keysToEdit = keys.length > 0 ? keys : tableData.map(r => r.action.key)
               setTableData(prev => prev.map(r =>
@@ -163,6 +173,23 @@ export function EditDataTable<T>({
                   ? { ...r, original: { ...r.edited }, action: { ...r.action, mode: 'view' } }
                   : r
               ))
+            },
+            onDeleteAll: async (keys) => {
+              const editingKeys: (string | number)[] = tableData
+                .filter(r => (r.action.mode === 'edit' || r.action.mode === 'new') && keys.includes(r.action.key))
+                .map(r => r.action.key)
+              
+              if (editingKeys.length > 0) {
+                setDeletionErrorKeys(editingKeys)
+                setTimeout(() => setDeletionErrorKeys([]), 3000)
+                return
+              }
+
+              if (keys.length > 0 && toolbar.onDeleteAll) {
+                await toolbar.onDeleteAll(keys)
+              }
+              
+              updateSelectedKeys([])
             }
           }}
           selectedRowKeys={currentSelectedKeys}
@@ -175,7 +202,7 @@ export function EditDataTable<T>({
         className="w-full overflow-x-auto"
       >
         <table className={`w-full text-left border-collapse`}>
-          <TableHeader
+          <EditTableHeader
             columns={columns}
             {...(rowSelection ? { rowSelection } : {})}
             {...(actionColumn ? { actionColumn } : {})}
@@ -191,7 +218,7 @@ export function EditDataTable<T>({
           />
           <tbody>
             {loading ? (
-              <TableLoading
+              <EditTableLoading
                 loadingVariant={loadingVariant}
                 limit={pagination?.limit || 5}
                 totalColumnsCount={totalColumnsCount}
@@ -216,6 +243,13 @@ export function EditDataTable<T>({
 
                 return (
                   <React.Fragment key={key}>
+                    {deletionErrorKeys.includes(key) && (
+                      <tr className="bg-red-50">
+                        <td colSpan={totalColumnsCount} className="text-red-500 text-xs text-center py-1">
+                          This row is currently being edited and cannot be deleted.
+                        </td>
+                      </tr>
+                    )}
                     <tr
                       className={`
                         ${isStriped && rowIndex % 2 === 1 ? stripedColorClasses[color] : 'bg-white'} 
@@ -248,7 +282,7 @@ export function EditDataTable<T>({
                         let renderedCell: React.ReactNode = null
                         if (isEditing && col.editable) {
                           renderedCell = (
-                            <EditableCell
+                            <EditEditableCell
                               column={col}
                               rowState={rowState}
                               onChange={(key, val) => {
@@ -277,8 +311,19 @@ export function EditDataTable<T>({
 
                       {actionColumn && (
                         <td className={`${currentPadding} ${cellBorderClass} text-center sticky right-0 z-10 bg-inherit ${isScrolledX ? 'shadow-[-4px_0_6px_-4px_rgba(0,0,0,0.1)]' : ''}`}>
-                          <ActionColumn
-                            config={{ color, ...actionColumn }}
+                          <EditActionColumn
+                            config={{ 
+                              color, 
+                              ...actionColumn,
+                              onDelete: async (row) => {
+                                if (actionColumn.onDelete) {
+                                  await actionColumn.onDelete(row)
+                                }
+                                if (currentSelectedKeys.includes(rowState.action.key)) {
+                                  updateSelectedKeys(currentSelectedKeys.filter(k => k !== rowState.action.key))
+                                }
+                              }
+                            }}
                             rowState={rowState}
                             onStateChange={(newState) => {
                               const newData = [...tableData]
@@ -298,7 +343,7 @@ export function EditDataTable<T>({
       </div>
 
       {!loading && pagination && (
-        <Pagination config={{ ...pagination, color }} />
+        <EditPagination config={{ ...pagination, color }} />
       )}
     </div>
   )

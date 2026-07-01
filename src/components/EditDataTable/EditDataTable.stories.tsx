@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { EditDataTable } from './EditDataTable'
-import type { ColumnDef, DataTableProps, PaginationState, PaginationConfig } from './EditDataTable.types'
+import type { EditColumnDef, EditDataTableProps, EditPaginationState, EditPaginationConfig } from './EditDataTable.types'
 import { UserIcon, SearchIcon } from '../Icons'
 import { Badge } from '../Badge'
 import { InputField } from '../Form'
+import { Dialog, DialogContainer } from '../Dialog'
 
 const meta: Meta<typeof EditDataTable> = {
   title: 'Components/EditDataTable',
@@ -52,7 +53,7 @@ const mockData: UserData[] = Array.from({ length: 45 }).map((_, i) => ({
   department: i % 2 === 0 ? 'Engineering' : 'Design',
 }))
 
-const columns: ColumnDef<UserData>[] = [
+const columns: EditColumnDef<UserData>[] = [
   {
     header: 'No.',
     width: '60px',
@@ -138,11 +139,11 @@ const columns: ColumnDef<UserData>[] = [
   },
 ]
 
-interface TableWrapperProps extends Omit<DataTableProps<UserData>, 'data' | 'pagination' | 'columns' | 'rowKey'> {
+interface TableWrapperProps extends Omit<EditDataTableProps<UserData>, 'data' | 'pagination' | 'columns' | 'rowKey'> {
   initialLimit?: number
   withPagination?: boolean
-  pagination?: Partial<PaginationConfig>
-  columns?: ColumnDef<UserData>[]
+  pagination?: Partial<EditPaginationConfig>
+  columns?: EditColumnDef<UserData>[]
 }
 
 // Base wrapper for pagination and state management
@@ -152,6 +153,7 @@ const TableWrapper = ({
   contained = false,
   pagination,
   columns: customColumns,
+  loading: externalLoading,
   ...props
 }: TableWrapperProps) => {
   const [page, setPage] = useState(1)
@@ -159,6 +161,7 @@ const TableWrapper = ({
   const [search, setSearch] = useState('')
   const [selectedKeys, setSelectedKeys] = useState<(string | number)[]>([])
   const [data, setData] = useState(mockData)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const filteredData = data.filter(item =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -171,7 +174,9 @@ const TableWrapper = ({
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm border border-neutral-200">
+      <DialogContainer />
       <EditDataTable<UserData>
+        loading={externalLoading || isRefreshing}
         data={displayData}
         columns={customColumns || columns}
         contained={contained}
@@ -203,25 +208,53 @@ const TableWrapper = ({
             setData(prev => [newUser, ...prev])
           },
           showRefresh: true,
+          onRefresh: async () => {
+            setIsRefreshing(true)
+            setTimeout(() => {
+              setData(mockData)
+              setIsRefreshing(false)
+              Dialog.success('Data refreshed!')
+            }, 800)
+          },
           showDeleteAll: true,
           showEditAll: true,
           showSaveAll: true,
+          onDeleteAll: async (keys) => {
+            Dialog.confirm({
+              title: 'Confirm Bulk Deletion',
+              message: `Are you sure you want to delete ${keys.length} selected items? This action cannot be undone.`,
+              confirmText: 'Yes, Delete All',
+              cancelText: 'Cancel',
+              onConfirm: () => {
+                setData(prev => prev.filter(r => !keys.includes(r.id)))
+                Dialog.success(`Successfully deleted ${keys.length} items.`)
+              }
+            })
+          },
           onSaveAll: async (rows) => {
-            alert('Saved rows: ' + rows.map(r => r.id).join(', '))
+            Dialog.success(`Successfully saved ${rows.length} users.`)
           },
           ...props.toolbar
         }}
         actionColumn={{
           type: 'inline',
-          onDetail: (row: UserData) => alert(`Detail for ${row.name}`),
+          onDetail: (row: UserData) => Dialog.info(`Profile details: ${row.name}`),
           onEdit: () => undefined,
           onDelete: (row: UserData) => {
-            setData(prev => prev.filter(r => r.id !== row.id))
-            alert(`Deleted ${row.name}`)
+            Dialog.confirm({
+              title: 'Confirm Deletion',
+              message: `Are you sure you want to delete ${row.name}? This action cannot be undone.`,
+              confirmText: 'Yes, Delete',
+              cancelText: 'Cancel',
+              onConfirm: () => {
+                setData(prev => prev.filter(r => r.id !== row.id))
+                Dialog.success(`${row.name} successfully deleted.`)
+              }
+            })
           },
           onSave: async (row: UserData) => {
             setData(prev => prev.map(r => r.id === row.id ? row : r))
-            alert(`Saved ${row.name}`)
+            Dialog.success(`${row.name} successfully saved.`)
           },
           ...props.actionColumn
         }}
@@ -232,7 +265,7 @@ const TableWrapper = ({
             totalItems: filteredData.length,
             totalPages: Math.ceil(filteredData.length / limit),
             pageSizeOptions: [5, 10, 20, 50],
-            onPaginationChange: (state: PaginationState) => {
+            onPaginationChange: (state: EditPaginationState) => {
               setPage(state.page)
               setLimit(state.limit)
             },
@@ -311,3 +344,105 @@ export const EmptyState: Story = {
     </div>
   ),
 }
+
+export const GroupedHeaders: Story = {
+  render: () => {
+    const groupedColumns: EditColumnDef<UserData>[] = [
+      {
+        header: 'Identity',
+        align: 'center',
+        columns: [
+          {
+            header: 'No.',
+            width: '60px',
+            align: 'center',
+            cell: (_, index) => <span className="text-neutral-500 font-medium">{index + 1}</span>,
+          },
+          {
+            header: 'Profile',
+            accessorKey: 'name',
+            editable: true,
+            editComponent: (value, onChange) => (
+              <InputField
+                value={value as string}
+                onChange={(e) => onChange(e.target.value)}
+                size="sm"
+                placeholder="Enter name"
+              />
+            ),
+          }
+        ]
+      },
+      {
+        header: 'Work Information',
+        align: 'center',
+        columns: [
+          { 
+            header: 'Department', 
+            accessorKey: 'department', 
+            align: 'center',
+            editable: true,
+            editComponent: (value, onChange) => (
+              <InputField
+                value={value as string}
+                onChange={(e) => onChange(e.target.value)}
+                size="sm"
+                placeholder="Enter department"
+              />
+            ),
+          },
+          { 
+            header: 'Role', 
+            accessorKey: 'role', 
+            align: 'center',
+            editable: true,
+            type: 'select',
+            options: [
+              { value: 'Admin', label: 'Admin' },
+              { value: 'Editor', label: 'Editor' },
+              { value: 'Viewer', label: 'Viewer' },
+            ],
+            cell: (row: UserData) => <Badge variant="soft" color={row.role === 'Admin' ? 'primary' : 'neutral'}>{row.role}</Badge>
+          },
+        ]
+      },
+      {
+        header: 'Status',
+        accessorKey: 'status',
+        align: 'center',
+        editable: true,
+        type: 'select',
+        options: [
+          { value: 'Active', label: 'Active' },
+          { value: 'Inactive', label: 'Inactive' },
+          { value: 'Pending', label: 'Pending' },
+        ],
+        cell: (row: UserData) => {
+          let badgeColor: 'success' | 'danger' | 'warning' = 'success'
+          if (row.status === 'Inactive') badgeColor = 'danger'
+          if (row.status === 'Pending') badgeColor = 'warning'
+          return (
+            <Badge variant="filled" color={badgeColor} size="sm" isPill>
+              {row.status}
+            </Badge>
+          )
+        }
+      }
+    ]
+
+    return (
+      <TableWrapper
+        columns={groupedColumns}
+        toolbar={{ 
+          title: 'Grouped Headers (ColSpan) Editable',
+          showAdd: true,
+          showEditAll: true,
+          showSaveAll: true,
+          showDeleteAll: true,
+          showRefresh: true
+        }}
+      />
+    )
+  }
+}
+

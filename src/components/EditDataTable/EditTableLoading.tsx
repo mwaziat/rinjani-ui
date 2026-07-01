@@ -1,7 +1,7 @@
 import React from 'react'
-import type { TableLoadingProps } from './EditDataTable.types'
+import type { EditTableLoadingProps } from './EditDataTable.types'
 
-export function TableLoading<T>({
+export function EditTableLoading<T>({
   loadingVariant,
   limit,
   totalColumnsCount,
@@ -10,7 +10,7 @@ export function TableLoading<T>({
   actionColumn,
   currentPadding,
   cellBorderClass,
-}: TableLoadingProps<T>) {
+}: EditTableLoadingProps<T>) {
   if (loadingVariant === 'skeleton') {
     return (
       <>

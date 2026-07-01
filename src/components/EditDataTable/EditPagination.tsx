@@ -1,14 +1,14 @@
 import React from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icons'
-import type { PaginationConfig } from './EditDataTable.types'
+import type { EditPaginationConfig } from './EditDataTable.types'
 import { sizeClasses, selectSizeClasses, radiusBySize, activeVariants, selectColorMap, iconSizeClasses } from './EditDataTable.styles'
 import { getPageNumbers } from './EditDataTable.utils'
 
-interface PaginationProps {
-  config: PaginationConfig
+interface EditPaginationProps {
+  config: EditPaginationConfig
 }
 
-export const Pagination = ({ config }: PaginationProps) => {
+export const EditPagination = ({ config }: EditPaginationProps) => {
   const {
     page,
     limit,

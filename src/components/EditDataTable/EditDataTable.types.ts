@@ -1,41 +1,41 @@
 import React from 'react'
 
-export type TableVariant = 'default' | 'striped' | 'bordered' | 'borderless' | 'hover' | 'compact' | 'comfortable' | 'spacious'
-export type TableColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'
+export type EditTableVariant = 'default' | 'striped' | 'bordered' | 'borderless' | 'hover' | 'compact' | 'comfortable' | 'spacious'
+export type EditTableColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'
 
-export type ColumnType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'custom' | 'select'
+export type EditColumnType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'custom' | 'select'
 
-export type RowMode = 'view' | 'edit' | 'new'
+export type EditRowMode = 'view' | 'edit' | 'new'
 
-export interface TableRowState<T> {
+export interface EditTableRowState<T> {
   original: T
   edited: T
   action: {
     key: string
-    mode: RowMode
+    mode: EditRowMode
   }
 }
 
-export interface ColumnDef<T> {
+export interface EditColumnDef<T> {
   header: React.ReactNode
   accessorKey?: keyof T
-  type?: ColumnType
+  type?: EditColumnType
   width?: string | number
   cell?: (row: T, rowIndex: number) => React.ReactNode
   onClick?: (row: T) => void
   className?: string
   sortable?: boolean
   align?: 'left' | 'center' | 'right'
-  columns?: ColumnDef<T>[]
+  columns?: EditColumnDef<T>[]
   editable?: boolean
   options?: { label: string; value: string | number }[]
-  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: TableRowState<T>) => React.ReactNode
+  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: EditTableRowState<T>) => React.ReactNode
 }
 
-export type ComponentVariant = 'filled' | 'outlined' | 'soft' | 'text'
-export type ComponentSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type EditComponentVariant = 'filled' | 'outlined' | 'soft' | 'text'
+export type EditComponentSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export interface ToolbarConfig<T> {
+export interface EditToolbarConfig<T> {
   title?: React.ReactNode
   description?: React.ReactNode
   showSearch?: boolean
@@ -51,65 +51,65 @@ export interface ToolbarConfig<T> {
   onEditAll?: (selectedKeys: (string | number)[]) => void
   showSaveAll?: boolean
   onSaveAll?: (rows: Partial<T>[]) => void | Promise<void>
-  variant?: ComponentVariant
-  color?: TableColor
-  size?: ComponentSize
+  variant?: EditComponentVariant
+  color?: EditTableColor
+  size?: EditComponentSize
   sortOrder?: string[]
   customElements?: React.ReactNode | React.ReactNode[]
 }
 
-export interface ActionColumnConfig<T> {
+export interface EditActionColumnConfig<T> {
   header?: string
   type?: 'dropdown' | 'inline' | 'custom'
-  variant?: ComponentVariant
-  color?: TableColor
-  size?: ComponentSize
+  variant?: EditComponentVariant
+  color?: EditTableColor
+  size?: EditComponentSize
   sortOrder?: string[]
   onDetail?: (row: T) => void
   onEdit?: (row: T) => void
   onDelete?: (row: T) => void
   onSave?: (editedRow: T, originalRow: T) => void | Promise<void>
   onCancel?: (row: T) => void
-  customActions?: (rowState: TableRowState<T>) => React.ReactNode | React.ReactNode[]
+  customActions?: (rowState: EditTableRowState<T>) => React.ReactNode | React.ReactNode[]
 }
 
-export interface PaginationState {
+export interface EditPaginationState {
   page: number
   limit: number
 }
 
-export interface PaginationConfig {
+export interface EditPaginationConfig {
   page: number
   limit: number
   totalItems: number
   totalPages: number
   pageSizeOptions?: number[]
-  onPaginationChange: (state: PaginationState) => void
-  color?: TableColor
-  variant?: ComponentVariant
-  size?: ComponentSize
+  onPaginationChange: (state: EditPaginationState) => void
+  color?: EditTableColor
+  variant?: EditComponentVariant
+  size?: EditComponentSize
 }
 
-export interface RowSelectionConfig {
+export interface EditRowSelectionConfig {
   selectedRowKeys?: (string | number)[]
   onSelectionChange?: (selectedKeys: (string | number)[]) => void
 }
 
-export interface ExpandableConfig<T> {
+export interface EditExpandableConfig<T> {
   expandedRowRender: (row: T, rowIndex: number) => React.ReactNode
   rowExpandable?: (row: T) => boolean
 }
 
-export interface DataTableProps<T> {
+export interface EditDataTableProps<T> {
   data: T[]
-  columns: ColumnDef<T>[]
-  variant?: TableVariant
-  color?: TableColor
-  toolbar?: ToolbarConfig<T>
-  actionColumn?: ActionColumnConfig<T>
-  pagination?: PaginationConfig
-  rowSelection?: RowSelectionConfig
-  expandable?: ExpandableConfig<T>
+  columns: EditColumnDef<T>[]
+  variant?: EditTableVariant
+  color?: EditTableColor
+  toolbar?: EditToolbarConfig<T>
+  actionColumn?: EditActionColumnConfig<T>
+  pagination?: EditPaginationConfig
+  rowSelection?: EditRowSelectionConfig
+  expandable?: EditExpandableConfig<T>
   loading?: boolean
   loadingVariant?: 'spinner' | 'skeleton'
   scrolled?: boolean
@@ -119,16 +119,16 @@ export interface DataTableProps<T> {
   contained?: boolean
 }
 
-export interface HeaderCell<T> {
-  column: ColumnDef<T>
+export interface EditHeaderCell<T> {
+  column: EditColumnDef<T>
   colSpan: number
   rowSpan: number
 }
 
-export interface TableHeaderProps<T> {
-  columns: ColumnDef<T>[]
-  rowSelection?: RowSelectionConfig
-  actionColumn?: ActionColumnConfig<T>
+export interface EditTableHeaderProps<T> {
+  columns: EditColumnDef<T>[]
+  rowSelection?: EditRowSelectionConfig
+  actionColumn?: EditActionColumnConfig<T>
   color: string
   scrolled: boolean
   isScrolledX: boolean
@@ -140,19 +140,19 @@ export interface TableHeaderProps<T> {
   handleSelectAll: (checked: boolean) => void
 }
 
-export interface TableLoadingProps<T> {
+export interface EditTableLoadingProps<T> {
   loadingVariant: 'spinner' | 'skeleton'
   limit: number
   totalColumnsCount: number
-  leafColumns: ColumnDef<T>[]
+  leafColumns: EditColumnDef<T>[]
   rowSelection?: boolean
   actionColumn?: boolean
   currentPadding: string
   cellBorderClass: string
 }
 
-export interface EditableCellProps<T> {
-  column: ColumnDef<T>
-  rowState: TableRowState<T>
+export interface EditEditableCellProps<T> {
+  column: EditColumnDef<T>
+  rowState: EditTableRowState<T>
   onChange: (key: keyof T, value: unknown) => void
 }

@@ -1,6 +1,6 @@
-import type { ColumnDef, HeaderCell } from './EditDataTable.types'
+import type { EditColumnDef, EditHeaderCell } from './EditDataTable.types'
 
-export const getDepth = <T,>(cols: ColumnDef<T>[]): number => {
+export const getDepth = <T,>(cols: EditColumnDef<T>[]): number => {
   let max = 0
   for (const col of cols) {
     if (col.columns && col.columns.length > 0) {
@@ -10,8 +10,8 @@ export const getDepth = <T,>(cols: ColumnDef<T>[]): number => {
   return max + 1
 }
 
-export const getLeafColumns = <T,>(cols: ColumnDef<T>[]): ColumnDef<T>[] => {
-  let leaves: ColumnDef<T>[] = []
+export const getLeafColumns = <T,>(cols: EditColumnDef<T>[]): EditColumnDef<T>[] => {
+  let leaves: EditColumnDef<T>[] = []
   for (const col of cols) {
     if (col.columns && col.columns.length > 0) {
       leaves = leaves.concat(getLeafColumns(col.columns))
@@ -22,10 +22,10 @@ export const getLeafColumns = <T,>(cols: ColumnDef<T>[]): ColumnDef<T>[] => {
   return leaves
 }
 
-export const generateHeaderRows = <T,>(cols: ColumnDef<T>[], depth: number): HeaderCell<T>[][] => {
-  const rows: HeaderCell<T>[][] = Array.from({ length: depth }, () => [])
+export const generateHeaderRows = <T,>(cols: EditColumnDef<T>[], depth: number): EditHeaderCell<T>[][] => {
+  const rows: EditHeaderCell<T>[][] = Array.from({ length: depth }, () => [])
   
-  const traverse = (currentCols: ColumnDef<T>[], currentLevel: number) => {
+  const traverse = (currentCols: EditColumnDef<T>[], currentLevel: number) => {
     for (const col of currentCols) {
       const hasChildren = col.columns && col.columns.length > 0
       const leafCount = hasChildren ? getLeafColumns(col.columns!).length : 1

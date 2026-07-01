@@ -1,12 +1,12 @@
 import React from 'react'
 import { CheckIcon, MinusIcon } from '../Icons'
-import type { TableHeaderProps } from './EditDataTable.types'
+import type { EditTableHeaderProps } from './EditDataTable.types'
 import { getDepth, generateHeaderRows } from './EditDataTable.utils'
 
 
 import { checkboxColorClasses, alignClasses } from './EditDataTable.styles'
 
-export function TableHeader<T>({
+export function EditTableHeader<T>({
   columns,
   rowSelection,
   actionColumn,
@@ -19,7 +19,7 @@ export function TableHeader<T>({
   isAllCurrentPageSelected,
   isIndeterminate,
   handleSelectAll,
-}: TableHeaderProps<T>) {
+}: EditTableHeaderProps<T>) {
   const maxDepth = getDepth(columns)
   const headerRows = generateHeaderRows(columns, maxDepth)
   

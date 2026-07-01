@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { EyeIcon, PencilIcon, TrashIcon, CheckIcon, XIcon, MoreVerticalIcon } from '../Icons'
 import { IconButton } from '../Button'
 import { Dropdown, DropdownList, DropdownItem } from '../Dropdown'
-import type { ActionColumnConfig, TableRowState } from './EditDataTable.types'
+import type { EditActionColumnConfig, EditTableRowState } from './EditDataTable.types'
 
-interface ActionColumnProps<T> {
-  config: ActionColumnConfig<T>
-  rowState: TableRowState<T>
-  onStateChange: (newState: TableRowState<T>) => void
+interface EditActionColumnProps<T> {
+  config: EditActionColumnConfig<T>
+  rowState: EditTableRowState<T>
+  onStateChange: (newState: EditTableRowState<T>) => void
 }
 
-export function ActionColumn<T>({ config, rowState, onStateChange }: ActionColumnProps<T>) {
+export function EditActionColumn<T>({ config, rowState, onStateChange }: EditActionColumnProps<T>) {
   const [isSaving, setIsSaving] = useState(false)
   const {
     type = 'inline',

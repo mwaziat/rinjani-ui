@@ -118,12 +118,14 @@ const TableWrapper = ({
   contained = false,
   pagination,
   columns: customColumns,
+  loading: externalLoading,
   ...props
 }: TableWrapperProps) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(initialLimit)
   const [search, setSearch] = useState('')
   const [selectedKeys, setSelectedKeys] = useState<(string | number)[]>([])
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const filteredData = mockData.filter(item =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -137,6 +139,7 @@ const TableWrapper = ({
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm border border-neutral-200">
       <DataTable<UserData>
+        loading={externalLoading || isRefreshing}
         data={displayData}
         columns={customColumns || columns}
         contained={contained}
@@ -157,6 +160,13 @@ const TableWrapper = ({
           showAdd: true,
           onAdd: () => alert('Add new user'),
           showRefresh: true,
+          onRefresh: async () => {
+            setIsRefreshing(true)
+            setTimeout(() => {
+              setIsRefreshing(false)
+              alert('Data refreshed!')
+            }, 800)
+          },
           showDeleteAll: true,
           showEditAll: true,
           ...props.toolbar
