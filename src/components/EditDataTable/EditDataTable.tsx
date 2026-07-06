@@ -6,7 +6,7 @@ import { CheckIcon } from '../Icons'
 import { EditEditableCell } from './EditEditableCell'
 import { EditTableHeader } from './EditTableHeader'
 import { EditTableLoading } from './EditTableLoading'
-import type { EditDataTableProps, EditTableRowState } from './EditDataTable.types'
+import type { EditDataTableProps, EditTableRowState, EditRowUpdater, EditRowStateUpdater } from './EditDataTable.types'
 import { paddingClasses, hoverColorClasses, stripedColorClasses, checkboxColorClasses, alignClasses } from './EditDataTable.styles'
 import { getLeafColumns } from './EditDataTable.utils'
 
@@ -164,13 +164,23 @@ export function EditDataTable<T>({
                 toolbar.onEditAll(keys)
               }
             },
-            onSaveAll: async (rows) => {
+            onSaveAll: async (rows, rowStates) => {
               if (toolbar.onSaveAll) {
-                await toolbar.onSaveAll(rows)
+                await toolbar.onSaveAll(rows, rowStates)
               }
               setTableData(prev => prev.map(r =>
                 (r.action.mode === 'edit' || r.action.mode === 'new')
                   ? { ...r, original: { ...r.edited }, action: { ...r.action, mode: 'view' } }
+                  : r
+              ))
+            },
+            onCancelAll: () => {
+              if (toolbar.onCancelAll) {
+                toolbar.onCancelAll(activeEditRows.map(r => r.original))
+              }
+              setTableData(prev => prev.map(r =>
+                (r.action.mode === 'edit' || r.action.mode === 'new')
+                  ? { ...r, edited: { ...r.original }, action: { ...r.action, mode: 'view' } }
                   : r
               ))
             },
@@ -194,6 +204,7 @@ export function EditDataTable<T>({
           }}
           selectedRowKeys={currentSelectedKeys}
           activeEditRows={activeEditRows.map(r => r.edited)}
+          activeEditStates={activeEditRows}
         />
       )}
 
@@ -244,13 +255,14 @@ export function EditDataTable<T>({
                 return (
                   <React.Fragment key={key}>
                     {deletionErrorKeys.includes(key) && (
-                      <tr className="bg-red-50">
+                      <tr key="deletion-error" className="bg-red-50">
                         <td colSpan={totalColumnsCount} className="text-red-500 text-xs text-center py-1">
                           This row is currently being edited and cannot be deleted.
                         </td>
                       </tr>
                     )}
                     <tr
+                      key="row"
                       className={`
                         ${isStriped && rowIndex % 2 === 1 ? stripedColorClasses[color] : 'bg-white'} 
                         ${isHover ? `${hoverColorClasses[color]} transition-colors` : ''}
@@ -293,11 +305,11 @@ export function EditDataTable<T>({
                                     : r
                                 ))
                               }}
-                              onRowChange={(nextRow) => {
+                              onRowChange={(nextRow: EditRowUpdater<T>) => {
                                 const rowKeyValue = rowState.action.key
                                 setTableData(prev => prev.map(r =>
                                   r.action.key === rowKeyValue
-                                    ? { ...r, edited: nextRow }
+                                    ? { ...r, edited: typeof nextRow === 'function' ? (nextRow as (prev: T) => T)(r.edited) : nextRow }
                                     : r
                                 ))
                               }}
@@ -334,10 +346,13 @@ export function EditDataTable<T>({
                               }
                             }}
                             rowState={rowState}
-                            onStateChange={(newState) => {
-                              const newData = [...tableData]
-                              newData[rowIndex] = newState
-                              setTableData(newData)
+                            onStateChange={(update: EditRowStateUpdater<T>) => {
+                              const rowKeyValue = rowState.action.key
+                              setTableData(prev => prev.map(r =>
+                                r.action.key === rowKeyValue
+                                  ? (typeof update === 'function' ? update(r) : update)
+                                  : r
+                              ))
                             }}
                           />
                         </td>

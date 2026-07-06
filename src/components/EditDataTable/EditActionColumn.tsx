@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { EyeIcon, PencilIcon, TrashIcon, CheckIcon, XIcon, MoreVerticalIcon } from '../Icons'
 import { IconButton } from '../Button'
 import { Dropdown, DropdownList, DropdownItem } from '../Dropdown'
-import type { EditActionColumnConfig, EditTableRowState } from './EditDataTable.types'
+import type { EditActionColumnConfig, EditTableRowState, EditRowStateUpdater } from './EditDataTable.types'
 
 interface EditActionColumnProps<T> {
   config: EditActionColumnConfig<T>
   rowState: EditTableRowState<T>
-  onStateChange: (newState: EditTableRowState<T>) => void
+  onStateChange: (update: EditRowStateUpdater<T>) => void
 }
 
 export function EditActionColumn<T>({ config, rowState, onStateChange }: EditActionColumnProps<T>) {
@@ -29,20 +29,20 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
   const isEditing = rowState.action.mode === 'edit' || rowState.action.mode === 'new'
 
   const handleEditClick = () => {
-    onStateChange({
-      ...rowState,
-      action: { ...rowState.action, mode: 'edit' }
-    })
+    onStateChange(prev => ({
+      ...prev,
+      action: { ...prev.action, mode: 'edit' }
+    }))
     if (onEdit) onEdit(rowState.original)
   }
 
   const handleCancelClick = () => {
     if (onCancel) onCancel(rowState.original)
-    onStateChange({
-      ...rowState,
-      edited: { ...rowState.original },
-      action: { ...rowState.action, mode: 'view' }
-    })
+    onStateChange(prev => ({
+      ...prev,
+      edited: { ...prev.original },
+      action: { ...prev.action, mode: 'view' }
+    }))
   }
 
   const handleSaveClick = async () => {
@@ -51,11 +51,11 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
       if (onSave) {
         await onSave(rowState.edited, rowState.original)
       }
-      onStateChange({
-        ...rowState,
-        original: { ...rowState.edited },
-        action: { ...rowState.action, mode: 'view' }
-      })
+      onStateChange(prev => ({
+        ...prev,
+        original: { ...prev.edited },
+        action: { ...prev.action, mode: 'view' }
+      }))
     } finally {
       setIsSaving(false)
     }

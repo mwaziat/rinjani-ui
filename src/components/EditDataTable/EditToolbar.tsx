@@ -1,17 +1,18 @@
 import React, { useRef, useState } from 'react'
-import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon, SaveIcon } from '../Icons'
+import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon, SaveIcon, XIcon } from '../Icons'
 import { Button } from '../Button'
 import { InputField } from '../Form'
-import type { EditToolbarConfig } from './EditDataTable.types'
+import type { EditToolbarConfig, EditTableRowState } from './EditDataTable.types'
 import { iconSizeClasses } from './EditDataTable.styles'
 
 interface EditToolbarProps<T> {
   config: EditToolbarConfig<T>
   selectedRowKeys?: (string | number)[]
   activeEditRows?: T[]
+  activeEditStates?: EditTableRowState<T>[]
 }
 
-export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = [] }: EditToolbarProps<T>) {
+export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = [], activeEditStates = [] }: EditToolbarProps<T>) {
   const {
     title,
     description,
@@ -28,6 +29,8 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
     onEditAll,
     showSaveAll = false,
     onSaveAll,
+    showCancelAll = true,
+    onCancelAll,
     variant = 'filled',
     color = 'primary',
     size = 'sm',
@@ -139,26 +142,39 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
           if (key === 'editAll') {
             if (activeEditRows.length > 0 && showSaveAll) {
               return (
-                <Button
-                  key="saveAll"
-                  leftIcon={<SaveIcon size={currentIconSize} />}
-                  variant="filled"
-                  color="success"
-                  size={size}
-                  disabled={isSavingAll}
-                  onClick={async () => {
-                    if (onSaveAll) {
-                      setIsSavingAll(true)
-                      try {
-                        await onSaveAll(activeEditRows)
-                      } finally {
-                        setIsSavingAll(false)
+                <React.Fragment key="saveAll">
+                  <Button
+                    leftIcon={<SaveIcon size={currentIconSize} />}
+                    variant="filled"
+                    color="success"
+                    size={size}
+                    disabled={isSavingAll}
+                    onClick={async () => {
+                      if (onSaveAll) {
+                        setIsSavingAll(true)
+                        try {
+                          await onSaveAll(activeEditRows, activeEditStates)
+                        } finally {
+                          setIsSavingAll(false)
+                        }
                       }
-                    }
-                  }}
-                >
-                  {isSavingAll ? 'Saving...' : 'Save All'}
-                </Button>
+                    }}
+                  >
+                    {isSavingAll ? 'Saving...' : 'Save All'}
+                  </Button>
+                  {showCancelAll && (
+                    <Button
+                      leftIcon={<XIcon size={currentIconSize} />}
+                      variant="outlined"
+                      color="danger"
+                      size={size}
+                      disabled={isSavingAll}
+                      onClick={() => onCancelAll?.(activeEditRows)}
+                    >
+                      Cancel All
+                    </Button>
+                  )}
+                </React.Fragment>
               )
             }
 
