@@ -286,11 +286,20 @@ export function EditDataTable<T>({
                               column={col}
                               rowState={rowState}
                               onChange={(key, val) => {
-                                const newData = [...tableData]
-                                if (newData[rowIndex]) {
-                                  newData[rowIndex].edited = { ...newData[rowIndex].edited, [key]: val as T[keyof T] }
-                                  setTableData(newData)
-                                }
+                                const rowKeyValue = rowState.action.key
+                                setTableData(prev => prev.map(r =>
+                                  r.action.key === rowKeyValue
+                                    ? { ...r, edited: { ...r.edited, [key]: val as T[keyof T] } }
+                                    : r
+                                ))
+                              }}
+                              onRowChange={(nextRow) => {
+                                const rowKeyValue = rowState.action.key
+                                setTableData(prev => prev.map(r =>
+                                  r.action.key === rowKeyValue
+                                    ? { ...r, edited: nextRow }
+                                    : r
+                                ))
                               }}
                             />
                           )

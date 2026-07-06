@@ -29,7 +29,7 @@ export interface EditColumnDef<T> {
   columns?: EditColumnDef<T>[]
   editable?: boolean
   options?: { label: string; value: string | number }[]
-  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: EditTableRowState<T>) => React.ReactNode
+  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: EditTableRowState<T>, onRowChange: (row: T) => void) => React.ReactNode
 }
 
 export type EditComponentVariant = 'filled' | 'outlined' | 'soft' | 'text'
@@ -155,4 +155,5 @@ export interface EditEditableCellProps<T> {
   column: EditColumnDef<T>
   rowState: EditTableRowState<T>
   onChange: (key: keyof T, value: unknown) => void
+  onRowChange: (row: T) => void
 }
