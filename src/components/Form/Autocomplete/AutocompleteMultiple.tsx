@@ -334,7 +334,7 @@ export const AutocompleteMultiple = ({
             bottom: portalPos.bottom,
             left: portalPos.left,
             width: portalPos.width,
-            zIndex: 150,
+            zIndex: 100000,
             visibility: portalPos.isPositioned ? 'visible' : 'hidden',
             pointerEvents: portalPos.isPositioned ? 'auto' : 'none',
           } as CSSProperties}
