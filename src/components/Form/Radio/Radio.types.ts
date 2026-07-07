@@ -26,11 +26,12 @@ export interface RadioProps extends Omit<BaseFormProps, 'label' | 'variant'> {
    * @default "col" 
    */
   orientation?: 'row' | 'col'
-  /** 
+  /**
    * If false, hides the text label next to each radio dot.
    * @default true
    */
   showOptionLabel?: boolean
+  appearance?: 'default' | 'card'
   /** Accessible label for the entire group (useful for screen readers if `label` is omitted). */
   groupAriaLabel?: string
   /** 

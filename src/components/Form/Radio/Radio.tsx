@@ -3,7 +3,8 @@
 import React from 'react'
 import { AlertCircleIcon } from '../../Icons'
 import type { RadioProps } from './Radio.types'
-import { sizeClasses, colors } from './Radio.styles'
+import { sizeClasses, colors, cardColors } from './Radio.styles'
+import { sizeMap, radiusMap } from '../InputField/InputField.styles'
 
 /**
  * A group of radio buttons that allows users to select exactly one option from a list.
@@ -46,11 +47,13 @@ export const Radio = ({
   groupAriaLabel,
   disabled = false,
   readOnly = false,
+  appearance = 'default',
 }: RadioProps) => {
   const autoName = React.useId().replace(/:/g, '')
 
   const resolvedName = name || `radio-group-${autoName}`
   const resolvedGroupAriaLabel = (typeof label === 'string' ? label.trim() : '') || groupAriaLabel || 'Radio Group'
+  const isCard = appearance === 'card'
 
   return (
     <div className={`flex flex-col w-full ${className}`}>
@@ -60,11 +63,19 @@ export const Radio = ({
         </label>
       )}
 
-      <div className={`flex ${orientation === 'row' ? 'flex-row flex-wrap gap-6' : 'flex-col gap-3'}`} role="radiogroup" aria-label={resolvedGroupAriaLabel}>
+      <div className={`flex ${orientation === 'row' ? `flex-row ${isCard ? 'gap-3' : 'flex-wrap gap-6'}` : 'flex-col gap-3'}`} role="radiogroup" aria-label={resolvedGroupAriaLabel}>
         {options.map((option) => {
           const isSelected = value === option.value
+          const cardBorder = error
+            ? 'border-danger-500'
+            : isSelected
+              ? cardColors[color]
+              : 'border-neutral-400 group-hover:border-neutral-300'
+          const labelClass = isCard
+            ? `group relative flex items-center border bg-white transition-all ${sizeMap[size]} px-4 ${radiusMap[size]} ${orientation === 'row' ? 'flex-1' : 'w-full'} ${sizeClasses[size].rowGap} ${cardBorder} ${(disabled || option.disabled) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`
+            : `group flex items-center ${(disabled || option.disabled) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'} ${showOptionLabel ? sizeClasses[size].rowGap : 'gap-0'}`
           return (
-            <label key={option.value} className={`group flex items-center ${(disabled || option.disabled) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'} ${showOptionLabel ? sizeClasses[size].rowGap : 'gap-0'}`}>
+            <label key={option.value} className={labelClass}>
               <div className="relative shrink-0">
                 <input
                   type="radio"

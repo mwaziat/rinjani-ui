@@ -18,3 +18,13 @@ export const colors: Record<FormColor, { active: string; focus: string }> = {
   info: { active: 'border-info-500 before:scale-100 before:bg-info-500', focus: 'peer-focus:ring-0 peer-focus:border-info-500' },
   neutral: { active: 'border-neutral-900 before:scale-100 before:bg-neutral-900', focus: 'peer-focus:ring-0 peer-focus:border-neutral-900' },
 }
+
+export const cardColors: Record<FormColor, string> = {
+  primary: 'border-primary-500 bg-primary-50',
+  secondary: 'border-secondary-500 bg-secondary-50',
+  success: 'border-success-500 bg-success-50',
+  warning: 'border-warning-500 bg-warning-50',
+  danger: 'border-danger-500 bg-danger-50',
+  info: 'border-info-500 bg-info-50',
+  neutral: 'border-neutral-900 bg-neutral-50',
+}
