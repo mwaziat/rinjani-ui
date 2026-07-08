@@ -194,7 +194,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
         </div>
       </div>
 
-      {isOpen && hasChildren && (
+      {isOpen && hasChildren && (children.length > 0 || isLoading || isError) && (
         <div role="group" className={childrenWrapperClass} style={childrenWrapperStyle}>
           {children.length > 0 ? (
             children.map((child: TreeNodeData, childIndex: number) => (
@@ -242,7 +242,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
           ) : (
             <div className={`flex items-center gap-2 px-3 py-2 ${labelTextClass(size)} text-neutral-400`}>
               <LoaderIcon size={14} />
-              <span>Loading…</span>
+              <span>Loading</span>
             </div>
           )}
         </div>
