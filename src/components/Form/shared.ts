@@ -18,6 +18,46 @@ export const getSelectValueKey = (value: SelectValue | undefined): SelectPrimiti
   return value
 }
 
+/**
+ * Normalize a primitive option value into a stable string key so comparisons
+ * survive type drift between options and external state (e.g. BIGINT ids
+ * arriving as strings while options carry numbers). Empty selections
+ * (undefined, null, '') normalize to undefined.
+ */
+export const toOptionKey = (value: SelectPrimitiveValue | null | undefined): string | undefined => {
+  if (value === undefined || value === null || value === '') {
+    return undefined
+  }
+
+  return String(value)
+}
+
+/**
+ * Resolve a selected value to its option, preferring the current options list
+ * and falling back to every option seen in previous renders. This keeps an
+ * active selection's label visible while the options list is replaced by
+ * server-side search results that no longer include it.
+ */
+export const useOptionResolver = (options: SelectOption[]): ((value: SelectValue | undefined) => SelectOption | undefined) => {
+  const seenOptionsRef = React.useRef<Map<string, SelectOption>>(new Map())
+
+  for (const option of options) {
+    const key = toOptionKey(option.value)
+    if (key !== undefined) {
+      seenOptionsRef.current.set(key, option)
+    }
+  }
+
+  return (value) => {
+    const key = toOptionKey(getSelectValueKey(value))
+    if (key === undefined) {
+      return undefined
+    }
+
+    return options.find((option) => toOptionKey(option.value) === key) ?? seenOptionsRef.current.get(key)
+  }
+}
+
 export const buildSelectValue = (
   sourceValue: SelectValue | undefined,
   nextValue: SelectPrimitiveValue,

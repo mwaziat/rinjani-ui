@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteProps } from './Autocomplete.types'
-import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, useStableInputId } from '../shared'
+import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import type { SelectOption } from '../types'
 import {
   colorMap,
@@ -82,8 +82,9 @@ export const Autocomplete = ({
   const listRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const inputId = useStableInputId(id, 'select-autocomplete')
-  const selectedValue = getSelectValueKey(value)
-  const selectedOption = options.find((option) => option.value === selectedValue)
+  const selectedKey = toOptionKey(getSelectValueKey(value))
+  const resolveOption = useOptionResolver(options)
+  const selectedOption = resolveOption(value)
   const hasValue = Boolean(selectedOption)
   const isFloating = floating && (isFocused || hasValue || isOpen)
   const canMutate = isMutableInteraction(disabled, readOnly)
@@ -354,9 +355,9 @@ export const Autocomplete = ({
                 <div
                   key={option.value}
                   role="option"
-                  aria-selected={option.value === selectedValue}
+                  aria-selected={toOptionKey(option.value) === selectedKey}
                   aria-disabled={option.disabled}
-                  className={`${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} px-4 py-3 text-sm font-medium transition-colors ${option.value === selectedValue ? colorMap[color].itemSelected : 'text-neutral-700 hover:bg-neutral-50'}`}
+                  className={`${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} px-4 py-3 text-sm font-medium transition-colors ${toOptionKey(option.value) === selectedKey ? colorMap[color].itemSelected : 'text-neutral-700 hover:bg-neutral-50'}`}
                   onMouseDown={(event) => {
                     event.preventDefault()
                     handleOptionSelect(option)
