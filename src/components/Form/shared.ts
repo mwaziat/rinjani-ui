@@ -36,17 +36,33 @@ export const toOptionKey = (value: SelectPrimitiveValue | null | undefined): str
  * Resolve a selected value to its option, preferring the current options list
  * and falling back to every option seen in previous renders. This keeps an
  * active selection's label visible while the options list is replaced by
- * server-side search results that no longer include it.
+ * server-side search results that no longer include it. The seen-options map
+ * lives in state and is adjusted during render (the React "derived state"
+ * pattern) so no refs are read while rendering; re-adjustment only triggers
+ * when a key is new or its label changed, so renders always converge.
  */
 export const useOptionResolver = (options: SelectOption[]): ((value: SelectValue | undefined) => SelectOption | undefined) => {
-  const seenOptionsRef = React.useRef<Map<string, SelectOption>>(new Map())
+  const [seenOptions, setSeenOptions] = React.useState<ReadonlyMap<string, SelectOption>>(() => new Map())
 
+  let nextSeen: Map<string, SelectOption> | null = null
   for (const option of options) {
     const key = toOptionKey(option.value)
-    if (key !== undefined) {
-      seenOptionsRef.current.set(key, option)
+    if (key === undefined) {
+      continue
+    }
+
+    const existing = (nextSeen ?? seenOptions).get(key)
+    if (existing === undefined || existing.label !== option.label) {
+      nextSeen = nextSeen ?? new Map(seenOptions)
+      nextSeen.set(key, option)
     }
   }
+
+  if (nextSeen) {
+    setSeenOptions(nextSeen)
+  }
+
+  const effectiveSeen = nextSeen ?? seenOptions
 
   return (value) => {
     const key = toOptionKey(getSelectValueKey(value))
@@ -54,7 +70,7 @@ export const useOptionResolver = (options: SelectOption[]): ((value: SelectValue
       return undefined
     }
 
-    return options.find((option) => toOptionKey(option.value) === key) ?? seenOptionsRef.current.get(key)
+    return options.find((option) => toOptionKey(option.value) === key) ?? effectiveSeen.get(key)
   }
 }
 
