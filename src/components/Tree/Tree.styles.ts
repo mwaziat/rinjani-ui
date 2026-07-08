@@ -66,7 +66,7 @@ export const nodeSizeClass = (size: TreeSize) => {
   if (size === 'xs') return 'min-h-8 py-1.5 px-2.5 text-xs'
   if (size === 'sm') return 'min-h-9 py-2 px-3 text-sm'
   if (size === 'md') return 'min-h-11 py-2.5 px-4 text-base'
-  if (size === 'lg') return 'min-h-[52px] py-3 px-5 text-lg'
+  if (size === 'lg') return 'min-h-13 py-3 px-5 text-lg'
   if (size === 'xl') return 'min-h-14 py-3.5 px-6 text-xl'
   return 'min-h-9 py-2 px-3 text-sm'
 }
