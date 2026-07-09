@@ -115,4 +115,5 @@ export interface TreeNodeProps {
 	maxIndentLevel: number
 	deepLevelNumbering: boolean
 	nodeActions: TreeActionConfig[]
+	siblingsHaveChildren: boolean
 }

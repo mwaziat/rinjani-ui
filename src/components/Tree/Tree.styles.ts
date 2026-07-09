@@ -40,15 +40,42 @@ export const variantColorMap = {
   }
 }
 
+export const hoverBgClass = (color: TreeColor): string => {
+  const map: Record<TreeColor, string> = {
+    primary: 'hover:bg-primary-100',
+    secondary: 'hover:bg-secondary-100',
+    success: 'hover:bg-success-100',
+    warning: 'hover:bg-warning-100',
+    danger: 'hover:bg-danger-100',
+    info: 'hover:bg-info-100',
+    neutral: 'hover:bg-neutral-100',
+  }
+  return map[color]
+}
+
+export const lineColorClass = (color: TreeColor): string => {
+  const map: Record<TreeColor, string> = {
+    primary: 'border-primary-300',
+    secondary: 'border-secondary-300',
+    success: 'border-success-300',
+    warning: 'border-warning-300',
+    danger: 'border-danger-300',
+    info: 'border-info-300',
+    neutral: 'border-neutral-300',
+  }
+  return map[color]
+}
+
 export const getRowStyle = (variant: TreeVariant, isActive: boolean, color: TreeColor) => {
   if (isActive) {
     if (variant === 'filled') return variantColorMap.activeFilled[color]
     return variantColorMap.active[color]
   }
-  
-  if (variant === 'filled') return 'bg-white hover:bg-neutral-50 text-neutral-700 shadow-sm border border-neutral-200'
-  if (variant === 'lined') return 'hover:bg-neutral-100/50 text-neutral-700'
-  return 'hover:bg-neutral-50 text-neutral-700'
+
+  const hover = hoverBgClass(color)
+  if (variant === 'filled') return `bg-white ${hover} text-neutral-700 shadow-sm border border-neutral-200`
+  if (variant === 'lined') return `${hover} text-neutral-700`
+  return `${hover} text-neutral-700`
 }
 
 export const actionColorClass = (color: TreeColor) => {

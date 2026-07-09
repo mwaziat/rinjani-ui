@@ -11,6 +11,7 @@ import {
   iconButtonSizeClass,
   getIconWidth,
   labelTextClass,
+  lineColorClass,
 } from './Tree.styles'
 import { getNextPathIndexes, resolveHasChildren } from './Tree.utils'
 
@@ -40,12 +41,20 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
   maxIndentLevel,
   deepLevelNumbering,
   nodeActions,
+  siblingsHaveChildren,
 }) => {
   const children = Array.isArray(node.children) ? node.children : []
   const hasChildren = resolveHasChildren(node, children)
-  const isOpen = expandedKeys.has(node.id)
+  const reserveToggle = hasChildren || siblingsHaveChildren
+  const childrenHaveToggles = children.some((child) =>
+    resolveHasChildren(child, Array.isArray(child.children) ? child.children : []),
+  )
+  const isExpanded = expandedKeys.has(node.id)
   const isLoading = node.isLoading === true
   const isError = node.loadState === 'error'
+  const hasLoadedChildren = children.length > 0
+  const needsLoad = hasChildren && !hasLoadedChildren && !isLoading && !isError
+  const isOpen = isExpanded && (hasLoadedChildren || isLoading || isError)
   const isActive = activeNodeId !== undefined && activeNodeId === node.id
   const isFocused = focusedNodeId === node.id
 
@@ -71,19 +80,27 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
     rowStyle = { marginLeft: `${visualLevel * 24}px` }
   } else if (variant === 'lined') {
     rowClass += ' rounded-md'
-    childrenWrapperClass += ' border-l border-dashed border-neutral-300'
+    childrenWrapperClass += ` border-l border-dashed ${lineColorClass(color)}`
     childrenWrapperStyle = { marginLeft: `${lineOffset}px`, paddingLeft: '16px' }
+  }
+
+  const toggleNode = () => {
+    if (!hasChildren) return
+    if (needsLoad) {
+      onToggleExpand(node, true)
+      return
+    }
+    onToggleExpand(node, !isOpen)
   }
 
   const handleToggle = (event: React.MouseEvent) => {
     event.stopPropagation()
-    if (!hasChildren) return
-    onToggleExpand(node, !isOpen)
+    toggleNode()
   }
 
   const handleNodeClick = () => {
     if (onNodeClick) onNodeClick(node)
-    else if (hasChildren) onToggleExpand(node, !isOpen)
+    else toggleNode()
   }
 
   return (
@@ -122,31 +139,33 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
         style={rowStyle}
       >
         {variant === 'lined' && level > 0 && (
-          <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-4 border-t border-dashed border-neutral-300" />
+          <div className={`absolute top-1/2 -translate-y-1/2 -left-4 w-4 border-t border-dashed ${lineColorClass(color)}`} />
         )}
 
         <div className="flex min-w-0 items-center gap-2">
-          <button
-            type="button"
-            aria-hidden={!hasChildren}
-            tabIndex={-1}
-            onClick={handleToggle}
-            className={`${iconButtonSizeClass(size)} flex items-center justify-center rounded-md transition-colors ${
-              hasChildren
-                ? isActive && variant === 'filled'
-                  ? 'text-white hover:bg-white/20'
-                  : 'text-neutral-400 hover:bg-neutral-200/50 hover:text-neutral-900'
-                : 'opacity-0 pointer-events-none'
-            }`}
-          >
-            {isLoading ? (
-              <LoaderIcon size={14} />
-            ) : isOpen ? (
-              <ChevronDownIcon size={14} />
-            ) : (
-              <ChevronRightIcon size={14} />
-            )}
-          </button>
+          {reserveToggle && (
+            <button
+              type="button"
+              aria-hidden={!hasChildren}
+              tabIndex={-1}
+              onClick={handleToggle}
+              className={`${iconButtonSizeClass(size)} flex items-center justify-center rounded-md transition-colors ${
+                hasChildren
+                  ? isActive && variant === 'filled'
+                    ? 'text-white hover:bg-white/20'
+                    : 'text-neutral-400 hover:bg-neutral-200/50 hover:text-neutral-900'
+                  : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              {isLoading ? (
+                <LoaderIcon size={14} />
+              ) : isOpen ? (
+                <ChevronDownIcon size={14} />
+              ) : (
+                <ChevronRightIcon size={14} />
+              )}
+            </button>
+          )}
 
           <div className="flex min-w-0 items-center gap-2.5">
             {node.icon && (
@@ -225,6 +244,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
                 maxIndentLevel={maxIndentLevel}
                 deepLevelNumbering={deepLevelNumbering}
                 nodeActions={nodeActions}
+                siblingsHaveChildren={childrenHaveToggles}
               />
             ))
           ) : isError ? (

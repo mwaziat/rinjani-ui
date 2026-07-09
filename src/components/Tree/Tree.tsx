@@ -14,6 +14,7 @@ import {
   getVisibleFlatNodes,
   isDescendantId,
   patchNodeById,
+  resolveHasChildren,
   setChildrenById,
   type FlatTreeEntry,
 } from './Tree.utils'
@@ -81,6 +82,11 @@ export const Tree = ({
   const visibleFlat = React.useMemo<FlatTreeEntry[]>(
     () => getVisibleFlatNodes(effectiveData, expandedSet),
     [effectiveData, expandedSet],
+  )
+
+  const rootHasToggles = React.useMemo(
+    () => effectiveData.some((node) => resolveHasChildren(node, Array.isArray(node.children) ? node.children : [])),
+    [effectiveData],
   )
 
   const [focusedNodeId, setFocusedNodeId] = React.useState<string | number | null>(null)
@@ -415,6 +421,7 @@ export const Tree = ({
               maxIndentLevel={maxIndentLevel}
               deepLevelNumbering={deepLevelNumbering}
               nodeActions={nodeActions}
+              siblingsHaveChildren={rootHasToggles}
             />
           ))
         ) : (
