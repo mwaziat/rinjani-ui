@@ -2,7 +2,7 @@ import React from 'react'
 import { InputField, Checkbox, Select } from '../Form'
 import type { EditEditableCellProps } from './EditDataTable.types'
 
-export function EditEditableCell<T>({ column, rowState, onChange }: EditEditableCellProps<T>) {
+export function EditEditableCell<T>({ column, rowState, onChange, onRowChange }: EditEditableCellProps<T>) {
   const { accessorKey, type = 'string', editComponent } = column
   const cellValue = accessorKey ? rowState.edited[accessorKey] : undefined
 
@@ -12,7 +12,8 @@ export function EditEditableCell<T>({ column, rowState, onChange }: EditEditable
         {editComponent(
           cellValue,
           (val) => accessorKey && onChange(accessorKey, val),
-          rowState
+          rowState,
+          onRowChange
         )}
       </>
     )

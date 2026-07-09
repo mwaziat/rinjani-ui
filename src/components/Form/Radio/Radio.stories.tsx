@@ -21,6 +21,10 @@ const meta: Meta<typeof Radio> = {
       control: 'radio',
       options: ['col', 'row'],
     },
+    appearance: {
+      control: 'radio',
+      options: ['default', 'card'],
+    },
   },
 }
 
@@ -130,4 +134,48 @@ const ShowcaseWrapper = () => {
 
 export const Showcase: Story = {
   render: () => <ShowcaseWrapper />,
+}
+
+export const Card: Story = {
+  render: (args) => <StatefulRadio {...args} />,
+  args: {
+    label: 'Status',
+    appearance: 'card',
+    orientation: 'row',
+    options: [
+      { label: 'Active', value: 'opt1' },
+      { label: 'Inactive', value: 'opt2' },
+    ],
+    value: 'opt1',
+    color: 'primary',
+    size: 'md',
+  },
+}
+
+const CardAlignmentWrapper = () => {
+  const [status, setStatus] = useState<string | number>('active')
+
+  return (
+    <div className="grid max-w-2xl grid-cols-2 items-end gap-4 bg-neutral-50 p-6">
+      {sizes.map((size) => (
+        <Radio
+          key={size}
+          size={size}
+          appearance="card"
+          orientation="row"
+          label={`Card ${size.toUpperCase()}`}
+          options={[
+            { label: 'Active', value: 'active' },
+            { label: 'Inactive', value: 'inactive' },
+          ]}
+          value={status}
+          onChange={setStatus}
+        />
+      ))}
+    </div>
+  )
+}
+
+export const CardSizes: Story = {
+  render: () => <CardAlignmentWrapper />,
 }

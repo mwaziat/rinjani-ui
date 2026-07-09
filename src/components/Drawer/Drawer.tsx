@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import type { DrawerProps } from './Drawer.types'
 import { positionStyles, baseBackdropClasses, baseDrawerClasses } from './Drawer.styles'
 import { getSizeClasses, getTransformClass } from './Drawer.utils'
+import { useIsHydrated } from '../../hooks/useIsHydrated'
 
 /**
  * A slide-out panel component used for navigation, filtering, or detailed views.
@@ -40,6 +41,8 @@ export const Drawer: React.FC<DrawerProps> = ({
   size = 'md',
   className = '',
 }) => {
+  const isHydrated = useIsHydrated()
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -53,7 +56,7 @@ export const Drawer: React.FC<DrawerProps> = ({
 
   const isHorizontal = position === 'left' || position === 'right'
 
-  if (typeof document === 'undefined') return null
+  if (!isHydrated) return null
 
   return createPortal(
     <div className={`fixed inset-0 z-9999 ${isOpen ? 'visible' : 'invisible transition-all delay-300'}`}>

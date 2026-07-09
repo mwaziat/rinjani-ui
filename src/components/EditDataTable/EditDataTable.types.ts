@@ -16,6 +16,20 @@ export interface EditTableRowState<T> {
   }
 }
 
+/**
+ * Value accepted by onRowChange: either the next row object, or a functional
+ * updater receiving the latest edited row. Use the functional form whenever the
+ * next row is derived asynchronously (e.g. after a fetch) so concurrent edits
+ * from sibling cells are never overwritten by a stale snapshot.
+ */
+export type EditRowUpdater<T> = T | ((prev: T) => T)
+
+/**
+ * Value accepted by the action column's onStateChange: the next row state, or a
+ * functional updater receiving the latest row state.
+ */
+export type EditRowStateUpdater<T> = EditTableRowState<T> | ((prev: EditTableRowState<T>) => EditTableRowState<T>)
+
 export interface EditColumnDef<T> {
   header: React.ReactNode
   accessorKey?: keyof T
@@ -29,7 +43,7 @@ export interface EditColumnDef<T> {
   columns?: EditColumnDef<T>[]
   editable?: boolean
   options?: { label: string; value: string | number }[]
-  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: EditTableRowState<T>) => React.ReactNode
+  editComponent?: (value: unknown, onChange: (val: unknown) => void, rowState: EditTableRowState<T>, onRowChange: (row: EditRowUpdater<T>) => void) => React.ReactNode
 }
 
 export type EditComponentVariant = 'filled' | 'outlined' | 'soft' | 'text'
@@ -50,7 +64,9 @@ export interface EditToolbarConfig<T> {
   showEditAll?: boolean
   onEditAll?: (selectedKeys: (string | number)[]) => void
   showSaveAll?: boolean
-  onSaveAll?: (rows: Partial<T>[]) => void | Promise<void>
+  onSaveAll?: (rows: Partial<T>[], rowStates?: EditTableRowState<T>[]) => void | Promise<void>
+  showCancelAll?: boolean
+  onCancelAll?: (originalRows: T[]) => void
   variant?: EditComponentVariant
   color?: EditTableColor
   size?: EditComponentSize
@@ -155,4 +171,5 @@ export interface EditEditableCellProps<T> {
   column: EditColumnDef<T>
   rowState: EditTableRowState<T>
   onChange: (key: keyof T, value: unknown) => void
+  onRowChange: (row: EditRowUpdater<T>) => void
 }

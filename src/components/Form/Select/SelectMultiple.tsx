@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { SelectMultipleProps } from './Select.types'
-import { getSelectValueKey, isMutableInteraction, useStableInputId } from '../shared'
+import { getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
 import {
   multiColorMap,
@@ -44,10 +44,13 @@ export const SelectMultiple = ({
   const listRef = useRef<HTMLDivElement>(null)
   const inputId = useStableInputId(id, 'select-multiple')
   const canMutate = isMutableInteraction(disabled, readOnly)
-  const getValueKey = (currentValue?: SelectValue) => getSelectValueKey(currentValue)
+  const getValueKey = (currentValue?: SelectValue) => toOptionKey(getSelectValueKey(currentValue))
 
-  const selectedKeys = useMemo(() => value.map((item) => getValueKey(item)), [value])
-  const selectedOptions = useMemo(() => options.filter((option) => selectedKeys.includes(option.value)), [options, selectedKeys])
+  const selectedKeys = useMemo(() => value.map((item) => toOptionKey(getSelectValueKey(item))), [value])
+  const resolveOption = useOptionResolver(options)
+  const selectedOptions = value
+    .map((item) => resolveOption(item))
+    .filter((option): option is SelectOption => option !== undefined)
 
   const buildNextValue = (optionValue: string | number, optionData?: unknown): SelectValue => {
     const sampleValue = value[0]
@@ -80,10 +83,11 @@ export const SelectMultiple = ({
 
   const toggleOption = (option: SelectOption) => {
     if (!canMutate || option.disabled) return
-    const isSelected = selectedKeys.includes(option.value)
+    const optionKey = toOptionKey(option.value)
+    const isSelected = selectedKeys.includes(optionKey)
 
     if (isSelected) {
-      onChange(value.filter((item) => getValueKey(item) !== option.value))
+      onChange(value.filter((item) => getValueKey(item) !== optionKey))
       return
     }
 
@@ -225,7 +229,7 @@ export const SelectMultiple = ({
             bottom: portalPos.bottom,
             left: portalPos.left,
             width: portalPos.width,
-            zIndex: 150,
+            zIndex: 100000,
             visibility: portalPos.isPositioned ? 'visible' : 'hidden',
             pointerEvents: portalPos.isPositioned ? 'auto' : 'none',
           } as CSSProperties}
@@ -233,7 +237,7 @@ export const SelectMultiple = ({
         >
           <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${portalPos.maxHeight}px` }}>
             {options.map((option) => {
-              const isSelected = selectedKeys.includes(option.value)
+              const isSelected = selectedKeys.includes(toOptionKey(option.value))
 
               return (
                 <div

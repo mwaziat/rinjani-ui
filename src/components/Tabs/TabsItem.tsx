@@ -4,7 +4,7 @@ import React from 'react'
 import { useTabsContext } from './Tabs.context'
 import type { TabsItemProps } from './Tabs.types'
 import { getTriggerClass } from './Tabs.utils'
-import { justifyMap } from './Tabs.styles'
+import { justifyMap, textAlignMap } from './Tabs.styles'
 
 export const TabsItem = React.forwardRef<HTMLButtonElement, TabsItemProps>(({ value, children, icon, iconPosition = 'start', disabled = false, className = '' }, ref) => {
   const { activeTab, onChange, color, size, variant, placement, align, alignLabel } = useTabsContext()
@@ -12,8 +12,9 @@ export const TabsItem = React.forwardRef<HTMLButtonElement, TabsItemProps>(({ va
 
   const baseLabel = alignLabel.startsWith('wrapped-') ? alignLabel.slice(8) : alignLabel
   const isWrapped = alignLabel.startsWith('wrapped-')
-  const labelAlignClass = `${justifyMap[baseLabel as string] ?? 'justify-center'} ${isWrapped ? 'whitespace-normal' : ''}`
-  const tabClass = `${getTriggerClass(isActive, placement, variant, size, color)} ${align === 'fullWidth' && !(placement === 'vertical-left' || placement === 'vertical-right') ? 'flex-1' : ''}`
+  const justifyClass = justifyMap[baseLabel as string] ?? 'justify-center'
+  const tabClass = `${getTriggerClass(isActive, placement, variant, size, color)} ${justifyClass} ${align === 'fullWidth' && !(placement === 'vertical-left' || placement === 'vertical-right') ? 'flex-1' : ''}`
+  const labelClass = isWrapped ? `whitespace-normal ${textAlignMap[baseLabel as string] ?? 'text-center'}` : ''
 
   let flexDirection = 'flex-row'
   if (iconPosition === 'end') flexDirection = 'flex-row-reverse'
@@ -34,7 +35,7 @@ export const TabsItem = React.forwardRef<HTMLButtonElement, TabsItemProps>(({ va
       onClick={() => !disabled && onChange(value)}
     >
       {icon && <span className="shrink-0 flex items-center justify-center">{icon}</span>}
-      {children && <span className={labelAlignClass}>{children}</span>}
+      {children && <span className={labelClass}>{children}</span>}
     </button>
   )
 })

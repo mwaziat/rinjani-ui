@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteMultipleProps } from './AutocompleteMultiple.types'
-import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, useStableInputId } from '../shared'
+import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
 import {
   colorMap,
@@ -84,10 +84,13 @@ export const AutocompleteMultiple = ({
   const searchInputRef = useRef<HTMLInputElement>(null)
   const inputId = useStableInputId(id, 'select-multiple-autocomplete')
   const canMutate = isMutableInteraction(disabled, readOnly)
-  const getValueKey = (currentValue?: SelectValue) => getSelectValueKey(currentValue)
+  const getValueKey = (currentValue?: SelectValue) => toOptionKey(getSelectValueKey(currentValue))
 
-  const selectedKeys = useMemo(() => value.map((item) => getValueKey(item)), [value])
-  const selectedOptions = useMemo(() => options.filter((option) => selectedKeys.includes(option.value)), [options, selectedKeys])
+  const selectedKeys = useMemo(() => value.map((item) => toOptionKey(getSelectValueKey(item))), [value])
+  const resolveOption = useOptionResolver(options)
+  const selectedOptions = value
+    .map((item) => resolveOption(item))
+    .filter((option): option is SelectOption => option !== undefined)
   const hasValue = selectedOptions.length > 0
   const isFloating = floating && (isFocused || hasValue || isOpen)
 
@@ -145,10 +148,11 @@ export const AutocompleteMultiple = ({
 
   const toggleOption = (option: SelectOption) => {
     if (!canMutate || option.disabled) return
-    const isSelected = selectedKeys.includes(option.value)
+    const optionKey = toOptionKey(option.value)
+    const isSelected = selectedKeys.includes(optionKey)
 
     if (isSelected) {
-      onChange(value.filter((item) => getValueKey(item) !== option.value))
+      onChange(value.filter((item) => getValueKey(item) !== optionKey))
       return
     }
 
@@ -334,7 +338,7 @@ export const AutocompleteMultiple = ({
             bottom: portalPos.bottom,
             left: portalPos.left,
             width: portalPos.width,
-            zIndex: 150,
+            zIndex: 100000,
             visibility: portalPos.isPositioned ? 'visible' : 'hidden',
             pointerEvents: portalPos.isPositioned ? 'auto' : 'none',
           } as CSSProperties}
@@ -380,7 +384,7 @@ export const AutocompleteMultiple = ({
 
           <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${Math.max(portalPos.maxHeight - 72, 80)}px` }}>
             {filteredOptions.map((option) => {
-              const isSelected = selectedKeys.includes(option.value)
+              const isSelected = selectedKeys.includes(toOptionKey(option.value))
 
               return (
                 <div

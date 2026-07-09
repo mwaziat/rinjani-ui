@@ -66,8 +66,14 @@ export const variantColorMap: Record<'filled' | 'outlined' | 'soft' | 'text' | '
   }
 }
 
-export const justifyMap: Record<string, string> = { 
-  left: 'justify-start', 
-  center: 'justify-center', 
-  right: 'justify-end' 
+export const justifyMap: Record<string, string> = {
+  left: 'justify-start',
+  center: 'justify-center',
+  right: 'justify-end'
+}
+
+export const textAlignMap: Record<string, string> = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right'
 }

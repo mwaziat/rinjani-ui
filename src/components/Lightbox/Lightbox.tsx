@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, PlayIcon, PauseIcon } from '../Icons'
 import type { LightboxProps } from './Lightbox.types'
 import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
+import { useIsHydrated } from '../../hooks/useIsHydrated'
 
 /**
  * A highly interactive, full-screen image gallery and image viewing component.
@@ -44,6 +45,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
   isDraggable = true,
   loop = true,
 }) => {
+  const isHydrated = useIsHydrated()
   const [currentIndex, setCurrentIndex] = useState(index)
   const [scale, setScale] = useState(1)
 
@@ -123,7 +125,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
     return () => clearInterval(timer)
   }, [open, isPlaying, autoplayDuration, isDragging, scale, handleNext])
 
-  if (typeof document === 'undefined') return null
+  if (!isHydrated) return null
 
   const slide = slides[currentIndex] || slides[0]
 

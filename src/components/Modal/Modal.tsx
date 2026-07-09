@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { ModalProps } from './Modal.types'
 import { sizeClasses } from './Modal.styles'
+import { useIsHydrated } from '../../hooks/useIsHydrated'
 
 let contentScrollLockCount = 0
 let modalZIndexSeed = 9999
@@ -48,6 +49,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(({
   const wrapperRef = useRef<HTMLDivElement>(null)
   const alignRef = useRef<HTMLDivElement>(null)
   const baseZIndex = useRef(10000)
+  const isHydrated = useIsHydrated()
 
   useEffect(() => {
     if (!isOpen) return
@@ -100,7 +102,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(({
       : 'max-h-[calc(100dvh-2rem)]'
     : ''
 
-  if (typeof document === 'undefined') return null
+  if (!isHydrated) return null
 
   return createPortal(
     <div ref={wrapperRef} className={`${wrapperClasses} ${isOpen ? 'visible' : 'invisible delay-300'}`} style={{ zIndex: baseZIndex.current + 1 }}>

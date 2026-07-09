@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { SelectProps } from './Select.types'
-import { buildSelectValue, getSelectValueKey, isMutableInteraction, useStableInputId } from '../shared'
+import { buildSelectValue, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import {
   singleColorMap,
   singleLineActive,
@@ -68,8 +68,9 @@ export const Select = ({
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const inputId = useStableInputId(id, 'select')
-  const selectedValue = getSelectValueKey(value)
-  const selectedOption = options.find((opt) => opt.value === selectedValue)
+  const selectedKey = toOptionKey(getSelectValueKey(value))
+  const resolveOption = useOptionResolver(options)
+  const selectedOption = resolveOption(value)
   const hasValue = Boolean(selectedOption)
   const isFloating = floating && (isFocused || hasValue || isOpen)
   const canMutate = isMutableInteraction(disabled, readOnly)
@@ -205,7 +206,7 @@ export const Select = ({
             bottom: portalPos.bottom,
             left: portalPos.left,
             width: portalPos.width,
-            zIndex: 150,
+            zIndex: 100000,
             visibility: portalPos.isPositioned ? 'visible' : 'hidden',
             pointerEvents: portalPos.isPositioned ? 'auto' : 'none',
           } as CSSProperties}
@@ -216,10 +217,10 @@ export const Select = ({
               <div
                 key={option.value}
                 role="option"
-                aria-selected={option.value === selectedValue}
+                aria-selected={toOptionKey(option.value) === selectedKey}
                 aria-disabled={option.disabled}
                 className={`${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} px-4 py-3 text-sm font-medium transition-colors
-                  ${option.value === selectedValue
+                  ${toOptionKey(option.value) === selectedKey
                     ? singleColorMap[color].itemSelected
                     : 'text-neutral-700 hover:bg-neutral-50'}`}
                 onClick={() => {
