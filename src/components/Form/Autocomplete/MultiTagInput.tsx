@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { PlusIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { MultiTagInputProps } from './MultiTagInput.types'
-import { useStableInputId } from '../shared'
+import { useStableInputId, iconSizeMap } from '../shared'
 import type { MultiTagValue, MultiTagValueMode } from '../types'
 import {
   colorMap,
@@ -14,8 +14,7 @@ import {
   labelSizeMap,
   floatingActiveSizeMap,
   sizeMap,
-  radiusMap,
-  iconSizes
+  radiusMap
 } from './MultiTagInput.styles'
 
 /**
@@ -189,7 +188,7 @@ export const MultiTagInput = ({
           disabled={disabled || readOnly}
           className={`absolute right-4 top-1/2 -translate-y-1/2 text-neutral-300 transition-colors ${disabled || readOnly ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-neutral-500'} ${inputColorMap[color].icon}`}
         >
-          {rightIcon || <PlusIcon size={iconSizes[size]} />}
+          {rightIcon || <PlusIcon size={iconSizeMap[size]} />}
         </button>
       </div>
 

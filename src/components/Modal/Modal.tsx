@@ -5,9 +5,10 @@ import { createPortal } from 'react-dom'
 import type { ModalProps } from './Modal.types'
 import { sizeClasses } from './Modal.styles'
 import { useIsHydrated } from '../../hooks/useIsHydrated'
+import { MODAL_Z_INDEX } from '../../utils/layers'
 
 let contentScrollLockCount = 0
-let modalZIndexSeed = 9999
+let modalZIndexSeed = MODAL_Z_INDEX
 
 /**
  * A highly customizable modal dialog component.

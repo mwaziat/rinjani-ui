@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteProps } from './Autocomplete.types'
-import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
+import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import type { SelectOption } from '../types'
 import {
   colorMap,
@@ -218,11 +218,11 @@ export const Autocomplete = ({
   const borderStyles = variant === 'line'
     ? (error
         ? `border-0 border-b border-danger-500`
-        : `border-0 border-b border-neutral-400 ${isOpen ? lineActive[color] : ''}`
+        : `border-0 border-b ${isOpen ? lineActive[color] : 'border-neutral-400'}`
       )
     : (error
         ? `border border-danger-500`
-        : `border border-neutral-400 ${isOpen ? colorMap[color].active : ''}`
+        : `border ${isOpen ? colorMap[color].active : 'border-neutral-400'}`
       )
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
@@ -285,7 +285,7 @@ export const Autocomplete = ({
             {rightIcon && rightIcon}
             {isClearable && value !== undefined && value !== null && value !== '' && (
               <XIcon
-                size={16}
+                size={clearIconSizeMap[size]}
                 className="transition-colors hover:text-danger-500"
                 onClick={(event: React.MouseEvent) => {
                   event.stopPropagation()
@@ -293,7 +293,7 @@ export const Autocomplete = ({
                 }}
               />
             )}
-            <ChevronDownIcon size={18} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDownIcon size={iconSizeMap[size]} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </div>
         </div>
 

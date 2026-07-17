@@ -6,7 +6,7 @@ import reactHooksPlugin from "eslint-plugin-react-hooks";
 import reactCompilerPlugin from "eslint-plugin-react-compiler";
 
 export default tseslint.config(
-  { ignores: ["dist", "node_modules", ".storybook", "docs", "coverage", "examples"] },
+  { ignores: ["dist", "node_modules", ".storybook", "docs", "coverage", "examples", "src/abc"] },
   {
     extends: [
       js.configs.recommended,

@@ -1,0 +1,5 @@
+export const DRAWER_Z_INDEX = 9_999
+export const MODAL_Z_INDEX = 10_000
+export const FEEDBACK_Z_INDEX = 2_147_482_000
+export const NOTIFICATION_Z_INDEX = 2_147_483_000
+export const FORM_POPOVER_Z_INDEX = 1_000_000

@@ -1,9 +1,17 @@
 import type { TreeNodeData } from './Tree.types'
 
+/**
+ * Calculates the hierarchical index path for a child node based on its parent's path.
+ * E.g., if parent is at path [0, 1] and child is the 2nd child (index 1), returns [0, 1, 2].
+ */
 export const getNextPathIndexes = (parentPathIndexes: number[], childIndex: number): number[] => {
   return [...parentPathIndexes, childIndex + 1]
 }
 
+/**
+ * Determines whether a node should be considered to have children.
+ * Evaluates `isEndChild`, `hasChildren`, `totalChildren`, and the actual array length.
+ */
 export const resolveHasChildren = (node: TreeNodeData, children: TreeNodeData[]): boolean => {
   if (node.isEndChild === true) return false
   if (node.hasChildren === true) return true
@@ -11,6 +19,9 @@ export const resolveHasChildren = (node: TreeNodeData, children: TreeNodeData[])
   return children.length > 0
 }
 
+/**
+ * Recursively searches a tree structure to find a node by its ID.
+ */
 export const findNodeById = (nodes: TreeNodeData[], targetId: string | number): TreeNodeData | null => {
   for (const node of nodes) {
     if (node.id === targetId) return node
@@ -21,6 +32,10 @@ export const findNodeById = (nodes: TreeNodeData[], targetId: string | number): 
   return null
 }
 
+/**
+ * Recursively searches for a node by ID and merges the given patch object into it.
+ * Returns a new array structure to maintain immutability.
+ */
 export const patchNodeById = (
   nodes: TreeNodeData[],
   targetId: string | number,
@@ -34,6 +49,10 @@ export const patchNodeById = (
   })
 }
 
+/**
+ * Recursively searches for a node by ID and completely replaces its children array.
+ * Automatically updates loading states and child counts.
+ */
 export const setChildrenById = (
   nodes: TreeNodeData[],
   targetId: string | number,
@@ -57,6 +76,9 @@ export const setChildrenById = (
   })
 }
 
+/**
+ * Checks if a specific target ID exists anywhere deep within the descendants of the given node.
+ */
 export const isDescendantId = (node: TreeNodeData, targetId: string | number): boolean => {
   const children = Array.isArray(node.children) ? node.children : []
   for (const child of children) {
@@ -66,6 +88,10 @@ export const isDescendantId = (node: TreeNodeData, targetId: string | number): b
   return false
 }
 
+/**
+ * Removes a node with the specified ID from the tree entirely.
+ * Returns both the new tree structure and the detached node object (if found).
+ */
 export const detachNodeById = (
   nodes: TreeNodeData[],
   targetId: string | number,
@@ -89,6 +115,10 @@ export const detachNodeById = (
   return { nextTree, detached: detachedNode }
 }
 
+/**
+ * Adds a new child node to the end of the children array of a specified parent node.
+ * Automatically increments child counts and flags.
+ */
 export const appendNodeAsChild = (
   nodes: TreeNodeData[],
   parentId: string | number,
@@ -111,6 +141,9 @@ export const appendNodeAsChild = (
   })
 }
 
+/**
+ * Internal representation of a tree node when flattened into a linear array for rendering.
+ */
 export interface FlatTreeEntry {
   node: TreeNodeData
   id: string | number
@@ -121,6 +154,10 @@ export interface FlatTreeEntry {
   pathIndexes: number[]
 }
 
+/**
+ * Converts a deeply nested tree structure into a flat array of nodes that are currently visible
+ * (i.e. all of their ancestors are currently expanded).
+ */
 export const getVisibleFlatNodes = (
   nodes: TreeNodeData[],
   expandedKeys: ReadonlySet<string | number>,

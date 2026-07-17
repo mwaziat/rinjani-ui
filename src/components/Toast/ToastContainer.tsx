@@ -5,6 +5,7 @@ import { toastManager } from './toast-manager'
 import type { ToastItem, ToastPlacement } from './Toast.types'
 import { ToastMessage } from './ToastMessage'
 import { placementClasses } from './Toast.styles'
+import { NOTIFICATION_Z_INDEX } from '../../utils/layers'
 
 export const ToastContainer: React.FC = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([])
@@ -34,7 +35,8 @@ export const ToastContainer: React.FC = () => {
         return (
           <div 
             key={placement} 
-            className={`fixed z-9999 p-4 flex gap-3 w-full pointer-events-none ${placementClasses[placement]} ${isBottom ? 'flex-col-reverse' : 'flex-col'}`}
+            className={`fixed p-4 flex gap-3 w-full pointer-events-none ${placementClasses[placement]} ${isBottom ? 'flex-col-reverse' : 'flex-col'}`}
+            style={{ zIndex: NOTIFICATION_Z_INDEX }}
           >
             {placementToasts.map((toast) => (
               <ToastMessage key={toast.id} toast={toast} />

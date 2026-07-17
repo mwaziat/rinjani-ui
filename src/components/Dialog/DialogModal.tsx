@@ -6,6 +6,7 @@ import { Button } from '../Button'
 import type { DialogItem } from './Dialog.types'
 import { dialogManager } from './dialog-manager'
 import { backdropClasses, modalClasses } from './Dialog.styles'
+import { FEEDBACK_Z_INDEX } from '../../utils/layers'
 
 export const DialogModal: React.FC<{ dialog: DialogItem }> = ({ dialog }) => {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -68,7 +69,7 @@ export const DialogModal: React.FC<{ dialog: DialogItem }> = ({ dialog }) => {
   const modalState = (hasEntered && !isLeaving) ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
+    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: FEEDBACK_Z_INDEX }}>
       <div
         className={`${backdropClasses} ${backdropState}`}
         onClick={dialog.closeOnBackdrop !== false ? handleCancel : undefined}

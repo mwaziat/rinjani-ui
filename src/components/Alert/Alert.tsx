@@ -10,6 +10,7 @@ import {
   InfoIcon 
 } from '../Icons/status'
 import { XIcon, MinusIcon, PlusIcon as ExpandIcon } from '../Icons/action'
+import { FEEDBACK_Z_INDEX } from '../../utils/layers'
 
 /**
  * A feedback component to communicate information, success, warnings, or errors to the user.
@@ -102,7 +103,7 @@ export const Alert: React.FC<AlertProps> = ({
   const iconColor = variant === 'filled' ? 'text-white' : ''
 
   return (
-    <div className={`${baseAlertClasses} ${isMinimized ? 'p-3 items-center' : 'p-4'} ${currentStyles} ${className}`}>
+    <div className={`${baseAlertClasses} ${isMinimized ? 'p-3 items-center' : 'p-4'} ${currentStyles} ${className}`} style={{ zIndex: FEEDBACK_Z_INDEX }}>
       {showIcon && (
         <div className={`shrink-0 mt-0.5 ${iconColor}`}>
           {renderedIcon}
