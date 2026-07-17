@@ -1,5 +1,6 @@
 export * from './UserIcon'
 export * from './ImageIcon'
+export * from './CalendarIcon'
 export * from './ChevronRightIcon'
 export * from './ChevronLeftIcon'
 export * from './ChevronDownIcon'
@@ -10,4 +11,3 @@ export * from './LayoutGridIcon'
 export * from './EyeIcon'
 export * from './EyeOffIcon'
 export * from './SearchIcon'
-

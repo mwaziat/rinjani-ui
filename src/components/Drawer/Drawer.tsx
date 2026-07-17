@@ -6,6 +6,7 @@ import type { DrawerProps } from './Drawer.types'
 import { positionStyles, baseBackdropClasses, baseDrawerClasses } from './Drawer.styles'
 import { getSizeClasses, getTransformClass } from './Drawer.utils'
 import { useIsHydrated } from '../../hooks/useIsHydrated'
+import { DRAWER_Z_INDEX } from '../../utils/layers'
 
 /**
  * A slide-out panel component used for navigation, filtering, or detailed views.
@@ -59,7 +60,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   if (!isHydrated) return null
 
   return createPortal(
-    <div className={`fixed inset-0 z-9999 ${isOpen ? 'visible' : 'invisible transition-all delay-300'}`}>
+    <div className={`fixed inset-0 ${isOpen ? 'visible' : 'invisible transition-all delay-300'}`} style={{ zIndex: DRAWER_Z_INDEX }}>
       <div
         className={`${baseBackdropClasses} ${isOpen ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}

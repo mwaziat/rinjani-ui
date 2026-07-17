@@ -107,7 +107,7 @@ export function DataTable<T>({
           onChange={(e) => onChange(e.target.checked)}
         />
         <div className={`
-          flex items-center justify-center border transition-all h-5 w-5 min-w-[20px] min-h-[20px] shrink-0 rounded-[4px]
+          flex items-center justify-center border transition-all h-5 w-5 min-w-5 min-h-5 shrink-0 rounded-sm
           ${checked || indeterminate ? checkboxColorClasses[color] : 'border-neutral-300 bg-white text-transparent group-hover:border-neutral-400'}
         `}>
           {checked && !indeterminate && <CheckIcon size={14} strokeWidth={4} className="text-white" />}
@@ -191,7 +191,7 @@ export function DataTable<T>({
                     )}
                     {rowSelection && (
                       <td className={`${currentPadding} ${cellBorderClass} w-[1%] whitespace-nowrap`}>
-                        <div className="h-5 w-5 bg-neutral-200 animate-pulse rounded-[4px]"></div>
+                        <div className="h-5 w-5 bg-neutral-200 animate-pulse rounded-sm"></div>
                       </td>
                     )}
                     {leafColumns.map((col, colIndex) => (

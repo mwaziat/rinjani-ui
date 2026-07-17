@@ -6,6 +6,24 @@ export const useStableInputId = (providedId: string | undefined, prefix: string)
   return providedId ?? `${prefix}-${generatedId}`
 }
 
+export const iconSizeMap: Record<import('./types').FormSize, number> = {
+  xxs: 12,
+  xs: 14,
+  sm: 16,
+  md: 18,
+  lg: 22,
+  xl: 26,
+}
+
+export const clearIconSizeMap: Record<import('./types').FormSize, number> = {
+  xxs: 10,
+  xs: 12,
+  sm: 14,
+  md: 16,
+  lg: 18,
+  xl: 20,
+}
+
 export const isSelectValueObject = (value: SelectValue | undefined): value is { value: SelectPrimitiveValue; data?: unknown } => {
   return typeof value === 'object' && value !== null && 'value' in value
 }

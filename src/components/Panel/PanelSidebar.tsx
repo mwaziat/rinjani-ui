@@ -3,6 +3,14 @@ import React, { useState, useMemo } from 'react'
 import { ChevronDownIcon, ChevronRightIcon, XIcon, LogOutIcon } from '../Icons'
 import type { PanelSidebarProps, SidebarMenuNode } from './Panel.types'
 
+/**
+ * The sidebar component for the Panel layout.
+ * 
+ * Renders a hierarchical navigation menu with support for collapsing (minimized mode)
+ * and sliding out on mobile devices.
+ * 
+ * Usually rendered automatically by `PanelLayout`, but can be used standalone.
+ */
 export const PanelSidebar = ({
   isMinimized = false,
   isOpenMobile = false,

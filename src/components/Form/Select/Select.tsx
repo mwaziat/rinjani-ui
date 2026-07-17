@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { SelectProps } from './Select.types'
-import { buildSelectValue, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
+import { buildSelectValue, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import {
   singleColorMap,
   singleLineActive,
@@ -129,11 +129,11 @@ export const Select = ({
   const borderStyles = variant === 'line'
     ? (error
       ? `border-0 border-b border-danger-500`
-      : `border-0 border-b border-neutral-400 ${isOpen ? singleLineActive[color] : ''}`
+      : `border-0 border-b ${isOpen ? singleLineActive[color] : 'border-neutral-400'}`
     )
     : (error
       ? `border border-danger-500`
-      : `border border-neutral-400 ${isOpen ? singleColorMap[color].active : ''}`
+      : `border ${isOpen ? singleColorMap[color].active : 'border-neutral-400'}`
     )
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
@@ -182,7 +182,7 @@ export const Select = ({
             {rightIcon && rightIcon}
             {isClearable && value !== undefined && value !== null && value !== '' && (
               <XIcon
-                size={16}
+                size={clearIconSizeMap[size]}
                 className="transition-colors hover:text-danger-500"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -191,7 +191,7 @@ export const Select = ({
                 }}
               />
             )}
-            <ChevronDownIcon size={18} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDownIcon size={iconSizeMap[size]} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </div>
         </div>
 

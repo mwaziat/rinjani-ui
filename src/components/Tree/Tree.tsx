@@ -34,7 +34,23 @@ const resolveVisibility = (
   if (typeof customVisibility === 'function') return customVisibility(node)
   return defaultVisibility(node)
 }
-
+/**
+ * A highly customizable hierarchical tree view component.
+ * 
+ * Supports endless nesting, drag-and-drop reordering, asynchronous child loading,
+ * custom node actions (add, edit, delete, view), and varied visual states.
+ * 
+ * @example
+ * ```tsx
+ * <Tree
+ *   title="Folder Structure"
+ *   data={folderData}
+ *   variant="lined"
+ *   actionsOnHover
+ *   onAction={(type, node) => handleNodeAction(type, node)}
+ * />
+ * ```
+ */
 export const Tree = ({
   data,
   actions,

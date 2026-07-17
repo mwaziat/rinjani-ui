@@ -4,6 +4,22 @@ import { PanelSidebar } from './PanelSidebar'
 import { PanelNavbar } from './PanelNavbar'
 import type { PanelLayoutProps } from './Panel.types'
 
+/**
+ * The main layout wrapper for building admin panels and dashboards.
+ * 
+ * Provides a responsive layout containing a Sidebar (left) and a Navbar (top),
+ * with built-in state management for collapsing and mobile view handling.
+ * 
+ * @example
+ * ```tsx
+ * <PanelLayout
+ *   sidebar={{ menuItems: items, logo: <Logo /> }}
+ *   navbar={{ userAccount: { ... }, notification: { ... } }}
+ * >
+ *   <main>Content goes here</main>
+ * </PanelLayout>
+ * ```
+ */
 export const PanelLayout = ({ 
   children, 
   sidebar,

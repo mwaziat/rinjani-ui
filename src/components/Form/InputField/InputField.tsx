@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { EyeIcon, EyeOffIcon, AlertCircleIcon } from '../../Icons'
 import type { InputFieldProps } from './InputField.types'
 import { colorMap, lineFocus, textSizeMap, labelSizeMap, floatingActiveSizeMap, sizeMap, radiusMap } from './InputField.styles'
-import { formatCurrency, parseCurrency, useStableInputId } from '../shared'
+import { formatCurrency, parseCurrency, useStableInputId, iconSizeMap } from '../shared'
 
 /**
  * A highly versatile text input component for forms.
@@ -127,7 +127,7 @@ export const InputField = ({
           <div className="absolute right-4 text-neutral-400 flex items-center justify-center">
             {isPassword ? (
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="hover:text-neutral-600 transition-colors cursor-pointer outline-none" tabIndex={-1}>
-                {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                {showPassword ? <EyeOffIcon size={iconSizeMap[size]} /> : <EyeIcon size={iconSizeMap[size]} />}
               </button>
             ) : (
               rightIcon

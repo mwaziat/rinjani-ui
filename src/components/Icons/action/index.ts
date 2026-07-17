@@ -14,3 +14,5 @@ export * from './LogOutIcon'
 export * from './RefreshIcon'
 export * from './PencilIcon'
 export * from './MoreVerticalIcon'
+
+export * from './CloudUploadIcon'

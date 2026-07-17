@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteMultipleProps } from './AutocompleteMultiple.types'
-import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
+import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
 import {
   colorMap,
@@ -240,11 +240,11 @@ export const AutocompleteMultiple = ({
   const borderStyles = variant === 'line'
     ? (error
         ? `border-0 border-b border-danger-500`
-        : `border-0 border-b border-neutral-400 ${isOpen ? lineActive[color] : ''}`
+        : `border-0 border-b ${isOpen ? lineActive[color] : 'border-neutral-400'}`
       )
     : (error
         ? `border border-danger-500`
-        : `border border-neutral-400 ${isOpen ? colorMap[color].active : ''}`
+        : `border ${isOpen ? colorMap[color].active : 'border-neutral-400'}`
       )
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
@@ -316,7 +316,7 @@ export const AutocompleteMultiple = ({
             {rightIcon && rightIcon}
             {isClearable && selectedOptions.length > 0 && (
               <XIcon
-                size={16}
+                size={clearIconSizeMap[size]}
                 className="transition-colors hover:text-danger-500"
                 onClick={(event: React.MouseEvent) => {
                   event.stopPropagation()
@@ -324,7 +324,7 @@ export const AutocompleteMultiple = ({
                 }}
               />
             )}
-            <ChevronDownIcon size={18} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDownIcon size={iconSizeMap[size]} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </div>
         </div>
       </div>

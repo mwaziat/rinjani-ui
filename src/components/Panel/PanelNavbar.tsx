@@ -5,6 +5,14 @@ import type { PanelNavbarProps, NavbarElement } from './Panel.types'
 import { NavbarNotification } from './NavbarNotification'
 import { NavbarUserAccount } from './NavbarUserAccount'
 
+/**
+ * The top navigation bar for the Panel layout.
+ * 
+ * Provides a space for a sidebar toggle button, custom elements, 
+ * notification dropdowns, and user profile dropdowns.
+ * 
+ * Usually rendered automatically by `PanelLayout`, but can be used standalone.
+ */
 export const PanelNavbar = ({ 
   isMinimized = false, 
   toggleSidebar,
