@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/*
+  rinjani-ui styles
+  Requires Tailwind CSS v4 in the consuming application.
+*/
+
+@import "tailwindcss/theme" layer(theme);
 
 @theme {
   --color-primary-50: #f6faf2;
@@ -137,7 +142,6 @@
 }
 
 @layer base {
-
   input:focus,
   textarea:focus,
   select:focus,
