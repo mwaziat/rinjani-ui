@@ -2,7 +2,7 @@ import React from 'react'
 import type { DrawerContentProps } from './Drawer.types'
 
 export const DrawerContent: React.FC<DrawerContentProps> = ({ children, className = '' }) => (
-  <div className={`flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-neutral-200 ${className}`}>
+  <div className={`flex-1 overflow-y-auto px-6 py-4 scrollbar-thin scrollbar-thumb-neutral-200 ${className}`}>
     {children}
   </div>
 )
