@@ -56,10 +56,10 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
           </div>
         )}
         <div>
-          <h1 className={`font-black uppercase leading-none tracking-tight text-neutral-800 ${activeLabelSizes[size]}`}>
+          <h1 className={`font-semibold capitalize leading-none tracking-tight text-neutral-800 ${activeLabelSizes[size]}`}>
             {activeLabel}
           </h1>
-          <p className={`mt-1 font-bold uppercase tracking-[0.2em] text-neutral-500 ${activeSubtitleSizes[size]}`}>
+          <p className={`mt-1 font-normal tracking-wide text-neutral-400 ${activeSubtitleSizes[size]}`}>
             Current Position
           </p>
         </div>

@@ -91,7 +91,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
         {sortOrder.map(key => {
           if (key === 'search') {
             return showSearch && (
-              <div key="search" className="w-full sm:w-64 shrink-0">
+              <div key="search" className="shrink-0">
                 <InputField
                   placeholder={searchPlaceholder}
                   onChange={handleSearch}
@@ -106,68 +106,76 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
 
           if (key === 'refresh') {
             return showRefresh && (
-              <Button
-                key="refresh"
-                leftIcon={<RefreshIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                onClick={onRefresh}
-              >
-                Refresh
-              </Button>
+              <div key="refresh" className="shrink-0">
+                <Button
+                  leftIcon={<RefreshIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  onClick={onRefresh}
+                >
+                  Refresh
+                </Button>
+              </div>
             )
           }
 
           if (key === 'add') {
             return showAdd && (
-              <Button
-                key="add"
-                leftIcon={<PlusIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                onClick={onAdd}
-              >
-                Add New
-              </Button>
+              <div key="add" className="shrink-0">
+                <Button
+                  leftIcon={<PlusIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  onClick={onAdd}
+                >
+                  Add New
+                </Button>
+              </div>
             )
           }
 
           if (key === 'editAll') {
             return showEditAll && (
-              <Button
-                key="editAll"
-                leftIcon={<PencilIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                disabled={selectedRowKeys.length === 0}
-                onClick={() => onEditAll?.(selectedRowKeys)}
-              >
-                Edit All
-              </Button>
+              <div key="editAll" className="shrink-0">
+                <Button
+                  leftIcon={<PencilIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => onEditAll?.(selectedRowKeys)}
+                >
+                  Edit All
+                </Button>
+              </div>
             )
           }
 
           if (key === 'deleteAll') {
             return showDeleteAll && (
-              <Button
-                key="deleteAll"
-                leftIcon={<TrashIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                disabled={selectedRowKeys.length === 0}
-                onClick={() => onDeleteAll?.(selectedRowKeys)}
-              >
-                Delete All
-              </Button>
+              <div key="deleteAll" className="shrink-0">
+                <Button
+                  leftIcon={<TrashIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => onDeleteAll?.(selectedRowKeys)}
+                >
+                  Delete All
+                </Button>
+              </div>
             )
           }
 
           if (customElementsMap[key]) {
-            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+            return (
+              <div key={key} className="shrink-0">
+                {customElementsMap[key]}
+              </div>
+            )
           }
 
           return null
@@ -175,7 +183,11 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
 
         {Object.keys(customElementsMap).map(key => {
           if (!sortOrder.includes(key)) {
-            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+            return (
+              <div key={key} className="shrink-0">
+                {customElementsMap[key]}
+              </div>
+            )
           }
           return null
         })}
