@@ -1,163 +1,129 @@
-"use client";
+"use client"
 
-import React from "react";
-import { usePathname } from "next/navigation";
-import { PanelLayout } from "rinjani-ui";
+import React from "react"
+import { usePathname } from "next/navigation"
+import { PanelLayout } from "rinjani-ui"
 import {
-  LuMessageSquare,
+  LuMousePointerClick,
   LuBadge,
   LuMenu,
-  LuMousePointerClick,
   LuLayoutTemplate,
+  LuMessageSquare,
   LuListTree,
-  LuImage,
-  LuAppWindow,
-  LuFolderOpen,
-  LuMessageCircle
-} from "react-icons/lu";
-import { FiLayout, FiFileText, FiBookOpen } from "react-icons/fi";
+  LuTable2,
+  LuLayoutGrid,
+  LuNavigation,
+  LuFileText,
+} from "react-icons/lu"
+import { FiBookOpen, FiFileText, FiLayout } from "react-icons/fi"
 
 const MenuItems = [
   {
     id: 1,
     label: "Getting Started",
-    href: "/rinjani/getting-started",
     icon: <FiBookOpen className="w-5 h-5" />,
     children: [
-      { id: 2, label: "Overview", href: "/rinjani/getting-started/overview" },
+      { id: 2, label: "Overview",     href: "/rinjani/getting-started/overview" },
       { id: 3, label: "Installation", href: "/rinjani/getting-started/installation" },
-      { id: 4, label: "Theming", href: "/rinjani/getting-started/theming" },
-      { id: 5, label: "Changelog", href: "/rinjani/getting-started/changelog" },
-    ],
-  },
-  {
-    id: 6,
-    label: "Feedback",
-    href: "/rinjani/components/feedback",
-    icon: <LuMessageSquare className="w-5 h-5" />,
-    children: [
-      { id: 7, label: "Alert", href: "/rinjani/components/feedback/alert" },
-      { id: 8, label: "Dialog", href: "/rinjani/components/feedback/dialog" },
-      { id: 9, label: "Toast", href: "/rinjani/components/feedback/toast" },
+      { id: 4, label: "Theming",      href: "/rinjani/getting-started/theming" },
+      { id: 5, label: "Changelog",    href: "/rinjani/getting-started/changelog" },
     ],
   },
   {
     id: 10,
-    label: "Badge",
-    href: "/rinjani/components/badge",
-    icon: <LuBadge className="w-5 h-5" />,
-  },
-  {
-    id: 11,
-    label: "Breadcrumb",
-    href: "/rinjani/components/breadcrumb",
-    icon: <LuMenu className="w-5 h-5" />,
-  },
-  {
-    id: 12,
-    label: "Button",
-    href: "/rinjani/components/button",
+    label: "General",
     icon: <LuMousePointerClick className="w-5 h-5" />,
-  },
-  {
-    id: 13,
-    label: "Card",
-    href: "/rinjani/components/card",
-    icon: <LuLayoutTemplate className="w-5 h-5" />,
-  },
-  {
-    id: 14,
-    label: "Drawer",
-    href: "/rinjani/components/drawer",
-    icon: <FiLayout className="w-5 h-5" />,
-  },
-  {
-    id: 15,
-    label: "Dropdown",
-    href: "/rinjani/components/dropdown",
-    icon: <LuListTree className="w-5 h-5" />,
-  },
-  {
-    id: 16,
-    label: "Form",
-    href: "/rinjani/components/form",
-    icon: <FiFileText className="w-5 h-5" />,
     children: [
-      { id: 17, label: "Autocomplete", href: "/rinjani/components/form/autocomplete" },
-      { id: 18, label: "Checkbox", href: "/rinjani/components/form/checkbox" },
-      { id: 19, label: "InputField", href: "/rinjani/components/form/input-field" },
-      { id: 20, label: "Radio", href: "/rinjani/components/form/radio" },
-      { id: 21, label: "Select", href: "/rinjani/components/form/select" },
-      { id: 22, label: "Switch", href: "/rinjani/components/form/switch" },
+      { id: 11, label: "Button",     href: "/rinjani/components/general/button" },
+      { id: 12, label: "Badge",      href: "/rinjani/components/general/badge" },
+      { id: 13, label: "Breadcrumb", href: "/rinjani/components/general/breadcrumb" },
+      { id: 14, label: "Card",       href: "/rinjani/components/general/card" },
+      { id: 15, label: "Tooltip",    href: "/rinjani/components/general/tooltip" },
     ],
   },
   {
-    id: 23,
-    label: "Lightbox",
-    href: "/rinjani/components/lightbox",
-    icon: <LuImage className="w-5 h-5" />,
+    id: 20,
+    label: "Navigation",
+    icon: <LuNavigation className="w-5 h-5" />,
+    children: [
+      { id: 21, label: "Dropdown", href: "/rinjani/components/navigation/dropdown" },
+      { id: 22, label: "Tabs",     href: "/rinjani/components/navigation/tabs" },
+      { id: 23, label: "Drawer",   href: "/rinjani/components/navigation/drawer" },
+      { id: 24, label: "Tree",     href: "/rinjani/components/navigation/tree" },
+    ],
   },
   {
-    id: 24,
-    label: "Modal",
-    href: "/rinjani/components/modal",
-    icon: <LuAppWindow className="w-5 h-5" />,
+    id: 30,
+    label: "Feedback",
+    icon: <LuMessageSquare className="w-5 h-5" />,
+    children: [
+      { id: 31, label: "Alert",  href: "/rinjani/components/feedback/alert" },
+      { id: 32, label: "Dialog", href: "/rinjani/components/feedback/dialog" },
+      { id: 33, label: "Toast",  href: "/rinjani/components/feedback/toast" },
+      { id: 34, label: "Modal",  href: "/rinjani/components/feedback/modal" },
+    ],
   },
   {
-    id: 25,
-    label: "Tabs",
-    href: "/rinjani/components/tabs",
-    icon: <LuFolderOpen className="w-5 h-5" />,
+    id: 40,
+    label: "Data Display",
+    icon: <LuTable2 className="w-5 h-5" />,
+    children: [
+      { id: 41, label: "DataTable",     href: "/rinjani/components/data-display/data-table" },
+      { id: 42, label: "EditDataTable", href: "/rinjani/components/data-display/edit-data-table" },
+      { id: 43, label: "Panel",         href: "/rinjani/components/data-display/panel" },
+      { id: 44, label: "Lightbox",      href: "/rinjani/components/data-display/lightbox" },
+    ],
   },
   {
-    id: 26,
-    label: "Tooltip",
-    href: "/rinjani/components/tooltip",
-    icon: <LuMessageCircle className="w-5 h-5" />,
+    id: 50,
+    label: "Form",
+    icon: <FiFileText className="w-5 h-5" />,
+    children: [
+      { id: 51, label: "InputField",   href: "/rinjani/components/form/input-field" },
+      { id: 52, label: "Select",       href: "/rinjani/components/form/select" },
+      { id: 53, label: "Autocomplete", href: "/rinjani/components/form/autocomplete" },
+      { id: 54, label: "Checkbox",     href: "/rinjani/components/form/checkbox" },
+      { id: 55, label: "Radio",        href: "/rinjani/components/form/radio" },
+      { id: 56, label: "Switch",       href: "/rinjani/components/form/switch" },
+      { id: 57, label: "DatePicker",   href: "/rinjani/components/form/date-picker" },
+      { id: 58, label: "Dropzone",     href: "/rinjani/components/form/dropzone" },
+    ],
   },
-];
+  {
+    id: 60,
+    label: "Layout",
+    icon: <LuLayoutGrid className="w-5 h-5" />,
+    children: [
+      { id: 61, label: "Icons", href: "/rinjani/components/layout/icons" },
+    ],
+  },
+]
 
-const RinjaniLayout = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname();
+export default function RinjaniLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
 
   const activeIds = React.useMemo(() => {
-    const newActiveIds = new Set<number>();
+    const ids = new Set<number>()
 
-    // Auto-detect active menu based on current URL path
     MenuItems.forEach((item) => {
-      // Check if parent matches
-      if (item.href && pathname.startsWith(item.href)) {
-        newActiveIds.add(item.id);
-      }
-
-      // Check if children matches
       if (item.children) {
         item.children.forEach((child) => {
           if (child.href && pathname.startsWith(child.href)) {
-            newActiveIds.add(item.id); // Expand the parent folder
-            newActiveIds.add(child.id); // Highlight the child menu
+            ids.add(item.id)
+            ids.add(child.id)
           }
-        });
+        })
       }
-    });
+    })
 
-    // Fallback if none matched
-    if (newActiveIds.size === 0) {
-      newActiveIds.add(1); // Default to Dashboard or first menu
-    }
+    if (ids.size === 0) ids.add(1)
 
-    return newActiveIds;
-  }, [pathname]);
+    return ids
+  }, [pathname])
 
   return (
-    <PanelLayout
-      sidebar={{
-        menuItems: MenuItems,
-        activeMenuIds: activeIds
-      }}>
+    <PanelLayout sidebar={{ menuItems: MenuItems, activeMenuIds: activeIds }}>
       {children}
     </PanelLayout>
   )
 }
-
-export default RinjaniLayout

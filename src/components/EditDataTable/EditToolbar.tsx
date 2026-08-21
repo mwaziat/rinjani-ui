@@ -96,7 +96,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
         {sortOrder.map(key => {
           if (key === 'search') {
             return showSearch && (
-              <div key="search" className="w-full sm:w-64 shrink-0">
+              <div key="search" className="shrink-0">
                 <InputField
                   placeholder={searchPlaceholder}
                   onChange={handleSearch}
@@ -109,70 +109,76 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
             )
           }
 
-          if (key === 'refresh') {
+                    if (key === 'refresh') {
             return showRefresh && (
-              <Button
-                key="refresh"
-                leftIcon={<RefreshIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                onClick={onRefresh}
-              >
-                Refresh
-              </Button>
+              <div key="refresh" className="shrink-0">
+                <Button
+                  leftIcon={<RefreshIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  onClick={onRefresh}
+                >
+                  Refresh
+                </Button>
+              </div>
             )
           }
 
-          if (key === 'add') {
+                    if (key === 'add') {
             return showAdd && (
-              <Button
-                key="add"
-                leftIcon={<PlusIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                onClick={onAdd}
-              >
-                Add New
-              </Button>
+              <div key="add" className="shrink-0">
+                <Button
+                  leftIcon={<PlusIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  onClick={onAdd}
+                >
+                  Add New
+                </Button>
+              </div>
             )
           }
 
-          if (key === 'editAll') {
+                    if (key === 'editAll') {
             if (activeEditRows.length > 0 && showSaveAll) {
               return (
                 <React.Fragment key="saveAll">
-                  <Button
-                    leftIcon={<SaveIcon size={currentIconSize} />}
-                    variant="filled"
-                    color="success"
-                    size={size}
-                    disabled={isSavingAll}
-                    onClick={async () => {
-                      if (onSaveAll) {
-                        setIsSavingAll(true)
-                        try {
-                          await onSaveAll(activeEditRows, activeEditStates)
-                        } finally {
-                          setIsSavingAll(false)
-                        }
-                      }
-                    }}
-                  >
-                    {isSavingAll ? 'Saving...' : 'Save All'}
-                  </Button>
-                  {showCancelAll && (
+                  <div className="shrink-0">
                     <Button
-                      leftIcon={<XIcon size={currentIconSize} />}
-                      variant="outlined"
-                      color="danger"
+                      leftIcon={<SaveIcon size={currentIconSize} />}
+                      variant="filled"
+                      color="success"
                       size={size}
                       disabled={isSavingAll}
-                      onClick={() => onCancelAll?.(activeEditRows)}
+                      onClick={async () => {
+                        if (onSaveAll) {
+                          setIsSavingAll(true)
+                          try {
+                            await onSaveAll(activeEditRows, activeEditStates)
+                          } finally {
+                            setIsSavingAll(false)
+                          }
+                        }
+                      }}
                     >
-                      Cancel All
+                      {isSavingAll ? 'Saving...' : 'Save All'}
                     </Button>
+                  </div>
+                  {showCancelAll && (
+                    <div className="shrink-0">
+                      <Button
+                        leftIcon={<XIcon size={currentIconSize} />}
+                        variant="outlined"
+                        color="danger"
+                        size={size}
+                        disabled={isSavingAll}
+                        onClick={() => onCancelAll?.(activeEditRows)}
+                      >
+                        Cancel All
+                      </Button>
+                    </div>
                   )}
                 </React.Fragment>
               )
@@ -182,37 +188,43 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
             const editLabel = hasSelection ? 'Edit Selected' : 'Edit All'
 
             return showEditAll && (
-              <Button
-                key="editAll"
-                leftIcon={<PencilIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                onClick={() => onEditAll?.(selectedRowKeys)}
-              >
-                {editLabel}
-              </Button>
+              <div key="editAll" className="shrink-0">
+                <Button
+                  leftIcon={<PencilIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  onClick={() => onEditAll?.(selectedRowKeys)}
+                >
+                  {editLabel}
+                </Button>
+              </div>
             )
           }
 
-          if (key === 'deleteAll') {
+                    if (key === 'deleteAll') {
             return showDeleteAll && (
-              <Button
-                key="deleteAll"
-                leftIcon={<TrashIcon size={currentIconSize} />}
-                variant={variant}
-                color={color}
-                size={size}
-                disabled={selectedRowKeys.length === 0}
-                onClick={() => onDeleteAll?.(selectedRowKeys)}
-              >
-                Delete All
-              </Button>
+              <div key="deleteAll" className="shrink-0">
+                <Button
+                  leftIcon={<TrashIcon size={currentIconSize} />}
+                  variant={variant}
+                  color={color}
+                  size={size}
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => onDeleteAll?.(selectedRowKeys)}
+                >
+                  Delete All
+                </Button>
+              </div>
             )
           }
 
-          if (customElementsMap[key]) {
-            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+                    if (customElementsMap[key]) {
+            return (
+              <div key={key} className="shrink-0">
+                {customElementsMap[key]}
+              </div>
+            )
           }
 
           return null
@@ -220,7 +232,11 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
 
         {Object.keys(customElementsMap).map(key => {
           if (!sortOrder.includes(key)) {
-            return <React.Fragment key={key}>{customElementsMap[key]}</React.Fragment>
+            return (
+              <div key={key} className="shrink-0">
+                {customElementsMap[key]}
+              </div>
+            )
           }
           return null
         })}
