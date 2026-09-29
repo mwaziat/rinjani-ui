@@ -142,14 +142,14 @@ export const Select = ({
     relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer
     text-neutral-900 font-normal
     ${singleSizeMap[size]}
-    ${leftIcon ? 'pl-11' : 'px-4'}
-    ${(rightIcon || isClearable) ? 'pr-11' : ''}
+    ${leftIcon ? 'pl-11' : 'pl-4'}
+    ${rightIcon && isClearable ? 'pr-24' : (rightIcon || isClearable) ? 'pr-20' : 'pr-11'}
     ${borderStyles}
     ${disabled ? 'cursor-not-allowed bg-neutral-100' : (variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white')}
   `
 
   const labelStyles = floating
-    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 font-normal uppercase tracking-widest` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? singleColorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis font-normal uppercase tracking-widest leading-none` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? singleColorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
     : `block mb-2 ${labelSizeMap[size]} font-normal uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
 
   return (
@@ -163,12 +163,12 @@ export const Select = ({
       <div className="relative">
         <div ref={triggerRef} id={inputId} role="combobox" aria-expanded={isOpen} aria-readonly={readOnly} aria-disabled={disabled} className={baseStyles} onClick={() => isOpen ? (setIsOpen(false), setIsFocused(false)) : openDropdown()} onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}>
           {leftIcon && (
-            <div className="absolute left-4 flex items-center justify-center text-neutral-400">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-neutral-400">
               {leftIcon}
             </div>
           )}
 
-          <span className={`flex-1 ${!selectedOption ? 'font-normal text-neutral-400' : ''}`}>
+          <span className={`min-w-0 flex-1 ${!selectedOption ? 'font-normal text-neutral-400' : ''}`}>
             {selectedOption ? selectedOption.label : (floating ? (isFloating ? placeholder : '\u00a0') : placeholder)}
           </span>
 
@@ -178,7 +178,7 @@ export const Select = ({
             </label>
           )}
 
-          <div className="absolute right-4 flex items-center gap-2 text-neutral-400">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-neutral-400">
             {rightIcon && rightIcon}
             {isClearable && value !== undefined && value !== null && value !== '' && (
               <XIcon

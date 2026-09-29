@@ -155,10 +155,10 @@ export function DateRangePicker<T = Date>({
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
 
-  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'px-4'} ${(rightIcon || isClearable) ? 'pr-11' : ''} ${borderStyles} ${variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white'} ${disabled ? 'cursor-not-allowed bg-neutral-50' : ''}`
+  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${rightIcon && isClearable ? 'pr-24' : (rightIcon || isClearable) ? 'pr-20' : 'pr-11'} ${borderStyles} ${variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white'} ${disabled ? 'cursor-not-allowed bg-neutral-50' : ''}`
 
   const labelStyles = floating
-    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 font-normal uppercase tracking-widest` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? colorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis font-normal uppercase tracking-widest leading-none` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? colorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
     : `block mb-2 ${labelSizeMap[size]} font-normal uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
   const isHydrated = useIsHydrated()
 
@@ -167,10 +167,10 @@ export function DateRangePicker<T = Date>({
       {!floating && label !== undefined && <span className={labelStyles}>{label} {required && <span className="ml-0.5 text-danger-500">*</span>}</span>}
       <div className="relative">
         <div ref={triggerRef} id={inputId} role="combobox" aria-expanded={isOpen} aria-readonly={readOnly} aria-disabled={disabled} className={triggerStyles} onClick={() => isOpen ? closePicker() : openPicker()} onFocus={() => setIsFocused(true)} onBlur={() => !isOpen && setIsFocused(false)}>
-          {leftIcon !== undefined && <span className="absolute left-4 flex items-center text-neutral-400">{leftIcon}</span>}
-          <span className={`flex-1 truncate ${!hasValue && floating && !isFloating ? 'text-transparent' : !hasValue ? 'text-neutral-400' : ''}`}>{renderedValue}</span>
+          {leftIcon !== undefined && <span className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center text-neutral-400">{leftIcon}</span>}
+          <span className={`min-w-0 flex-1 truncate ${!hasValue && floating && !isFloating ? 'text-transparent' : !hasValue ? 'text-neutral-400' : ''}`}>{renderedValue}</span>
           {floating && label !== undefined && <span className={labelStyles}>{label} {required && <span className="ml-0.5 text-danger-500">*</span>}</span>}
-          <div className="absolute right-4 flex items-center gap-2 text-neutral-400">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-neutral-400">
             {rightIcon && rightIcon}
             {isClearable && (currentValue[0] !== null || currentValue[1] !== null) && !disabled && !readOnly && (
               <XIcon

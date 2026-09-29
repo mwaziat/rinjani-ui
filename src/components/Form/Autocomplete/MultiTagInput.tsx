@@ -99,7 +99,7 @@ export const MultiTagInput = ({
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
 
-  const baseInputStyles = `peer w-full ${radiusClass} transition-all outline-none ${variant === 'line' ? '' : 'border'} disabled:bg-neutral-50 disabled:cursor-not-allowed text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'px-4'} ${(rightIcon ? 'pr-11' : 'pr-10')} ${borderStyles} ${variant === 'filled' ? 'bg-neutral-50 focus:bg-white' : 'bg-white'} ${floating ? (isFloating ? 'placeholder-neutral-400' : 'placeholder-transparent') : 'placeholder-neutral-400'} placeholder:font-normal`
+  const baseInputStyles = `peer w-full ${radiusClass} transition-all outline-none ${variant === 'line' ? '' : 'border'} disabled:bg-neutral-50 disabled:cursor-not-allowed text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${(rightIcon ? 'pr-11' : 'pr-10')} ${borderStyles} ${variant === 'filled' ? 'bg-neutral-50 focus:bg-white' : 'bg-white'} ${floating ? (isFloating ? 'placeholder-neutral-400' : 'placeholder-transparent') : 'placeholder-neutral-400'} placeholder:font-normal`
 
   const handleAddTag = () => {
     if (disabled || readOnly) return
@@ -147,7 +147,7 @@ export const MultiTagInput = ({
   }
 
   const labelStyles = floating
-    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 font-normal uppercase tracking-widest` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? inputColorMap[color].label : 'text-neutral-400'}`}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis font-normal uppercase tracking-widest leading-none` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? inputColorMap[color].label : 'text-neutral-400'}`}`
     : `mb-2 block ${labelSizeMap[size]} font-normal uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
 
   return (

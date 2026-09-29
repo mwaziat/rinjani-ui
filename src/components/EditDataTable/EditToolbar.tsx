@@ -38,11 +38,13 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
     customElements,
   } = config
 
+  const [searchValue, setSearchValue] = useState('')
   const [isSavingAll, setIsSavingAll] = useState(false)
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
+    setSearchValue(value)
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current)
     }
@@ -86,18 +88,25 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
   }
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 gap-4">
-      <div className="flex-1 w-full sm:w-auto">
+    <div className="flex flex-col sm:flex-row! justify-between items-start sm:items-center! p-5 gap-4">
+      <div className="min-w-0 flex-1 w-full sm:w-auto!">
         {title && <h3 className="text-lg font-bold text-neutral-800">{title}</h3>}
         {description && <p className="text-sm text-neutral-500 mt-0.5">{description}</p>}
       </div>
 
-      <div className="flex flex-wrap gap-3 items-center w-full sm:w-auto justify-start sm:justify-end">
+      <div className="flex flex-wrap gap-3 items-center w-full sm:w-auto! justify-start sm:justify-end!">
         {sortOrder.map(key => {
           if (key === 'search') {
             return showSearch && (
               <div key="search" className="shrink-0">
                 <InputField
+                  type="search"
+                  name="data-table-search"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  inputMode="search"
+                  value={searchValue}
                   placeholder={searchPlaceholder}
                   onChange={handleSearch}
                   leftIcon={<SearchIcon />}
