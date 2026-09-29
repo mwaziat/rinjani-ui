@@ -32,47 +32,75 @@ npm install rinjani-ui
 ```
 
 Make sure you have these peer dependencies installed:
+
 - `react: ^18.0.0 || ^19.0.0`
 - `react-dom: ^18.0.0 || ^19.0.0`
 - `tailwindcss: >=4.0.0`
-- `@tailwindcss/postcss: >=4.0.0`
+
+For a Tailwind CSS v4 application, also install the PostCSS integration if your framework does not already provide it:
+
+```bash
+npm install -D tailwindcss @tailwindcss/postcss
+```
+
+> **Important:** Rinjani UI is not a runtime CSS system. Its React components use Tailwind utility classes, so those classes must be compiled by a Tailwind pipeline. The application should own that pipeline.
 
 ## Quick Start
 
-The most efficient way to use Rinjani UI is to let your project's Tailwind compiler automatically detect the components.
+There are two supported modes. Choose one mode for an application; do not combine them.
 
-1. **Automatic Method (Recommended):**
-   Tell your Tailwind to scan Rinjani UI components so the styles merge perfectly with your app.
+### Mode A: Integrate with the application's Tailwind pipeline (recommended)
 
-   **For Tailwind v4:**
-   Add this to your main CSS file:
-   ```css
-   @import "tailwindcss";
-   @source "../node_modules/rinjani-ui";
-   ```
+Use this mode when the application already uses Tailwind CSS. Tailwind should be imported exactly once by the application.
 
-   **For Tailwind v3:**
-   Add this to your `tailwind.config.js`:
-   ```javascript
-   module.exports = {
-     content: [
-       // ... your other paths
-       "./node_modules/rinjani-ui/dist/**/*.{js,mjs,cjs}",
-     ],
-   }
-   ```
+For a Next.js application with `src/app/globals.css`:
 
-2. **Fallback Method (Optional):**
-   If the styles don't seem to apply, or if you are not using Tailwind CSS in your project, you can simply import our pre-compiled CSS in your root file (e.g., `main.tsx` or `layout.tsx`):
+```css
+/* src/app/globals.css */
+@import "tailwindcss";
+@import "rinjani-ui/theme.css";
+```
 
-   ```tsx
-   import 'rinjani-ui/dist/index.css'
-   ```
 
-3. Import the component you need and use it:
+`rinjani-ui/theme.css` provides the default Rinjani color tokens and the precompiled utility classes used by Rinjani components. The application does not need to reference `node_modules` or calculate a relative `@source` path.
+
+Your application's own Tailwind compiler still processes its source files and any additional classes used in your application. Rinjani's internal utility classes are already included in `theme.css`, so they do not depend on the consuming application's source scan.
+
+You only need to add an application-level `@theme` block when you want to override or extend the defaults. You do not need to copy the complete Rinjani palette into your application.
+
+Then import only the application's global stylesheet in the Next.js layout:
 
 ```tsx
-import { Button } from 'rinjani-ui'
+import "./globals.css";
+import { DialogContainer, ToastContainer } from "rinjani-ui";
+```
+
+If you use dialogs or toasts, mount their containers once inside the layout, usually below `{children}`:
+
+```tsx
+<body>
+  {children}
+  <DialogContainer />
+  <ToastContainer />
+</body>
+```
+
+Do **not** also add `import "rinjani-ui/style.css"` in this mode. Use `import "rinjani-ui/theme.css"` for the default tokens. Do not put `@import "tailwindcss"` in multiple global CSS files either; merge the files or keep one Tailwind entry point and place additional `@theme`/custom CSS below it.
+
+### Mode B: Standalone Rinjani stylesheet
+
+Use this mode only when the application does not run its own Tailwind compiler. Import the package stylesheet once:
+
+```tsx
+import "rinjani-ui/style.css";
+```
+
+Do not import `tailwindcss` separately in this mode. This stylesheet is self-contained for Rinjani components, but it is not the right integration mode when the application also needs to compile its own Tailwind utility classes.
+
+### Import and use a component
+
+```tsx
+import { Button } from "rinjani-ui"
 
 function App() {
   return (
@@ -83,6 +111,11 @@ function App() {
 }
 ```
 
+### Why styles can conflict
+
+`rinjani-ui/style.css` contains a standalone Tailwind theme/utilities pipeline and Rinjani's default theme tokens. Importing it together with the application's own `@import "tailwindcss"` runs overlapping global CSS layers more than once. This can cause Preflight resets, theme variables, utility order, or color tokens to override each other. In an existing Tailwind application, import `rinjani-ui/theme.css` instead; it contains the default tokens and precompiled Rinjani utilities without adding a second Preflight/base reset. Rinjani components are not isolated in a CSS shadow root and do not have a separate CSS lifecycle.
+
+The React containers (`DialogContainer` and `ToastContainer`) do have their own client-side React lifecycle, but their visual styles still come from the application's Tailwind build in Mode A.
 ## Available Components
 
 Rinjani UI has grown from a simple Button library into a comprehensive UI kit. Here are the components currently available:
@@ -127,106 +160,19 @@ import { Button } from 'rinjani-ui'
 
 ## Theming & Customization
 
-Rinjani UI is built fully upon **TailwindCSS v4** architecture. This means you don't need a bulky `tailwind.config.js` to override styles.
-
-You can easily customize and manipulate the color themes by defining a `@theme` block in your main CSS file (where you import Tailwind).
-
-Here is the exact structure you need to use to override Rinjani UI's default color palette:
-
+The default Rinjani palette is provided by `rinjani-ui/theme.css`; consumers do not need to copy the full palette or register a `node_modules` path. Import it once in the application stylesheet, then override only the tokens that need to be different.
 ```css
 @import "tailwindcss";
+@import "rinjani-ui/theme.css";
 
 @theme {
-  /* Primary Colors */
-  --color-primary-50: #f6faf2;
-  --color-primary-100: #ebf5e3;
-  --color-primary-200: #d8ebca;
-  --color-primary-300: #b9db9f;
-  --color-primary-400: #93c56b;
-  --color-primary-500: #6cb33f;
-  --color-primary-600: #55912f;
-  --color-primary-700: #427028;
-  --color-primary-800: #375924;
-  --color-primary-900: #304d22;
-  --color-primary-950: #172b0f;
-
-  /* Secondary Colors */
-  --color-secondary-50: #f1f7fd;
-  --color-secondary-100: #e0eef9;
-  --color-secondary-200: #badcf2;
-  --color-secondary-300: #7ebce7;
-  --color-secondary-400: #389ad6;
-  --color-secondary-500: #005daa;
-  --color-secondary-600: #006eb5;
-  --color-secondary-700: #005893;
-  --color-secondary-800: #044b7a;
-  --color-secondary-900: #093f66;
-  --color-secondary-950: #062844;
-
-  /* Success Colors */
-  --color-success-50: #ecfdf5;
-  --color-success-100: #d1fae5;
-  --color-success-200: #a7f3d0;
-  --color-success-300: #6ee7b7;
-  --color-success-400: #34d399;
-  --color-success-500: #10b981;
-  --color-success-600: #059669;
-  --color-success-700: #047857;
-  --color-success-800: #065f46;
-  --color-success-900: #064e3b;
-
-  /* Warning Colors */
-  --color-warning-50: #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-200: #fde68a;
-  --color-warning-300: #fcd34d;
-  --color-warning-400: #fbbf24;
-  --color-warning-500: #f59e0b;
-  --color-warning-600: #d97706;
-  --color-warning-700: #b45309;
-  --color-warning-800: #92400e;
-  --color-warning-900: #78350f;
-
-  /* Danger Colors */
-  --color-danger-50: #fef2f2;
-  --color-danger-100: #fee2e2;
-  --color-danger-200: #fecaca;
-  --color-danger-300: #fca5a5;
-  --color-danger-400: #f87171;
-  --color-danger-500: #ef4444;
-  --color-danger-600: #dc2626;
-  --color-danger-700: #b91c1c;
-  --color-danger-800: #991b1b;
-  --color-danger-900: #7f1d1d;
-
-  /* Info Colors */
-  --color-info-50: #f0f9ff;
-  --color-info-100: #e0f2fe;
-  --color-info-200: #bae6fd;
-  --color-info-300: #7dd3fc;
-  --color-info-400: #38bdf8;
-  --color-info-500: #0ea5e9;
-  --color-info-600: #0284c7;
-  --color-info-700: #0369a1;
-  --color-info-800: #075985;
-  --color-info-900: #0c4a6e;
-
-  /* Neutral Colors */
-  --color-neutral-50: #f8fafc;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-300: #cbd5e1;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-500: #64748b;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1e293b;
-  --color-neutral-900: #0f172a;
-  --color-neutral-950: #020617;
+  --color-primary-500: #0d9488;
+  --color-primary-600: #0f766e;
+  --color-primary-700: #115e59;
 }
 ```
 
-Simply replace the hex codes above with your own brand colors, and all Rinjani UI components (Buttons, Badges, Tabs, etc.) will automatically adapt to your new theme!
+The application-level theme block is optional. Any token you define there overrides the corresponding Rinjani default while all other defaults remain available.
 
 ## Development
 

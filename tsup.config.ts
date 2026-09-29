@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig((options) => ({
-  entry: ['src/index.ts', 'src/index.css'],
+  entry: ['src/index.ts', 'src/index.css', 'src/theme.css'],
   format: ['cjs', 'esm'],
   dts: true,
   clean: !options.watch,
