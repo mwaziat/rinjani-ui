@@ -9,6 +9,8 @@ import { EditTableLoading } from './EditTableLoading'
 import type { EditDataTableProps, EditTableRowState, EditRowUpdater, EditRowStateUpdater } from './EditDataTable.types'
 import { paddingClasses, hoverColorClasses, stripedColorClasses, checkboxColorClasses, alignClasses } from './EditDataTable.styles'
 import { getLeafColumns } from './EditDataTable.utils'
+import { getSortKey, sortRows, toggleSortState } from '../TableSorting'
+import type { SortState } from '../TableSorting'
 
 export function EditDataTable<T>({
   data,
@@ -17,6 +19,7 @@ export function EditDataTable<T>({
   color = 'primary',
   toolbar,
   actionColumn,
+  sorting,
   pagination,
   loading = false,
   loadingVariant = 'spinner',
@@ -45,6 +48,8 @@ export function EditDataTable<T>({
   const pendingAddRef = useRef(false)
   const [prevData, setPrevData] = useState(data)
   const [deletionErrorKeys, setDeletionErrorKeys] = useState<(string | number)[]>([])
+  const [localSortState, setLocalSortState] = useState<SortState[]>(() => sorting?.defaultState ?? [])
+  const sortState = sorting?.state ?? localSortState
   
   if (data !== prevData) {
     setPrevData(data)
@@ -108,7 +113,28 @@ export function EditDataTable<T>({
     rowSelection?.onSelectionChange?.(newKeys)
   }
 
-  const currentPageKeys = tableData.map(row => row.action.key)
+  const leafColumns = getLeafColumns(columns)
+
+  const handleSortChange = (column: typeof leafColumns[number]) => {
+    if (!sorting || !column.sortable) return
+    const key = getSortKey(column)
+    if (!key) return
+
+    const nextState = toggleSortState(sortState, key, sorting.multiple !== false)
+    if (sorting.state === undefined) setLocalSortState(nextState)
+    sorting.onSortChange?.(nextState)
+  }
+
+  const displayedTableData = sorting?.mode === 'server'
+    ? tableData
+    : sortRows(tableData, sortState, leafColumns, (rowState, column) => {
+        if (column.sortValue) return column.sortValue(rowState.edited)
+        return column.accessorKey !== undefined
+          ? rowState.edited[column.accessorKey as keyof T]
+          : undefined
+      })
+
+  const currentPageKeys = displayedTableData.map(row => row.action.key)
   const isAllCurrentPageSelected = currentPageKeys.length > 0 && currentPageKeys.every(k => currentSelectedKeys.includes(k))
   const isSomeCurrentPageSelected = currentPageKeys.length > 0 && currentPageKeys.some(k => currentSelectedKeys.includes(k))
   const isIndeterminate = isSomeCurrentPageSelected && !isAllCurrentPageSelected
@@ -130,7 +156,6 @@ export function EditDataTable<T>({
     updateSelectedKeys(Array.from(newKeys))
   }
 
-  const leafColumns = getLeafColumns(columns)
   const totalColumnsCount = leafColumns.length + (actionColumn ? 1 : 0) + (rowSelection ? 1 : 0)
 
   const activeEditRows = tableData.filter(r => r.action.mode === 'edit' || r.action.mode === 'new')
@@ -226,6 +251,9 @@ export function EditDataTable<T>({
             isAllCurrentPageSelected={isAllCurrentPageSelected}
             isIndeterminate={isIndeterminate}
             handleSelectAll={handleSelectAll}
+            sorting={sorting}
+            sortState={sortState}
+            onSortChange={handleSortChange}
           />
           <tbody>
             {loading ? (
@@ -239,14 +267,14 @@ export function EditDataTable<T>({
                 currentPadding={currentPadding}
                 cellBorderClass={cellBorderClass}
               />
-            ) : tableData.length === 0 ? (
+            ) : displayedTableData.length === 0 ? (
               <tr>
                 <td colSpan={totalColumnsCount} className="p-8 text-center text-neutral-500">
                   {emptyDisplay || 'No data available.'}
                 </td>
               </tr>
             ) : (
-              tableData.map((rowState, rowIndex) => {
+              displayedTableData.map((rowState, rowIndex) => {
                 const globalRowIndex = pageOffset + rowIndex
                 const key = rowState.action.key
                 const isSelected = currentSelectedKeys.includes(key)

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { DataTable } from './DataTable'
 import type { ColumnDef, DataTableProps, PaginationState } from './DataTable.types'
+import type { SortState } from '../TableSorting'
+import { sortRows } from '../TableSorting'
 import { UserIcon, SearchIcon, CheckIcon, SettingsIcon, SaveIcon } from '../Icons'
 import { Badge } from '../Badge'
 import { Button, IconButton } from '../Button'
@@ -64,6 +66,8 @@ const columns: ColumnDef<UserData>[] = [
   {
     header: 'User Profile',
     accessorKey: 'name',
+    sortable: true,
+    sortKey: 'name',
     cell: (row: UserData) => (
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-500 shrink-0">
@@ -79,10 +83,13 @@ const columns: ColumnDef<UserData>[] = [
   {
     header: 'Department',
     accessorKey: 'department',
+    sortable: true,
     align: 'center',
   },
   {
     header: 'Role',
+    accessorKey: 'role',
+    sortable: true,
     align: 'center',
     cell: (row: UserData) => (
       <Badge variant="soft" color={row.role === 'Admin' ? 'primary' : 'neutral'}>
@@ -92,6 +99,8 @@ const columns: ColumnDef<UserData>[] = [
   },
   {
     header: 'Status',
+    accessorKey: 'status',
+    sortable: true,
     align: 'right',
     cell: (row: UserData) => {
       let badgeColor: 'success' | 'danger' | 'warning' = 'success'
@@ -109,6 +118,53 @@ const columns: ColumnDef<UserData>[] = [
 interface TableWrapperProps {
   toolbar?: DataTableProps<UserData>['toolbar']
   actionColumn?: DataTableProps<UserData>['actionColumn']
+}
+
+export const LocalSorting: Story = {
+  render: () => (
+    <DataTable<UserData>
+      data={mockData.slice(0, 15)}
+      columns={columns}
+      rowKey={(row) => row.id}
+      sorting={{
+        mode: 'local',
+        defaultState: [
+          { key: 'status', direction: 'asc' },
+          { key: 'name', direction: 'asc' },
+        ],
+      }}
+    />
+  ),
+}
+
+function ServerSortingExample() {
+  const [sortState, setSortState] = useState<SortState[]>([])
+  const serverData = sortRows(mockData.slice(0, 15), sortState, columns, (row, column) => {
+    if (column.sortValue) return column.sortValue(row)
+    return column.accessorKey !== undefined ? row[column.accessorKey as keyof UserData] : undefined
+  })
+
+  return (
+    <div className="space-y-3">
+      <DataTable<UserData>
+        data={serverData}
+        columns={columns}
+        rowKey={(row) => row.id}
+        sorting={{
+          mode: 'server',
+          state: sortState,
+          onSortChange: setSortState,
+        }}
+      />
+      <pre className="rounded-lg bg-neutral-900 p-3 text-xs text-neutral-100">
+        {JSON.stringify(sortState, null, 2)}
+      </pre>
+    </div>
+  )
+}
+
+export const ServerSorting: Story = {
+  render: () => <ServerSortingExample />,
 }
 
 function TableWrapper({ toolbar, actionColumn }: TableWrapperProps) {

@@ -63,6 +63,8 @@ const columns: EditColumnDef<UserData>[] = [
   {
     header: 'User Profile',
     accessorKey: 'name',
+    sortable: true,
+    sortKey: 'name',
     editable: true,
     editComponent: (value, onChange) => (
       <InputField
@@ -87,6 +89,7 @@ const columns: EditColumnDef<UserData>[] = [
   {
     header: 'Department',
     accessorKey: 'department',
+    sortable: true,
     align: 'center',
     editable: true,
     editComponent: (value, onChange) => (
@@ -101,6 +104,7 @@ const columns: EditColumnDef<UserData>[] = [
   {
     header: 'Role',
     accessorKey: 'role',
+    sortable: true,
     align: 'center',
     editable: true,
     type: 'select',
@@ -118,6 +122,7 @@ const columns: EditColumnDef<UserData>[] = [
   {
     header: 'Status',
     accessorKey: 'status',
+    sortable: true,
     align: 'right',
     editable: true,
     type: 'select',
@@ -280,6 +285,21 @@ const TableWrapper = ({
 
 export const Showcase: Story = {
   render: () => <TableWrapper />,
+}
+
+export const LocalSorting: Story = {
+  render: () => (
+    <TableWrapper
+      withPagination={false}
+      sorting={{
+        mode: 'local',
+        defaultState: [
+          { key: 'status', direction: 'asc' },
+          { key: 'name', direction: 'asc' },
+        ],
+      }}
+    />
+  ),
 }
 
 export const TableVariants: Story = {
@@ -445,4 +465,3 @@ export const GroupedHeaders: Story = {
     )
   }
 }
-

@@ -158,6 +158,69 @@ import { Button } from 'rinjani-ui'
 <Button isLoading>Saving...</Button>
 ```
 
+### DataTable sorting
+
+Sorting is optional. Mark only the columns that may be sorted with `sortable: true`, then provide a `sorting` configuration. A sort value is an array so multiple columns can be sorted together. The first item has the highest priority. Multiple sorting is enabled by default; use `multiple: false` when only one column may be active.
+
+```tsx
+import { DataTable } from 'rinjani-ui'
+
+const columns = [
+  {
+    header: 'Name',
+    accessorKey: 'name',
+    sortable: true,
+  },
+  {
+    header: 'Created',
+    accessorKey: 'createdAt',
+    sortable: true,
+    // Optional backend/database field name.
+    sortKey: 'created_at',
+    type: 'date',
+  },
+]
+
+<DataTable
+  data={users}
+  columns={columns}
+  sorting={{
+    mode: 'local',
+    defaultState: [
+      { key: 'name', direction: 'asc' },
+      { key: 'created_at', direction: 'desc' },
+    ],
+  }}
+/>
+```
+
+Click another sortable column header to add it as a secondary sort. The cycle for each column is `asc → desc → none`. With `multiple: false`, clicking another column replaces the current sort.
+
+For API/database sorting, use controlled state and `mode: 'server'`. Rinjani UI does not call the API itself; it reports the requested sort order to the parent component.
+
+```tsx
+import { useState } from 'react'
+import type { SortState } from 'rinjani-ui'
+
+const [sortState, setSortState] = useState<SortState[]>([])
+
+<DataTable
+  data={users}
+  columns={columns}
+  sorting={{
+    mode: 'server',
+    state: sortState,
+    onSortChange: (nextSort) => {
+      setSortState(nextSort)
+      // Fetch again using nextSort, for example:
+      // GET /users?sort[0][key]=created_at&sort[0][direction]=desc
+    },
+  }}
+/>
+```
+
+The same `sorting` API is available on `EditDataTable`. Local sorting preserves edited rows by their `rowKey`; server sorting lets the parent fetch a new ordered page. When pagination is server-controlled, reset the page to `1` when the sort state changes.
+
 ## Theming & Customization
 
 The default Rinjani palette is provided by `rinjani-ui/theme.css`; consumers do not need to copy the full palette or register a `node_modules` path. Import it once in the application stylesheet, then override only the tokens that need to be different.

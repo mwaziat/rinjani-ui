@@ -1,4 +1,5 @@
 import React from 'react'
+import type { SortingConfig, SortState } from '../TableSorting'
 
 export type EditTableVariant = 'default' | 'striped' | 'bordered' | 'borderless' | 'hover' | 'compact' | 'comfortable' | 'spacious'
 export type EditTableColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'
@@ -39,6 +40,10 @@ export interface EditColumnDef<T> {
   onClick?: (row: T) => void
   className?: string
   sortable?: boolean
+  /** Optional key sent through sorting callbacks. Defaults to accessorKey. */
+  sortKey?: string
+  /** Optional value used by local sorting when it differs from accessorKey. */
+  sortValue?: (row: T) => unknown
   align?: 'left' | 'center' | 'right'
   columns?: EditColumnDef<T>[]
   editable?: boolean
@@ -123,6 +128,7 @@ export interface EditDataTableProps<T> {
   color?: EditTableColor
   toolbar?: EditToolbarConfig<T>
   actionColumn?: EditActionColumnConfig<T>
+  sorting?: SortingConfig
   pagination?: EditPaginationConfig
   rowSelection?: EditRowSelectionConfig
   expandable?: EditExpandableConfig<T>
@@ -154,6 +160,9 @@ export interface EditTableHeaderProps<T> {
   isAllCurrentPageSelected: boolean
   isIndeterminate: boolean
   handleSelectAll: (checked: boolean) => void
+  sorting: SortingConfig | undefined
+  sortState: SortState[]
+  onSortChange: (column: EditColumnDef<T>) => void
 }
 
 export interface EditTableLoadingProps<T> {

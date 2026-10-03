@@ -1,4 +1,5 @@
 import React from 'react'
+import type { SortingConfig } from '../TableSorting'
 
 export type TableVariant = 'default' | 'striped' | 'bordered' | 'borderless' | 'hover' | 'compact' | 'comfortable' | 'spacious'
 export type TableColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'
@@ -15,6 +16,10 @@ export interface ColumnDef<T> {
   onClick?: (row: T) => void
   className?: string
   sortable?: boolean
+  /** Optional key sent through sorting callbacks. Defaults to accessorKey. */
+  sortKey?: string
+  /** Optional value used by local sorting when it differs from accessorKey. */
+  sortValue?: (row: T) => unknown
   align?: 'left' | 'center' | 'right'
   columns?: ColumnDef<T>[]
 }
@@ -90,6 +95,7 @@ export interface DataTableProps<T> {
   color?: TableColor
   toolbar?: ToolbarConfig
   actionColumn?: ActionColumnConfig<T>
+  sorting?: SortingConfig
   pagination?: PaginationConfig
   rowSelection?: RowSelectionConfig
   expandable?: ExpandableConfig<T>

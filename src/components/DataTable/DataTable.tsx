@@ -3,7 +3,9 @@ import { Toolbar } from './Toolbar'
 import { Pagination } from './Pagination'
 import { ActionColumn } from './ActionColumn'
 import { CheckIcon, MinusIcon, ChevronRightIcon } from '../Icons'
-import type { DataTableProps } from './DataTable.types'
+import { getSortKey, sortRows, SortIndicator, toggleSortState } from '../TableSorting'
+import type { DataTableProps, ColumnDef } from './DataTable.types'
+import type { SortState } from '../TableSorting'
 import { hoverColorClasses, stripedColorClasses, checkboxColorClasses, alignClasses } from './DataTable.styles'
 import { getDepth, getLeafColumns, generateHeaderRows } from './DataTable.utils'
 
@@ -14,6 +16,7 @@ export function DataTable<T>({
   color = 'primary',
   toolbar,
   actionColumn,
+  sorting,
   pagination,
   loading = false,
   loadingVariant = 'spinner',
@@ -62,6 +65,9 @@ export function DataTable<T>({
   const headerBorderClass = isBordered ? 'border border-neutral-300' : isBorderless ? 'border-0' : 'border-b-2 border-neutral-200'
 
   const pageOffset = pagination ? (pagination.page - 1) * pagination.limit : 0
+
+  const [localSortState, setLocalSortState] = useState<SortState[]>(() => sorting?.defaultState ?? [])
+  const sortState = sorting?.state ?? localSortState
 
   // --- Row Selection Logic ---
   const currentSelectedKeys = rowSelection?.selectedRowKeys !== undefined 
@@ -123,11 +129,26 @@ export function DataTable<T>({
     )
   }
 
-
-
   const maxDepth = getDepth(columns)
   const leafColumns = getLeafColumns(columns)
   const headerRows = generateHeaderRows(columns, maxDepth)
+
+  const handleSortChange = (column: ColumnDef<T>) => {
+    if (!sorting || !column.sortable) return
+    const key = getSortKey(column)
+    if (!key) return
+
+    const nextState = toggleSortState(sortState, key, sorting.multiple !== false)
+    if (sorting.state === undefined) setLocalSortState(nextState)
+    sorting.onSortChange?.(nextState)
+  }
+
+  const displayedData = sorting?.mode === 'server'
+    ? data
+    : sortRows(data, sortState, leafColumns, (row, column) => {
+        if (column.sortValue) return column.sortValue(row)
+        return column.accessorKey !== undefined ? row[column.accessorKey as keyof T] : undefined
+      })
 
   const totalColumnsCount = leafColumns.length + (actionColumn ? 1 : 0) + (rowSelection ? 1 : 0) + (expandable ? 1 : 0)
 
@@ -165,10 +186,32 @@ export function DataTable<T>({
                     key={cellIdx} 
                     colSpan={cell.colSpan}
                     rowSpan={cell.rowSpan}
+                    aria-sort={(() => {
+                      const key = getSortKey(cell.column)
+                      const sort = key ? sortState.find((item) => item.key === key) : undefined
+                      return sort?.direction === 'asc' ? 'ascending' : sort?.direction === 'desc' ? 'descending' : undefined
+                    })()}
                     className={`${currentPadding} font-semibold whitespace-nowrap bg-white ${scrolled ? 'sticky top-0 z-10 shadow-sm' : ''} ${cellBorderClass} ${cell.column.align ? alignClasses[cell.column.align] : ''} ${cell.column.className || ''}`}
                     style={{ width: cell.column.width, minWidth: cell.column.width, maxWidth: cell.column.width }}
                   >
-                    {cell.column.header}
+                    {sorting && cell.column.sortable && getSortKey(cell.column) ? (
+                      <button
+                        type="button"
+                        className="flex w-full min-w-0 items-center justify-between gap-2 whitespace-normal text-left text-inherit hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 rounded-sm"
+                        title={sorting.multiple === false
+                          ? 'Click to sort this column'
+                          : 'Click to add this column to the sort order'}
+                        onClick={() => handleSortChange(cell.column)}
+                      >
+                        <span className="min-w-0 flex-1 break-words">{cell.column.header}</span>
+                        <SortIndicator
+                          direction={sortState.find((item) => item.key === getSortKey(cell.column))?.direction}
+                          priority={sortState.findIndex((item) => item.key === getSortKey(cell.column)) >= 0
+                            ? sortState.findIndex((item) => item.key === getSortKey(cell.column))
+                            : undefined}
+                        />
+                      </button>
+                    ) : cell.column.header}
                   </th>
                 ))}
                 {rowIndex === 0 && actionColumn && (
@@ -216,14 +259,14 @@ export function DataTable<T>({
                   </td>
                 </tr>
               )
-            ) : data.length === 0 ? (
+            ) : displayedData.length === 0 ? (
               <tr>
                 <td colSpan={totalColumnsCount} className="p-8 text-center text-neutral-500">
                   {emptyDisplay || 'No data available.'}
                 </td>
               </tr>
             ) : (
-              data.map((row, rowIndex) => {
+              displayedData.map((row, rowIndex) => {
                 const globalRowIndex = pageOffset + rowIndex
                 const key = rowKey ? rowKey(row) : rowIndex
                 const isSelected = currentSelectedKeys.includes(key)
