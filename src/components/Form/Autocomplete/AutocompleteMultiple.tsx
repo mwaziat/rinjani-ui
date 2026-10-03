@@ -249,10 +249,10 @@ export const AutocompleteMultiple = ({
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
 
-  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'px-4'} ${(rightIcon || isClearable) ? 'pr-11' : ''} ${borderStyles} ${variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white'} ${disabled ? 'cursor-not-allowed bg-neutral-50' : ''}`
+  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${rightIcon && isClearable ? 'pr-24' : (rightIcon || isClearable) ? 'pr-20' : 'pr-11'} ${borderStyles} ${variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white'} ${disabled ? 'cursor-not-allowed bg-neutral-50' : ''}`
 
   const labelStyles = floating
-    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 font-normal uppercase tracking-widest` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? colorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis font-normal uppercase tracking-widest leading-none` : `top-1/2 -translate-y-1/2 ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${isFloating ? (isOpen ? colorMap[color].label : 'text-neutral-500') : 'text-neutral-400'}`}`
     : `block mb-2 ${labelSizeMap[size]} font-normal uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
 
   return (
@@ -283,7 +283,7 @@ export const AutocompleteMultiple = ({
             </div>
           )}
 
-          <div className="flex flex-1 flex-wrap gap-1.5">
+          <div className="min-w-0 flex flex-1 flex-wrap gap-1.5">
             {selectedOptions.length === 0 && (
               <span className="font-normal text-neutral-400">
                 {floating ? (isFloating ? placeholder : '\u00a0') : placeholder}

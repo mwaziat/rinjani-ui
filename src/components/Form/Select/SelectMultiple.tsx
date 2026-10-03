@@ -140,10 +140,10 @@ export const SelectMultiple = ({
   const hasValue = selectedOptions.length > 0
   const isFloating = floating && (isFocused || hasValue || isOpen)
 
-  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-medium ${multiSizeMap[size]} ${leftIcon ? 'pl-11' : 'px-4'} ${(rightIcon || isClearable) ? 'pr-11' : ''} ${borderStyles} ${disabled ? 'cursor-not-allowed bg-neutral-100' : (variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white')}`
+  const triggerStyles = `relative w-full ${radiusClass} transition-all outline-none flex items-center cursor-pointer text-neutral-900 font-medium ${multiSizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${rightIcon && isClearable ? 'pr-24' : (rightIcon || isClearable) ? 'pr-20' : 'pr-11'} ${borderStyles} ${disabled ? 'cursor-not-allowed bg-neutral-100' : (variant === 'filled' ? (isOpen ? 'bg-white' : 'bg-neutral-50') : 'bg-white')}`
 
   const labelStyles = floating && label
-    ? `absolute z-10 transition-all duration-200 pointer-events-none uppercase font-semibold tracking-widest text-neutral-400 ${isFloating ? 'top-0 text-[10px] bg-white px-2 -translate-y-1/2 left-4' : `top-1/2 -translate-y-1/2 text-[11px] ${leftIcon ? 'left-11' : 'left-4'}`} ${isFloating ? multiColorMap[color].label : ''} ${error ? 'text-danger-500' : ''}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none uppercase font-semibold tracking-widest text-neutral-400 ${isFloating ? 'top-0 text-[10px] bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis leading-none' : `top-1/2 -translate-y-1/2 text-[11px] ${leftIcon ? 'left-11' : 'left-4'}`} ${isFloating ? multiColorMap[color].label : ''} ${error ? 'text-danger-500' : ''}`
     : `block mb-2 text-[11px] font-semibold uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
 
   return (
@@ -174,7 +174,7 @@ export const SelectMultiple = ({
             </div>
           )}
 
-          <div className="flex flex-1 flex-wrap gap-1.5">
+          <div className="min-w-0 flex flex-1 flex-wrap gap-1.5">
             {selectedOptions.length === 0 && (
               <span className="font-normal text-neutral-400">
                 {floating ? (isFloating ? placeholder : '\u00a0') : placeholder}

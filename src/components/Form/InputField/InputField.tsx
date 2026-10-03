@@ -77,10 +77,10 @@ export const InputField = ({
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
 
-  const baseInputStyles = `peer w-full ${radiusClass} transition-all outline-none focus:outline-none !ring-0 !outline-none shadow-none focus:shadow-none focus:ring-0 focus:ring-offset-0 ${variant === 'line' ? '' : 'border'} disabled:bg-neutral-100 disabled:cursor-not-allowed text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'px-4'} ${(rightIcon || isPassword) ? 'pr-11' : 'px-4'} ${borderStyles} ${variant === 'filled' ? 'bg-neutral-50 focus:bg-white' : 'bg-white'} ${floating ? (isFloating ? 'placeholder-neutral-400' : 'placeholder-transparent') : 'placeholder-neutral-400'} placeholder:font-normal`
+  const baseInputStyles = `peer w-full ${radiusClass} transition-all outline-none focus:outline-none !ring-0 !outline-none shadow-none focus:shadow-none focus:ring-0 focus:ring-offset-0 ${variant === 'line' ? '' : 'border'} disabled:bg-neutral-100 disabled:cursor-not-allowed text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${(rightIcon || isPassword) ? 'pr-11' : 'pr-4'} ${borderStyles} ${variant === 'filled' ? 'bg-neutral-50 focus:bg-white' : 'bg-white'} ${floating ? (isFloating ? 'placeholder-neutral-400' : 'placeholder-transparent') : 'placeholder-neutral-400'} placeholder:font-normal`
 
   const labelStyles = floating
-    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 font-normal uppercase tracking-widest` : `${isMultiline ? 'top-4 translate-y-0' : 'top-1/2 -translate-y-1/2'} ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${colorMap[color].label} ${isFloating ? 'text-neutral-500' : 'text-neutral-400'}`}`
+    ? `absolute z-10 transition-all duration-200 pointer-events-none ${isFloating ? `top-0 ${floatingActiveSizeMap[size]} bg-white px-2 -translate-y-1/2 left-4 whitespace-nowrap max-w-[calc(100%_-_2rem)] overflow-hidden text-ellipsis font-normal uppercase tracking-widest leading-none` : `${isMultiline ? 'top-4 translate-y-0' : 'top-1/2 -translate-y-1/2'} ${textSizeMap[size]} font-normal ${leftIcon ? 'left-11' : 'left-4'}`} ${error ? 'text-danger-500' : `${colorMap[color].label} ${isFloating ? 'text-neutral-500' : 'text-neutral-400'}`}`
     : `block mb-2 ${labelSizeMap[size]} font-normal uppercase tracking-widest ${error ? 'text-danger-500' : 'text-neutral-500'}`
 
   const inputProps = props as Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue' | 'onChange' | 'type' | 'inputMode'>
@@ -113,7 +113,7 @@ export const InputField = ({
       )}
 
       <div className="relative flex items-center">
-        {leftIcon && <div className="absolute left-4 text-neutral-400 flex items-center justify-center pointer-events-none">{leftIcon}</div>}
+        {leftIcon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 flex items-center justify-center pointer-events-none">{leftIcon}</div>}
 
         {isMultiline ? (
           <textarea id={inputId} placeholder={placeholder} rows={rows} className={`${baseInputStyles} py-4 min-h-30 resize-none`} {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} defaultValue={defaultValue as string | number | readonly string[] | undefined} value={value as string | number | readonly string[] | undefined} onChange={handleChange} onFocus={(event) => { setIsFocused(true); (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onFocus?.(event) }} onBlur={(event) => { setIsFocused(false); (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onBlur?.(event) }} />
@@ -124,7 +124,7 @@ export const InputField = ({
         {floating && label && <label htmlFor={inputId} className={labelStyles}>{label} {required && <span className="text-danger-500 ml-0.5">*</span>}</label>}
 
         {(rightIcon || isPassword) && (
-          <div className="absolute right-4 text-neutral-400 flex items-center justify-center">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 flex items-center justify-center">
             {isPassword ? (
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="hover:text-neutral-600 transition-colors cursor-pointer outline-none" tabIndex={-1}>
                 {showPassword ? <EyeOffIcon size={iconSizeMap[size]} /> : <EyeIcon size={iconSizeMap[size]} />}

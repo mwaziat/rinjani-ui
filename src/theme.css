@@ -1,7 +1,7 @@
-@layer theme, rinjani;
+@layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(rinjani);
+@import "tailwindcss/utilities.css" layer(components);
 @source "./src";
 
 @theme static {
