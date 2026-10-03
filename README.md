@@ -175,6 +175,7 @@ const columns = [
     header: 'Created',
     accessorKey: 'createdAt',
     sortable: true,
+    autoWrap: true,
     // Optional backend/database field name.
     sortKey: 'created_at',
     type: 'date',
@@ -220,6 +221,8 @@ const [sortState, setSortState] = useState<SortState[]>([])
 ```
 
 The same `sorting` API is available on `EditDataTable`. Local sorting preserves edited rows by their `rowKey`; server sorting lets the parent fetch a new ordered page. When pagination is server-controlled, reset the page to `1` when the sort state changes.
+
+For long column labels, set `autoWrap: true`. The header is limited to two lines. A single long word uses ellipsis without breaking the word, while labels that exceed the two-line limit are truncated. The full label is available in a tooltip whenever `autoWrap` is enabled; columns without `autoWrap` do not create this tooltip.
 
 ## Theming & Customization
 

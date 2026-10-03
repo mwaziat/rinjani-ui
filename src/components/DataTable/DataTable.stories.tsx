@@ -167,6 +167,37 @@ export const ServerSorting: Story = {
   render: () => <ServerSortingExample />,
 }
 
+export const WrappedHeaders: Story = {
+  render: () => (
+    <DataTable<UserData>
+      data={mockData.slice(0, 5)}
+      columns={[
+        {
+          header: 'Promotion Application Method',
+          accessorKey: 'department',
+          width: '150px',
+          autoWrap: true,
+          sortable: true,
+        },
+        {
+          header: 'User Email Address',
+          accessorKey: 'email',
+          width: '150px',
+          autoWrap: true,
+          sortable: true,
+        },
+        {
+          header: 'Status',
+          accessorKey: 'status',
+          autoWrap: true,
+          sortable: true,
+        },
+      ]}
+      sorting={{ mode: 'local' }}
+    />
+  ),
+}
+
 function TableWrapper({ toolbar, actionColumn }: TableWrapperProps) {
   const [page, setPage] = useState(1)
   const limit = 5

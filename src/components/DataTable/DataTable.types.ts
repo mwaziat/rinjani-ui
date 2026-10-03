@@ -16,6 +16,8 @@ export interface ColumnDef<T> {
   onClick?: (row: T) => void
   className?: string
   sortable?: boolean
+  /** Wrap long headers to at most two lines and show a tooltip when clipped. */
+  autoWrap?: boolean
   /** Optional key sent through sorting callbacks. Defaults to accessorKey. */
   sortKey?: string
   /** Optional value used by local sorting when it differs from accessorKey. */

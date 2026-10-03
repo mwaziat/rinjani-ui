@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 
 /**
  * Theme colors derived from the Rinjani UI color palette.
@@ -59,6 +59,10 @@ export interface TooltipProps {
    */
   children: ReactNode
   /**
+   * Optional element used as the positioning anchor instead of the trigger wrapper.
+   */
+  anchorRef?: RefObject<HTMLElement | null>
+  /**
    * The text or elements to display inside the tooltip bubble.
    */
   content: ReactNode
@@ -92,6 +96,10 @@ export interface TooltipProps {
    * @default 8
    */
   offset?: number
+  /**
+   * Additional CSS classes applied to the tooltip trigger wrapper.
+   */
+  triggerClassName?: string
   /**
    * Additional CSS classes applied to the tooltip bubble container.
    */

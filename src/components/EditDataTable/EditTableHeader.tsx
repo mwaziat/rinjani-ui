@@ -2,7 +2,7 @@ import React from 'react'
 import { CheckIcon, MinusIcon } from '../Icons'
 import type { EditTableHeaderProps } from './EditDataTable.types'
 import { getDepth, generateHeaderRows } from './EditDataTable.utils'
-import { getSortKey, SortIndicator } from '../TableSorting'
+import { getSortKey, SortIndicator, TableHeaderContent } from '../TableSorting'
 
 
 import { checkboxColorClasses, alignClasses } from './EditDataTable.styles'
@@ -69,24 +69,24 @@ export function EditTableHeader<T>({
               className={`${currentPadding} font-semibold whitespace-nowrap bg-white ${scrolled ? 'sticky top-0 z-10 shadow-sm' : ''} ${cellBorderClass} ${cell.column.align ? alignClasses[cell.column.align] : ''} ${cell.column.className || ''}`}
               style={{ width: cell.column.width, minWidth: cell.column.width, maxWidth: cell.column.width }}
             >
-              {sorting && cell.column.sortable && getSortKey(cell.column) ? (
-                <button
-                  type="button"
-                  className="flex w-full min-w-0 items-center justify-between gap-2 whitespace-normal text-left text-inherit hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 rounded-sm"
-                  title={sorting.multiple === false
-                    ? 'Click to sort this column'
-                    : 'Click to add this column to the sort order'}
-                  onClick={() => onSortChange(cell.column)}
-                >
-                  <span className="min-w-0 flex-1 break-words">{cell.column.header}</span>
+              <TableHeaderContent
+                header={cell.column.header}
+                autoWrap={cell.column.autoWrap}
+                sortIndicator={sorting && cell.column.sortable && getSortKey(cell.column) ? (
                   <SortIndicator
                     direction={sortState.find((item) => item.key === getSortKey(cell.column))?.direction}
                     priority={sortState.findIndex((item) => item.key === getSortKey(cell.column)) >= 0
                       ? sortState.findIndex((item) => item.key === getSortKey(cell.column))
                       : undefined}
                   />
-                </button>
-              ) : cell.column.header}
+                ) : undefined}
+                onSort={sorting && cell.column.sortable && getSortKey(cell.column)
+                  ? () => onSortChange(cell.column)
+                  : undefined}
+                title={sorting?.multiple === false
+                  ? 'Click to sort this column'
+                  : 'Click to add this column to the sort order'}
+              />
             </th>
           ))}
           {rowIndex === 0 && actionColumn && (

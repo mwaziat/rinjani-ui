@@ -23,6 +23,7 @@ import { clampPosition, getOverflowScore, getPlacementCandidates, getPositionFor
  */
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
   children,
+  anchorRef,
   content,
   color = 'neutral',
   size = 'sm',
@@ -30,6 +31,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
   placement = 'auto',
   showArrow = true,
   offset = 8,
+  triggerClassName = '',
   className = '',
   isPill = false,
   delay = 200,
@@ -66,16 +68,18 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
   }
 
   useEffect(() => {
-    if (!isOpen || !triggerRef.current || !contentRef.current) {
+    const anchorElement = anchorRef?.current || triggerRef.current
+    if (!isOpen || !anchorElement || !contentRef.current) {
       return
     }
 
     const updatePosition = () => {
-      if (!triggerRef.current || !contentRef.current) {
+      const currentAnchor = anchorRef?.current || triggerRef.current
+      if (!currentAnchor || !contentRef.current) {
         return
       }
-
-      const triggerRect = triggerRef.current.getBoundingClientRect()
+      
+      const triggerRect = currentAnchor.getBoundingClientRect()
       const contentRect = contentRef.current.getBoundingClientRect()
       const candidates = getPlacementCandidates(placement)
 
@@ -112,7 +116,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
-  }, [isOpen, placement, offset, content])
+  }, [isOpen, placement, offset, content, anchorRef])
 
   const selectedVariant = variants[variant]?.[color] || variants.filled.neutral
   const radiusStyle = isPill ? 'rounded-full' : radiusBySize[size]
@@ -133,7 +137,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}
         onBlur={handleMouseLeave}
-        className="inline-block"
+        className={`inline-block ${triggerClassName}`}
       >
         {children}
       </div>

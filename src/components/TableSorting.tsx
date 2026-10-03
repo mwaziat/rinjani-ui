@@ -1,5 +1,6 @@
 import React from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from './Icons'
+import { Tooltip } from './Tooltip'
 
 export type SortDirection = 'asc' | 'desc'
 
@@ -26,6 +27,94 @@ export interface SortColumnLike {
   accessorKey?: PropertyKey
   sortKey?: string
   type?: string
+}
+
+export interface TableHeaderContentProps {
+  header: React.ReactNode
+  autoWrap?: boolean | undefined
+  sortIndicator?: React.ReactNode | undefined
+  onSort?: (() => void) | undefined
+  title?: string | undefined
+}
+
+/**
+ * Renders a table header without allowing long labels to overlap the next
+ * column. When autoWrap is enabled, the label is limited to two lines and the
+ * full label is available through a tooltip.
+ */
+export function TableHeaderContent({
+  header,
+  autoWrap = false,
+  sortIndicator,
+  onSort,
+  title,
+}: TableHeaderContentProps) {
+  const labelRef = React.useRef<HTMLSpanElement>(null)
+  const isSingleWord = typeof header === 'string' && header.trim() !== '' && !/\s/.test(header.trim())
+
+  const labelStyle: React.CSSProperties | undefined = autoWrap
+    ? isSingleWord
+      ? {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }
+      : {
+          display: '-webkit-box',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'normal',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 2,
+          overflowWrap: 'normal',
+        }
+    : undefined
+
+  const label = (
+    <span
+      ref={labelRef}
+      className="min-w-0 flex-1"
+      style={labelStyle}
+    >
+      {header}
+    </span>
+  )
+
+  const content = onSort ? (
+    <button
+      type="button"
+      className="flex w-full min-w-0 items-center justify-between gap-2 whitespace-normal text-left text-inherit hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 rounded-sm"
+      title={autoWrap ? undefined : title}
+      aria-label={title}
+      onClick={onSort}
+    >
+      {label}
+      {sortIndicator}
+    </button>
+  ) : (
+    <span className="flex w-full min-w-0 items-center whitespace-normal text-left text-inherit">
+      {label}
+      {sortIndicator}
+    </span>
+  )
+
+  if (autoWrap) {
+    return (
+      <Tooltip
+        content={header}
+        placement="top-start"
+        color="neutral"
+        size="sm"
+        maxWidth="lg"
+        triggerClassName="block w-full"
+        anchorRef={labelRef as React.RefObject<HTMLElement | null>}
+      >
+        <span className="block w-full min-w-0">{content}</span>
+      </Tooltip>
+    )
+  }
+
+  return content
 }
 
 export const getSortKey = <T extends SortColumnLike>(column: T): string | undefined => {
