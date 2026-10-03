@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { SelectProps } from './Select.types'
-import { buildSelectValue, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
+import { buildSelectValue, getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import {
   singleColorMap,
   singleLineActive,
@@ -67,6 +67,7 @@ export const Select = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const optionsRef = useRef<HTMLDivElement>(null)
   const inputId = useStableInputId(id, 'select')
   const selectedKey = toOptionKey(getSelectValueKey(value))
   const resolveOption = useOptionResolver(options)
@@ -125,6 +126,18 @@ export const Select = ({
       window.removeEventListener('scroll', update, true)
     }
   }, [isOpen, options.length])
+
+  useEffect(() => {
+    if (!isOpen || !portalPos.isPositioned || selectedKey === undefined) {
+      return
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      scrollOptionIntoView(optionsRef.current, selectedKey)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [isOpen, options.length, portalPos.isPositioned, selectedKey])
 
   const borderStyles = variant === 'line'
     ? (error
@@ -212,10 +225,11 @@ export const Select = ({
           } as CSSProperties}
           className="overflow-hidden rounded-lg border-1.5 border-neutral-100 bg-white shadow-xl animate-in fade-in zoom-in-95 duration-200"
         >
-          <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${portalPos.maxHeight}px` }}>
+          <div ref={optionsRef} className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${portalPos.maxHeight}px` }}>
             {options.map((option) => (
               <div
                 key={option.value}
+                data-option-key={toOptionKey(option.value)}
                 role="option"
                 aria-selected={toOptionKey(option.value) === selectedKey}
                 aria-disabled={option.disabled}

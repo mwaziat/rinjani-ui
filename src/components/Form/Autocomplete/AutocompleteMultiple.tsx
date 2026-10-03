@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteMultipleProps } from './AutocompleteMultiple.types'
-import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
+import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
 import {
   colorMap,
@@ -82,6 +82,8 @@ export const AutocompleteMultiple = ({
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const optionsRef = useRef<HTMLDivElement>(null)
+  const lastSelectedKeyRef = useRef<string | undefined>(undefined)
   const inputId = useStableInputId(id, 'select-multiple-autocomplete')
   const canMutate = isMutableInteraction(disabled, readOnly)
   const getValueKey = (currentValue?: SelectValue) => toOptionKey(getSelectValueKey(currentValue))
@@ -156,6 +158,7 @@ export const AutocompleteMultiple = ({
       return
     }
 
+    lastSelectedKeyRef.current = optionKey
     onChange([...value, buildNextValue(option.value, option.data)])
   }
 
@@ -236,6 +239,22 @@ export const AutocompleteMultiple = ({
   }, [query, onSearch])
 
   const filteredOptions = useMemo(() => filterOptionsByLabel(options, query), [options, query])
+
+  const scrollSelectedKey = selectedKeys.includes(lastSelectedKeyRef.current ?? '')
+    ? lastSelectedKeyRef.current
+    : selectedKeys[0]
+
+  useEffect(() => {
+    if (!isOpen || query.trim() !== '' || !portalPos.isPositioned || scrollSelectedKey === undefined) {
+      return
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      scrollOptionIntoView(optionsRef.current, scrollSelectedKey)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [filteredOptions.length, isOpen, portalPos.isPositioned, query, scrollSelectedKey])
 
   const borderStyles = variant === 'line'
     ? (error
@@ -382,13 +401,14 @@ export const AutocompleteMultiple = ({
             </div>
           </div>
 
-          <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${Math.max(portalPos.maxHeight - 72, 80)}px` }}>
+          <div ref={optionsRef} className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${Math.max(portalPos.maxHeight - 72, 80)}px` }}>
             {filteredOptions.map((option) => {
               const isSelected = selectedKeys.includes(toOptionKey(option.value))
 
               return (
                 <div
                   key={option.value}
+                  data-option-key={toOptionKey(option.value)}
                   role="option"
                   aria-selected={isSelected}
                   aria-disabled={option.disabled}

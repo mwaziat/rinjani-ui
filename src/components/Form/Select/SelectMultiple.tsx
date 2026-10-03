@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { SelectMultipleProps } from './Select.types'
-import { getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
+import { getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
 import {
   multiColorMap,
@@ -42,6 +42,8 @@ export const SelectMultiple = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const optionsRef = useRef<HTMLDivElement>(null)
+  const lastSelectedKeyRef = useRef<string | undefined>(undefined)
   const inputId = useStableInputId(id, 'select-multiple')
   const canMutate = isMutableInteraction(disabled, readOnly)
   const getValueKey = (currentValue?: SelectValue) => toOptionKey(getSelectValueKey(currentValue))
@@ -91,6 +93,7 @@ export const SelectMultiple = ({
       return
     }
 
+    lastSelectedKeyRef.current = optionKey
     onChange([...value, buildNextValue(option.value, option.data)])
   }
 
@@ -125,6 +128,22 @@ export const SelectMultiple = ({
       window.removeEventListener('scroll', update, true)
     }
   }, [isOpen])
+
+  const scrollSelectedKey = selectedKeys.includes(lastSelectedKeyRef.current ?? '')
+    ? lastSelectedKeyRef.current
+    : selectedKeys[0]
+
+  useEffect(() => {
+    if (!isOpen || !portalPos.isPositioned || scrollSelectedKey === undefined) {
+      return
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      scrollOptionIntoView(optionsRef.current, scrollSelectedKey)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [isOpen, options.length, portalPos.isPositioned, scrollSelectedKey])
 
   const borderStyles = variant === 'line'
     ? (error
@@ -235,13 +254,14 @@ export const SelectMultiple = ({
           } as CSSProperties}
           className="overflow-hidden rounded-lg border-1.5 border-neutral-100 bg-white shadow-xl animate-in fade-in zoom-in-95 duration-200"
         >
-          <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${portalPos.maxHeight}px` }}>
+          <div ref={optionsRef} className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${portalPos.maxHeight}px` }}>
             {options.map((option) => {
               const isSelected = selectedKeys.includes(toOptionKey(option.value))
 
               return (
                 <div
                   key={option.value}
+                  data-option-key={toOptionKey(option.value)}
                   role="option"
                   aria-selected={isSelected}
                   aria-disabled={option.disabled}

@@ -114,6 +114,21 @@ export const filterOptionsByLabel = (options: SelectOption[], query: string): Se
   return options.filter((option) => option.label.toLowerCase().includes(keyword))
 }
 
+/**
+ * Keeps a selected option visible inside a scrollable option list without
+ * moving the page that contains the portalled dropdown.
+ */
+export const scrollOptionIntoView = (container: HTMLElement | null, optionKey: string | undefined): void => {
+  if (!container || optionKey === undefined) {
+    return
+  }
+
+  const optionElement = Array.from(container.querySelectorAll<HTMLElement>('[data-option-key]'))
+    .find((element) => element.dataset.optionKey === optionKey)
+
+  optionElement?.scrollIntoView({ block: 'nearest', behavior: 'auto' })
+}
+
 export const isMutableInteraction = (disabled?: boolean, readOnly?: boolean): boolean => {
   return !disabled && !readOnly
 }
