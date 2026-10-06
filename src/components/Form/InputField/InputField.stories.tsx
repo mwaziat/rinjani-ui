@@ -125,7 +125,7 @@ const ShowcaseDemo = () => {
               <InputField label="Disabled State" disabled placeholder="You cannot type here" value="Disabled value" />
               <InputField label="Read Only" readOnly placeholder="Read only input" value="Read only value" />
               <InputField label="Error State" error="This field is required and invalid." placeholder="Enter value" />
-              <InputField label="Multiline (Textarea)" isMultiline rows={3} placeholder="Write your long message here..." />
+              <InputField label="Multiline (Textarea)" isMultiline rows={3} leftIcon={<MessageSquareIcon size={18} />} placeholder="Write your long message here..." />
             </div>
 
           </div>

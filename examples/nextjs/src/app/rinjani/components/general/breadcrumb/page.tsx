@@ -5,7 +5,7 @@ import { PropsTable } from "@/components/docs/PropsTable"
 import { TableOfContents } from "@/components/docs/TableOfContents"
 import { PageHeader } from "@/components/docs/PageHeader"
 import { breadcrumbProps } from "./_props"
-import { BasicDemo, ColorsDemo, ContainedDemo, WithIconsDemo, CustomSeparatorDemo, SizesDemo } from "./_demos"
+import { BasicDemo, ColorsDemo, ContainedDemo, WithIconsDemo, CustomSeparatorDemo, AlignmentDemo, SizesDemo } from "./_demos"
 
 const tocItems = [
   { id: "basic", label: "Basic usage", depth: 2 as const },
@@ -13,6 +13,7 @@ const tocItems = [
   { id: "contained", label: "Contained variants", depth: 2 as const },
   { id: "icons", label: "With icons", depth: 2 as const },
   { id: "separator", label: "Custom separator", depth: 2 as const },
+  { id: "alignment", label: "Alignment & custom content", depth: 2 as const },
   { id: "sizes", label: "Sizes", depth: 2 as const },
   { id: "api", label: "API", depth: 2 as const },
 ]
@@ -80,6 +81,19 @@ export default function Example() {
     </div>
   )
 }`,
+  alignment: `import { Breadcrumb } from 'rinjani-ui'
+
+export default function Example() {
+  return (
+    <Breadcrumb
+      paths={[{ label: 'Home', href: '/' }, { label: 'Room', href: '/room' }]}
+      activeLabel="List"
+      justify="end"
+      currentPosition="Custom current position"
+      rightContent={<button type="button">Actions</button>}
+    />
+  )
+}`,
   sizes: `import { Breadcrumb } from 'rinjani-ui'
 
 export default function Example() {
@@ -95,12 +109,13 @@ export default function Example() {
 }
 
 export default async function BreadcrumbPage() {
-  const [basicHl, colorsHl, containedHl, iconsHl, separatorHl, sizesHl] = await Promise.all([
+  const [basicHl, colorsHl, containedHl, iconsHl, separatorHl, alignmentHl, sizesHl] = await Promise.all([
     highlight(codes.basic, "tsx"),
     highlight(codes.colors, "tsx"),
     highlight(codes.contained, "tsx"),
     highlight(codes.icons, "tsx"),
     highlight(codes.separator, "tsx"),
+    highlight(codes.alignment, "tsx"),
     highlight(codes.sizes, "tsx"),
   ])
 
@@ -146,6 +161,14 @@ export default async function BreadcrumbPage() {
           <h2 className="text-xl font-semibold text-neutral-800 mb-4">Custom separator</h2>
           <ComponentDemo code={separatorHl} rawCode={codes.separator} centered={false}>
             <CustomSeparatorDemo />
+          </ComponentDemo>
+        </section>
+
+        <section id="alignment" className="scroll-mt-24">
+          <h2 className="text-xl font-semibold text-neutral-800 mb-4">Alignment & custom content</h2>
+          <p className="text-sm text-neutral-500 mb-4">Use <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded font-mono">justify</code> to align the component to the start, end, or keep the default space-between layout. Customize the subtitle with <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded font-mono">currentPosition</code> and add actions with <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded font-mono">rightContent</code>.</p>
+          <ComponentDemo code={alignmentHl} rawCode={codes.alignment} centered={false}>
+            <AlignmentDemo />
           </ComponentDemo>
         </section>
 

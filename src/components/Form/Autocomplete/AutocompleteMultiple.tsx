@@ -78,6 +78,7 @@ export const AutocompleteMultiple = ({
   const [query, setQuery] = useState('')
   const [isAddItemOpen, setIsAddItemOpen] = useState(false)
   const [addItemValue, setAddItemValue] = useState('')
+  const onSearchRef = useRef(onSearch)
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
@@ -235,8 +236,12 @@ export const AutocompleteMultiple = ({
   }, [isOpen])
 
   useEffect(() => {
-    onSearch?.(query)
-  }, [query, onSearch])
+    onSearchRef.current = onSearch
+  }, [onSearch])
+
+  useEffect(() => {
+    onSearchRef.current?.(query)
+  }, [query])
 
   const filteredOptions = useMemo(() => filterOptionsByLabel(options, query), [options, query])
 

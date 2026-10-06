@@ -33,7 +33,7 @@ export const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(({ class
     else if (placement === 'horizontal-top') containerBorderClass = 'border-b border-neutral-200'
     else if (placement === 'horizontal-bottom') containerBorderClass = 'border-t border-neutral-200'
   } else {
-    containerBorderClass = 'p-1.5 rounded-xl border border-neutral-200 bg-neutral-50/50'
+    containerBorderClass = 'p-1.5 rounded-xl bg-neutral-50/50'
   }
 
   const mainAxisAlignMap: Record<string, string> = { left: 'justify-start', center: 'justify-center', right: 'justify-end', fullWidth: 'justify-start' }

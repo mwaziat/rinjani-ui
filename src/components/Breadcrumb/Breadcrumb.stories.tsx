@@ -21,14 +21,21 @@ const meta: Meta<typeof Breadcrumb> = {
       control: 'select',
       options: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl'],
     },
+    justify: {
+      control: 'select',
+      options: ['between', 'start', 'end'],
+    },
     contained: { control: 'boolean' },
     activeLabel: { control: 'text' },
+    currentPosition: { control: 'text' },
   },
   args: {
     color: 'primary',
     variant: 'line',
     size: 'md',
+    justify: 'between',
     activeLabel: 'System Settings',
+    currentPosition: 'Current Position',
     contained: true,
   },
   parameters: {
@@ -132,6 +139,29 @@ export const Showcase: Story = {
             activeIcon={<SettingsIcon size={20} />}
             paths={MOCK_PATHS}
             separator={<span className="font-bold text-neutral-300">/</span>}
+          />
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-neutral-200 w-full">
+        <h2 className="text-xl font-bold text-neutral-800 mb-6">Alignment & Custom Content</h2>
+        <div className="flex flex-col gap-6">
+          <Breadcrumb
+            color="primary"
+            activeLabel="Room List"
+            currentPosition="Left aligned"
+            paths={MOCK_PATHS}
+            justify="start"
+            contained={false}
+          />
+          <Breadcrumb
+            color="primary"
+            activeLabel="Room List"
+            currentPosition="Custom current position"
+            paths={MOCK_PATHS}
+            justify="end"
+            rightContent={<button type="button" className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-700">Actions</button>}
+            contained={false}
           />
         </div>
       </div>

@@ -37,6 +37,16 @@ export type TabAlignLabel = 'left' | 'center' | 'right' | 'wrapped-left' | 'wrap
  */
 export type TabPlacement = 'horizontal-top' | 'horizontal-bottom' | 'vertical-left' | 'vertical-right'
 
+/**
+ * Determines whether Tabs switches panels or navigates through visible sections.
+ */
+export type TabBehavior = 'panel' | 'scroll'
+
+/**
+ * Native scroll behavior used when a scroll tab is activated.
+ */
+export type TabScrollBehavior = 'auto' | 'smooth'
+
 export interface TabsProps {
   /** 
    * The `value` of the currently active tab. 
@@ -77,6 +87,38 @@ export interface TabsProps {
    * @default "horizontal-top"
    */
   placement?: TabPlacement
+  /**
+   * Controls the interaction model. Existing panel switching remains the default.
+   * @default "panel"
+   */
+  behavior?: TabBehavior
+  /**
+   * Space reserved above a target section when it is scrolled into view.
+   * Useful when the page has a sticky header.
+   * @default 0
+   */
+  scrollOffset?: number
+  /**
+   * Scroll animation used when behavior is set to "scroll".
+   * @default "smooth"
+   */
+  scrollBehavior?: TabScrollBehavior
+  /**
+   * Updates the active tab while the user scrolls through the sections.
+   * @default false
+   */
+  scrollSpy?: boolean
+  /**
+   * Isolates scrolling to the content viewport instead of the page.
+   * @default false
+   */
+  scrollContainer?: boolean
+  /**
+   * Maximum height of the isolated content viewport.
+   * Only used when `scrollContainer` is true.
+   * @default "70vh"
+   */
+  scrollMaxHeight?: string | number
   /** Additional CSS classes for the root container. */
   className?: string
   /** 
@@ -120,14 +162,16 @@ export interface TabsItemProps {
 
 export interface TabsContentProps {
   /** 
-   * The unique value this content panel is associated with. 
-   * Will only be rendered when `activeTab` matches this value.
+   * The unique value this content panel is associated with.
+   * In `panel` behavior it is rendered only when `activeTab` matches; in `scroll` behavior all sections are rendered.
    */
   value: string
   /** The content to display when this tab is active. */
   children: ReactNode
   /** Additional CSS classes for the content panel. */
   className?: string
+  /** Optional inline styles for the content panel. */
+  style?: React.CSSProperties
 }
 
 export interface TabsFooterProps {

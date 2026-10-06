@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { TabColor, TabSize, TabVariant, TabAlign, TabAlignLabel, TabPlacement } from './Tabs.types'
+import type { TabColor, TabSize, TabVariant, TabAlign, TabAlignLabel, TabPlacement, TabBehavior, TabScrollBehavior } from './Tabs.types'
 
 export interface TabsContextValue {
   activeTab: string
@@ -10,6 +10,11 @@ export interface TabsContextValue {
   align: TabAlign
   alignLabel: TabAlignLabel
   placement: TabPlacement
+  behavior: TabBehavior
+  scrollOffset: number
+  scrollBehavior: TabScrollBehavior
+  scrollSpy: boolean
+  scrollContainer: boolean
 }
 
 export const TabsContext = createContext<TabsContextValue | null>(null)

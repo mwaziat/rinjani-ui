@@ -46,6 +46,42 @@ export const tabsProps: PropRow[] = [
     description: "Layout orientation and position of the tab list.",
   },
   {
+    name: "behavior",
+    type: '"panel" | "scroll"',
+    default: '"panel"',
+    description: "Uses the existing panel switcher or keeps all content visible and scrolls to the selected section.",
+  },
+  {
+    name: "scrollOffset",
+    type: "number",
+    default: "0",
+    description: "Space reserved above the target section, useful with sticky headers.",
+  },
+  {
+    name: "scrollBehavior",
+    type: '"auto" | "smooth"',
+    default: '"smooth"',
+    description: "Scroll animation used when behavior is set to scroll.",
+  },
+  {
+    name: "scrollSpy",
+    type: "boolean",
+    default: "false",
+    description: "Updates the active tab while the user scrolls through visible sections.",
+  },
+  {
+    name: "scrollContainer",
+    type: "boolean",
+    default: "false",
+    description: "Isolates scrolling to the content area instead of the page. Only active with behavior=scroll.",
+  },
+  {
+    name: "scrollMaxHeight",
+    type: "string | number",
+    default: '"70vh"',
+    description: "Maximum height of the isolated content area.",
+  },
+  {
     name: "children",
     type: "ReactNode",
     required: true,

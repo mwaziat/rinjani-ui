@@ -27,6 +27,18 @@ const meta: Meta<typeof Tabs> = {
       control: 'select',
       options: ['horizontal-top', 'horizontal-bottom', 'vertical-left', 'vertical-right'],
     },
+    behavior: {
+      control: 'select',
+      options: ['panel', 'scroll'],
+    },
+    scrollOffset: { control: 'number' },
+    scrollBehavior: {
+      control: 'select',
+      options: ['auto', 'smooth'],
+    },
+    scrollSpy: { control: 'boolean' },
+    scrollContainer: { control: 'boolean' },
+    scrollMaxHeight: { control: 'text' },
   },
   args: {
     color: 'primary',
@@ -34,6 +46,12 @@ const meta: Meta<typeof Tabs> = {
     size: 'sm',
     align: 'left',
     placement: 'horizontal-top',
+    behavior: 'panel',
+    scrollOffset: 0,
+    scrollBehavior: 'smooth',
+    scrollSpy: false,
+    scrollContainer: false,
+    scrollMaxHeight: '70vh',
   },
 }
 
@@ -77,6 +95,50 @@ const DemoIconTabs: React.FC<{ title: string, variant?: import('./Tabs.types').T
         <Tabs.List>
           {children}
         </Tabs.List>
+      </Tabs>
+    </div>
+  )
+}
+
+const ScrollTabsDemo: React.FC = () => {
+  const [active, setActive] = useState('profile')
+
+  return (
+    <div className="w-full rounded-xl bg-neutral-50 p-4">
+      <Tabs
+        activeTab={active}
+        onChange={setActive}
+        behavior="scroll"
+        scrollOffset={16}
+        scrollBehavior="smooth"
+        scrollSpy
+        scrollContainer
+        scrollMaxHeight="20rem"
+        variant="soft"
+      >
+        <Tabs.List>
+          <Tabs.Item value="profile">Hotel Profile</Tabs.Item>
+          <Tabs.Item value="contacts">Contacts & Location</Tabs.Item>
+          <Tabs.Item value="policies">Guest Policies</Tabs.Item>
+          <Tabs.Item value="finance">Finance & Payment</Tabs.Item>
+        </Tabs.List>
+
+        <Tabs.Content value="profile" className="min-h-[180px] border-b border-neutral-200 py-8">
+          <h4 className="mb-2 font-semibold text-neutral-800">Hotel Profile</h4>
+          <p className="text-sm text-neutral-600">This section stays visible while the tab scrolls to it.</p>
+        </Tabs.Content>
+        <Tabs.Content value="contacts" className="min-h-[180px] border-b border-neutral-200 py-8">
+          <h4 className="mb-2 font-semibold text-neutral-800">Contacts & Location</h4>
+          <p className="text-sm text-neutral-600">Scroll manually and the active tab follows the visible section.</p>
+        </Tabs.Content>
+        <Tabs.Content value="policies" className="min-h-[180px] border-b border-neutral-200 py-8">
+          <h4 className="mb-2 font-semibold text-neutral-800">Guest Policies</h4>
+          <p className="text-sm text-neutral-600">Use scrollOffset when the page has a sticky header.</p>
+        </Tabs.Content>
+        <Tabs.Content value="finance" className="min-h-[180px] py-8">
+          <h4 className="mb-2 font-semibold text-neutral-800">Finance & Payment</h4>
+          <p className="text-sm text-neutral-600">All sections are rendered together in scroll behavior.</p>
+        </Tabs.Content>
       </Tabs>
     </div>
   )
@@ -132,6 +194,11 @@ export const Showcase: Story = {
       </div>
 
       <DemoTabs title="Scrollable Tabs" scrollable />
+
+      <div className="w-full">
+        <h3 className="mb-4 text-lg font-bold text-neutral-800">Scroll Behavior with Scroll Spy</h3>
+        <ScrollTabsDemo />
+      </div>
     </div>
   ),
 }

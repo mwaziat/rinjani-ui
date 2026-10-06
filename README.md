@@ -158,6 +158,51 @@ import { Button } from 'rinjani-ui'
 <Button isLoading>Saving...</Button>
 ```
 
+### Breadcrumb alignment and custom content
+
+The default layout keeps the page heading on the left and the breadcrumb trail on the right. Use `justify="start"` or `justify="end"` when the whole component should be aligned to one side. The subtitle and right-side actions are customizable:
+
+```tsx
+import { Breadcrumb } from 'rinjani-ui'
+
+<Breadcrumb
+  paths={[
+    { label: 'Home', href: '/' },
+    { label: 'Rooms', href: '/rooms' },
+  ]}
+  activeLabel="List"
+  justify="start"
+  currentPosition="Room management"
+  rightContent={<button type="button">Add room</button>}
+/>
+```
+
+`justify` accepts `"between"` (default), `"start"`, or `"end"`. Set `currentPosition={null}` to hide the subtitle.
+
+### Remote Autocomplete search
+
+`Autocomplete` and `AutocompleteMultiple` keep the query internally. For live API search, one options state and one fetch function are enough. The search callback is invoked for the initial empty query and when the query changes. Changes to the callback function identity do not trigger another request.
+
+```tsx
+import { useState } from 'react'
+import { Autocomplete } from 'rinjani-ui'
+import type { SelectOption } from 'rinjani-ui'
+
+const [options, setOptions] = useState<SelectOption[]>([])
+
+const fetchOptions = async (query: string) => {
+  const response = await fetch(`/api/users?search=${encodeURIComponent(query)}`)
+  setOptions(await response.json())
+}
+
+<Autocomplete
+  options={options}
+  onSearch={(query) => void fetchOptions(query)}
+/>
+```
+
+Do not call the API from an effect that depends on the `options` list, and do not keep a second `search` state only to forward the query back to the component.
+
 ### DataTable sorting
 
 Sorting is optional. Mark only the columns that may be sorted with `sortable: true`, then provide a `sorting` configuration. A sort value is an array so multiple columns can be sorted together. The first item has the highest priority. Multiple sorting is enabled by default; use `multiple: false` when only one column may be active.
@@ -223,6 +268,38 @@ const [sortState, setSortState] = useState<SortState[]>([])
 The same `sorting` API is available on `EditDataTable`. Local sorting preserves edited rows by their `rowKey`; server sorting lets the parent fetch a new ordered page. When pagination is server-controlled, reset the page to `1` when the sort state changes.
 
 For long column labels, set `autoWrap: true`. The header is limited to two lines. A single long word uses ellipsis without breaking the word, while labels that exceed the two-line limit are truncated. The full label is available in a tooltip whenever `autoWrap` is enabled; columns without `autoWrap` do not create this tooltip.
+
+### Tabs with scroll behavior
+
+The default `Tabs` behavior is unchanged: it switches between one visible `Tabs.Content` panel. To use tabs as section navigation, set `behavior="scroll"`. All content sections remain visible, clicking a tab scrolls to its section, and `scrollSpy` can update the active tab while scrolling:
+
+```tsx
+import { useState } from 'react'
+import { Tabs } from 'rinjani-ui'
+
+const [activeTab, setActiveTab] = useState('profile')
+
+<Tabs
+  activeTab={activeTab}
+  onChange={setActiveTab}
+  behavior="scroll"
+  scrollOffset={80}
+  scrollBehavior="smooth"
+  scrollSpy
+  scrollContainer
+  scrollMaxHeight="32rem"
+>
+  <Tabs.List>
+    <Tabs.Item value="profile">Hotel Profile</Tabs.Item>
+    <Tabs.Item value="contacts">Contacts & Location</Tabs.Item>
+  </Tabs.List>
+
+  <Tabs.Content value="profile">Profile section</Tabs.Content>
+  <Tabs.Content value="contacts">Contacts section</Tabs.Content>
+</Tabs>
+```
+
+Use `scrollOffset` when a sticky header would otherwise cover the section heading. Add `scrollContainer` to keep the tab list fixed while only the content area scrolls; `scrollMaxHeight` controls that internal viewport. Existing `Tabs` implementations do not need any changes because `behavior="panel"` and `scrollContainer={false}` are the defaults.
 
 ## Theming & Customization
 
