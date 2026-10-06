@@ -2,6 +2,7 @@ import React from 'react'
 import { CheckIcon, MinusIcon } from '../Icons'
 import type { EditTableHeaderProps } from './EditDataTable.types'
 import { getDepth, generateHeaderRows } from './EditDataTable.utils'
+import { getSortKey, SortIndicator, TableHeaderContent } from '../TableSorting'
 
 
 import { checkboxColorClasses, alignClasses } from './EditDataTable.styles'
@@ -19,6 +20,9 @@ export function EditTableHeader<T>({
   isAllCurrentPageSelected,
   isIndeterminate,
   handleSelectAll,
+  sorting,
+  sortState,
+  onSortChange,
 }: EditTableHeaderProps<T>) {
   const maxDepth = getDepth(columns)
   const headerRows = generateHeaderRows(columns, maxDepth)
@@ -57,10 +61,32 @@ export function EditTableHeader<T>({
               key={cellIdx} 
               colSpan={cell.colSpan}
               rowSpan={cell.rowSpan}
+              aria-sort={(() => {
+                const key = getSortKey(cell.column)
+                const sort = key ? sortState.find((item) => item.key === key) : undefined
+                return sort?.direction === 'asc' ? 'ascending' : sort?.direction === 'desc' ? 'descending' : undefined
+              })()}
               className={`${currentPadding} font-semibold whitespace-nowrap bg-white ${scrolled ? 'sticky top-0 z-10 shadow-sm' : ''} ${cellBorderClass} ${cell.column.align ? alignClasses[cell.column.align] : ''} ${cell.column.className || ''}`}
               style={{ width: cell.column.width, minWidth: cell.column.width, maxWidth: cell.column.width }}
             >
-              {cell.column.header}
+              <TableHeaderContent
+                header={cell.column.header}
+                autoWrap={cell.column.autoWrap}
+                sortIndicator={sorting && cell.column.sortable && getSortKey(cell.column) ? (
+                  <SortIndicator
+                    direction={sortState.find((item) => item.key === getSortKey(cell.column))?.direction}
+                    priority={sortState.findIndex((item) => item.key === getSortKey(cell.column)) >= 0
+                      ? sortState.findIndex((item) => item.key === getSortKey(cell.column))
+                      : undefined}
+                  />
+                ) : undefined}
+                onSort={sorting && cell.column.sortable && getSortKey(cell.column)
+                  ? () => onSortChange(cell.column)
+                  : undefined}
+                title={sorting?.multiple === false
+                  ? 'Click to sort this column'
+                  : 'Click to add this column to the sort order'}
+              />
             </th>
           ))}
           {rowIndex === 0 && actionColumn && (

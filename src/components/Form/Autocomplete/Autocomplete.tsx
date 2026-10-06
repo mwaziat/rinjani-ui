@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
 import type { AutocompleteProps } from './Autocomplete.types'
-import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
+import { buildSelectValue, filterOptionsByLabel, getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import type { SelectOption } from '../types'
 import {
   colorMap,
@@ -77,10 +77,12 @@ export const Autocomplete = ({
   const [query, setQuery] = useState('')
   const [isAddItemOpen, setIsAddItemOpen] = useState(false)
   const [addItemValue, setAddItemValue] = useState('')
+  const onSearchRef = useRef(onSearch)
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const optionsRef = useRef<HTMLDivElement>(null)
   const inputId = useStableInputId(id, 'select-autocomplete')
   const selectedKey = toOptionKey(getSelectValueKey(value))
   const resolveOption = useOptionResolver(options)
@@ -208,12 +210,28 @@ export const Autocomplete = ({
   }, [isOpen])
 
   useEffect(() => {
-    onSearch?.(query)
-  }, [query, onSearch])
+    onSearchRef.current = onSearch
+  }, [onSearch])
+
+  useEffect(() => {
+    onSearchRef.current?.(query)
+  }, [query])
 
   const filteredOptions = useMemo(() => {
     return filterOptionsByLabel(options, query)
   }, [options, query])
+
+  useEffect(() => {
+    if (!isOpen || query.trim() !== '' || !portalPos.isPositioned || selectedKey === undefined) {
+      return
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      scrollOptionIntoView(optionsRef.current, selectedKey)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [filteredOptions.length, isOpen, portalPos.isPositioned, query, selectedKey])
 
   const borderStyles = variant === 'line'
     ? (error
@@ -350,10 +368,11 @@ export const Autocomplete = ({
               </div>
             </div>
 
-            <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${Math.max(portalPos.maxHeight - 72, 80)}px` }}>
+            <div ref={optionsRef} className="overflow-y-auto scrollbar-thin" style={{ maxHeight: `${Math.max(portalPos.maxHeight - 72, 80)}px` }}>
               {filteredOptions.map((option) => (
                 <div
                   key={option.value}
+                  data-option-key={toOptionKey(option.value)}
                   role="option"
                   aria-selected={toOptionKey(option.value) === selectedKey}
                   aria-disabled={option.disabled}

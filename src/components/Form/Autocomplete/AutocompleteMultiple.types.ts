@@ -69,6 +69,6 @@ export interface AutocompleteMultipleProps extends Omit<BaseFormProps, 'label'> 
   onAddItem?: (option: SelectOption) => void
   /** Callback fired when the add item button is clicked in `custom` mode. */
   onAddItemClick?: (query: string) => void
-  /** Callback fired whenever the user types into the search field. */
+  /** Callback fired when the internal search query changes. Callback identity changes do not trigger a new search. */
   onSearch?: (query: string) => void
 }

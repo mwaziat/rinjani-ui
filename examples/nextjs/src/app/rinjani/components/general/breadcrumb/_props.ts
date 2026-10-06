@@ -34,6 +34,12 @@ export const breadcrumbProps: PropRow[] = [
     description: "Font size and spacing of the breadcrumb trail.",
   },
   {
+    name: "justify",
+    type: '"between" | "start" | "end"',
+    default: '"between"',
+    description: "Controls whether the header and trail are distributed between both sides, aligned left, or aligned right.",
+  },
+  {
     name: "contained",
     type: "boolean",
     default: "false",
@@ -50,5 +56,17 @@ export const breadcrumbProps: PropRow[] = [
     type: "ReactNode",
     default: "—",
     description: "Icon rendered beside the active label.",
+  },
+  {
+    name: "currentPosition",
+    type: "ReactNode",
+    default: '"Current Position"',
+    description: "Custom subtitle/content shown below the active label. Pass null to hide it.",
+  },
+  {
+    name: "rightContent",
+    type: "ReactNode",
+    default: "—",
+    description: "Optional content rendered after the breadcrumb trail, useful for actions or filters.",
   },
 ]

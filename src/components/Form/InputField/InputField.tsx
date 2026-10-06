@@ -1,10 +1,43 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { EyeIcon, EyeOffIcon, AlertCircleIcon } from '../../Icons'
 import type { InputFieldProps } from './InputField.types'
 import { colorMap, lineFocus, textSizeMap, labelSizeMap, floatingActiveSizeMap, sizeMap, radiusMap } from './InputField.styles'
 import { formatCurrency, parseCurrency, useStableInputId, iconSizeMap } from '../shared'
+
+type CurrencySelection = {
+  formattedValue: string
+  startDigitIndex: number
+  endDigitIndex: number
+}
+
+const countDigitsBefore = (value: string, position: number) =>
+  (value.slice(0, position).match(/[0-9]/g) ?? []).length
+
+const positionAfterDigitCount = (value: string, digitCount: number) => {
+  if (digitCount <= 0) {
+    const firstDigitIndex = value.search(/[0-9]/)
+    return firstDigitIndex === -1 ? value.length : firstDigitIndex
+  }
+
+  let seenDigits = 0
+
+  for (let index = 0; index < value.length; index += 1) {
+    if (/[0-9]/.test(value[index] ?? '')) {
+      seenDigits += 1
+      if (seenDigits >= digitCount) {
+        return index + 1
+      }
+    }
+  }
+
+  return value.length
+}
+
+// Avoid a server-render warning while still restoring the caret before the
+// browser paints when this component runs on the client.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 /**
  * A highly versatile text input component for forms.
@@ -54,6 +87,8 @@ export const InputField = ({
   const [isFocused, setIsFocused] = useState(false)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue ?? '')
   const [uncontrolledCurrencyRawValue, setUncontrolledCurrencyRawValue] = useState(() => parseCurrency(String(defaultValue ?? ''), currency ?? '', locale))
+  const inputRef = useRef<HTMLInputElement>(null)
+  const pendingCurrencySelectionRef = useRef<CurrencySelection | null>(null)
   const inputId = useStableInputId(id, 'input-field')
   const isCurrencyMode = format === 'currency' && !isMultiline && !isPassword && Boolean(currency?.trim())
   const isControlled = value !== undefined
@@ -76,6 +111,7 @@ export const InputField = ({
     )
 
   const radiusClass = variant === 'line' ? 'rounded-none' : radiusMap[size]
+  const iconVerticalStyles = isMultiline ? 'top-4' : 'top-1/2 -translate-y-1/2'
 
   const baseInputStyles = `peer w-full ${radiusClass} transition-all outline-none focus:outline-none !ring-0 !outline-none shadow-none focus:shadow-none focus:ring-0 focus:ring-offset-0 ${variant === 'line' ? '' : 'border'} disabled:bg-neutral-100 disabled:cursor-not-allowed text-neutral-900 font-normal ${sizeMap[size]} ${leftIcon ? 'pl-11' : 'pl-4'} ${(rightIcon || isPassword) ? 'pr-11' : 'pr-4'} ${borderStyles} ${variant === 'filled' ? 'bg-neutral-50 focus:bg-white' : 'bg-white'} ${floating ? (isFloating ? 'placeholder-neutral-400' : 'placeholder-transparent') : 'placeholder-neutral-400'} placeholder:font-normal`
 
@@ -91,18 +127,51 @@ export const InputField = ({
     }
 
     if (isCurrencyMode && currency && 'value' in event.target) {
-      const rawNextValue = parseCurrency(event.target.value, currency, locale)
+      const target = event.currentTarget
+      const selectionStart = target.selectionStart ?? target.value.length
+      const selectionEnd = target.selectionEnd ?? selectionStart
+      const rawNextValue = parseCurrency(target.value, currency, locale)
+      const formattedNextValue = formatCurrency(rawNextValue, currency, locale)
+
+      // Currency formatting inserts prefixes and group separators. Store the
+      // selection as a digit index so it can be restored after React writes
+      // the newly formatted value back to the controlled input.
+      pendingCurrencySelectionRef.current = {
+        formattedValue: formattedNextValue,
+        startDigitIndex: countDigitsBefore(target.value, selectionStart),
+        endDigitIndex: countDigitsBefore(target.value, selectionEnd),
+      }
+
       if (!isControlled) {
         setUncontrolledCurrencyRawValue(rawNextValue)
       }
-      event.target.value = rawNextValue
-      event.currentTarget.value = rawNextValue
+
+      // Keep the existing InputField contract: consumers receive the raw
+      // numeric value, while the input itself renders the formatted value.
+      target.value = rawNextValue
     }
 
     if (onChange) {
       onChange(event as unknown as React.ChangeEvent<HTMLInputElement>)
     }
   }
+
+  useIsomorphicLayoutEffect(() => {
+    if (!isCurrencyMode || !inputRef.current) {
+      pendingCurrencySelectionRef.current = null
+      return
+    }
+
+    const pendingSelection = pendingCurrencySelectionRef.current
+    if (!pendingSelection || inputRef.current.value !== pendingSelection.formattedValue) {
+      return
+    }
+
+    const start = positionAfterDigitCount(inputRef.current.value, pendingSelection.startDigitIndex)
+    const end = positionAfterDigitCount(inputRef.current.value, pendingSelection.endDigitIndex)
+    inputRef.current.setSelectionRange(start, end)
+    pendingCurrencySelectionRef.current = null
+  })
 
   return (
     <div className={`flex flex-col w-full ${className}`}>
@@ -112,19 +181,19 @@ export const InputField = ({
         </label>
       )}
 
-      <div className="relative flex items-center">
-        {leftIcon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 flex items-center justify-center pointer-events-none">{leftIcon}</div>}
+      <div className={`relative flex ${isMultiline ? 'items-start' : 'items-center'}`}>
+        {leftIcon && <div className={`absolute left-4 ${iconVerticalStyles} text-neutral-400 flex items-center justify-center pointer-events-none`}>{leftIcon}</div>}
 
         {isMultiline ? (
           <textarea id={inputId} placeholder={placeholder} rows={rows} className={`${baseInputStyles} py-4 min-h-30 resize-none`} {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} defaultValue={defaultValue as string | number | readonly string[] | undefined} value={value as string | number | readonly string[] | undefined} onChange={handleChange} onFocus={(event) => { setIsFocused(true); (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onFocus?.(event) }} onBlur={(event) => { setIsFocused(false); (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onBlur?.(event) }} />
         ) : (
-          <input id={inputId} type={isCurrencyMode ? 'text' : (isPassword ? (showPassword ? 'text' : 'password') : type)} inputMode={isCurrencyMode ? 'numeric' : inputMode} placeholder={placeholder} className={baseInputStyles} {...inputProps} defaultValue={isCurrencyMode ? undefined : defaultValue} value={isCurrencyMode ? displayCurrencyValue : value} onChange={handleChange} onFocus={(event) => { setIsFocused(true); inputProps.onFocus?.(event) }} onBlur={(event) => { setIsFocused(false); inputProps.onBlur?.(event) }} />
+          <input ref={inputRef} id={inputId} type={isCurrencyMode ? 'text' : (isPassword ? (showPassword ? 'text' : 'password') : type)} inputMode={isCurrencyMode ? 'numeric' : inputMode} placeholder={placeholder} className={baseInputStyles} {...inputProps} defaultValue={isCurrencyMode ? undefined : defaultValue} value={isCurrencyMode ? displayCurrencyValue : value} onChange={handleChange} onFocus={(event) => { setIsFocused(true); inputProps.onFocus?.(event) }} onBlur={(event) => { setIsFocused(false); inputProps.onBlur?.(event) }} />
         )}
 
         {floating && label && <label htmlFor={inputId} className={labelStyles}>{label} {required && <span className="text-danger-500 ml-0.5">*</span>}</label>}
 
         {(rightIcon || isPassword) && (
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 flex items-center justify-center">
+          <div className={`absolute right-4 ${iconVerticalStyles} text-neutral-400 flex items-center justify-center`}>
             {isPassword ? (
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="hover:text-neutral-600 transition-colors cursor-pointer outline-none" tabIndex={-1}>
                 {showPassword ? <EyeOffIcon size={iconSizeMap[size]} /> : <EyeIcon size={iconSizeMap[size]} />}

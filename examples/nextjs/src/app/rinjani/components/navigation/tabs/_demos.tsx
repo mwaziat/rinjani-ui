@@ -92,3 +92,42 @@ export function VerticalDemo() {
     </div>
   )
 }
+
+export function ScrollBehaviorDemo() {
+  const [tab, setTab] = useState("profile")
+
+  return (
+    <div className="w-full rounded-xl bg-neutral-50 p-4">
+      <Tabs
+        activeTab={tab}
+        onChange={setTab}
+        behavior="scroll"
+        scrollOffset={80}
+        scrollBehavior="smooth"
+        scrollSpy
+        scrollContainer
+        scrollMaxHeight="24rem"
+        variant="soft"
+      >
+        <Tabs.List>
+          <Tabs.Item value="profile">Hotel Profile</Tabs.Item>
+          <Tabs.Item value="contacts">Contacts & Location</Tabs.Item>
+          <Tabs.Item value="policies">Guest Policies</Tabs.Item>
+        </Tabs.List>
+
+        <Tabs.Content value="profile" className="min-h-[220px] py-8">
+          <h3 className="font-semibold text-neutral-800">Hotel Profile</h3>
+          <p className="mt-2 text-sm text-neutral-600">All sections remain visible in scroll behavior.</p>
+        </Tabs.Content>
+        <Tabs.Content value="contacts" className="min-h-[220px] py-8">
+          <h3 className="font-semibold text-neutral-800">Contacts & Location</h3>
+          <p className="mt-2 text-sm text-neutral-600">Clicking a tab scrolls to this section.</p>
+        </Tabs.Content>
+        <Tabs.Content value="policies" className="min-h-[220px] py-8">
+          <h3 className="font-semibold text-neutral-800">Guest Policies</h3>
+          <p className="mt-2 text-sm text-neutral-600">Scroll manually to see the active tab update.</p>
+        </Tabs.Content>
+      </Tabs>
+    </div>
+  )
+}

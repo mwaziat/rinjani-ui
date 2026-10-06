@@ -41,6 +41,23 @@ const meta: Meta<typeof Autocomplete> = {
       { label: 'Apple', value: 'apple' },
       { label: 'Banana', value: 'banana' },
       { label: 'Cherry', value: 'cherry' },
+      { label: 'Date', value: 'date' },
+      { label: 'Elderberry', value: 'elderberry' },
+      { label: 'Fig', value: 'fig' },
+      { label: 'Grape', value: 'grape' },
+      { label: 'Honeydew', value: 'honeydew' },
+      { label: 'Kiwi', value: 'kiwi' },
+      { label: 'Lemon', value: 'lemon' },
+      { label: 'Mango', value: 'mango' },
+      { label: 'Nectarine', value: 'nectarine' },
+      { label: 'Orange', value: 'orange' },
+      { label: 'Papaya', value: 'papaya' },
+      { label: 'Quince', value: 'quince' },
+      { label: 'Raspberry', value: 'raspberry' },
+      { label: 'Strawberry', value: 'strawberry' },
+      { label: 'Tangerine', value: 'tangerine' },
+      { label: 'Ugli Fruit', value: 'ugli-fruit' },
+      { label: 'Watermelon', value: 'watermelon' },
     ]
   },
 }
@@ -58,6 +75,21 @@ const MOCK_OPTIONS: SelectOption[] = [
   { label: 'Cherry', value: 'cherry' },
   { label: 'Date', value: 'date' },
   { label: 'Elderberry (Disabled)', value: 'elderberry', disabled: true },
+  { label: 'Fig', value: 'fig' },
+  { label: 'Grape', value: 'grape' },
+  { label: 'Honeydew', value: 'honeydew' },
+  { label: 'Kiwi', value: 'kiwi' },
+  { label: 'Lemon', value: 'lemon' },
+  { label: 'Mango', value: 'mango' },
+  { label: 'Nectarine', value: 'nectarine' },
+  { label: 'Orange', value: 'orange' },
+  { label: 'Papaya (Disabled)', value: 'papaya', disabled: true },
+  { label: 'Quince', value: 'quince' },
+  { label: 'Raspberry', value: 'raspberry' },
+  { label: 'Strawberry', value: 'strawberry' },
+  { label: 'Tangerine', value: 'tangerine' },
+  { label: 'Ugli Fruit', value: 'ugli-fruit' },
+  { label: 'Watermelon', value: 'watermelon' },
 ]
 
 const StatefulAutocomplete = (props: Omit<AutocompleteProps, 'value' | 'onChange'> & { initialValue?: SelectValue }) => {
@@ -324,6 +356,15 @@ const ShowcaseDemo = () => {
 
 export const Showcase: Story = {
   render: () => <ShowcaseDemo />
+}
+
+export const ScrollToSelected: Story = {
+  render: () => (
+    <div className="grid max-w-3xl gap-6 md:grid-cols-2">
+      <StatefulAutocomplete label="Selected middle option" initialValue="mango" options={MOCK_OPTIONS} />
+      <StatefulAutocompleteMultiple label="Selected middle option (multiple)" initialValue={['mango']} options={MOCK_OPTIONS} />
+    </div>
+  )
 }
 
 export const Playground: Story = {}

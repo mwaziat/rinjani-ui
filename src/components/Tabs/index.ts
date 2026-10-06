@@ -22,5 +22,7 @@ export type {
   TabColor, 
   TabAlign, 
   TabAlignLabel, 
-  TabPlacement 
+  TabPlacement,
+  TabBehavior,
+  TabScrollBehavior,
 } from './Tabs.types'

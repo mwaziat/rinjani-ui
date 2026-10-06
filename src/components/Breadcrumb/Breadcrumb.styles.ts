@@ -1,7 +1,13 @@
-import type { BreadcrumbColor, BreadcrumbVariant, BreadcrumbSize } from './Breadcrumb.types'
+import type { BreadcrumbColor, BreadcrumbVariant, BreadcrumbSize, BreadcrumbJustify } from './Breadcrumb.types'
 
-export const baseBreadcrumbWrapperStyles = "flex flex-col justify-between gap-4 md:flex-row md:items-center"
+export const baseBreadcrumbWrapperStyles = "flex flex-col gap-4 md:flex-row md:items-center"
 export const containedBreadcrumbStyles = "rounded-xl border border-neutral-200 bg-white p-4 shadow-sm"
+
+export const breadcrumbJustifyStyles = {
+  between: 'justify-between',
+  start: 'justify-start',
+  end: 'justify-end',
+} satisfies Record<BreadcrumbJustify, string>
 
 export const colorVariants = {
   primary: 'text-primary-600 bg-primary-50',

@@ -61,6 +61,28 @@ export function CustomSeparatorDemo() {
   )
 }
 
+export function AlignmentDemo() {
+  return (
+    <div className="flex flex-col gap-4 w-full">
+      <Breadcrumb
+        paths={basePaths}
+        activeLabel="List"
+        currentPosition="Left aligned"
+        justify="start"
+        contained={false}
+      />
+      <Breadcrumb
+        paths={basePaths}
+        activeLabel="List"
+        currentPosition="Custom current position"
+        justify="end"
+        rightContent={<button type="button" className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-700">Actions</button>}
+        contained={false}
+      />
+    </div>
+  )
+}
+
 export function SizesDemo() {
   return (
     <div className="flex flex-col gap-3">

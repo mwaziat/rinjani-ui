@@ -5,7 +5,7 @@ import { PropsTable } from "@/components/docs/PropsTable"
 import { TableOfContents } from "@/components/docs/TableOfContents"
 import { PageHeader } from "@/components/docs/PageHeader"
 import { tabsProps, tabsItemProps } from "./_props"
-import { BasicDemo, VariantsDemo, ColorsDemo, WithIconsDemo, VerticalDemo } from "./_demos"
+import { BasicDemo, VariantsDemo, ColorsDemo, WithIconsDemo, VerticalDemo, ScrollBehaviorDemo } from "./_demos"
 
 const tocItems = [
   { id: "basic", label: "Basic usage", depth: 2 as const },
@@ -13,6 +13,7 @@ const tocItems = [
   { id: "colors", label: "Colors", depth: 2 as const },
   { id: "icons", label: "With icons", depth: 2 as const },
   { id: "vertical", label: "Vertical placement", depth: 2 as const },
+  { id: "scroll", label: "Scroll behavior", depth: 2 as const },
   { id: "api", label: "Tabs API", depth: 2 as const },
   { id: "api-item", label: "Tabs.Item API", depth: 2 as const },
 ]
@@ -59,14 +60,42 @@ import { FiUser, FiSettings } from 'react-icons/fi'
   <Tabs.Content value="profile">Profile content</Tabs.Content>
   <Tabs.Content value="settings">Settings content</Tabs.Content>
 </Tabs>`,
+  scroll: `import { Tabs } from 'rinjani-ui'
+import { useState } from 'react'
+
+export default function Example() {
+  const [tab, setTab] = useState('profile')
+
+  return (
+    <Tabs
+      activeTab={tab}
+      onChange={setTab}
+      behavior="scroll"
+      scrollOffset={80}
+      scrollBehavior="smooth"
+      scrollSpy
+      scrollContainer
+      scrollMaxHeight="24rem"
+    >
+      <Tabs.List>
+        <Tabs.Item value="profile">Hotel Profile</Tabs.Item>
+        <Tabs.Item value="contacts">Contacts & Location</Tabs.Item>
+      </Tabs.List>
+
+      <Tabs.Content value="profile">Profile section</Tabs.Content>
+      <Tabs.Content value="contacts">Contacts section</Tabs.Content>
+    </Tabs>
+  )
+}`,
 }
 
 export default async function TabsPage() {
-  const [basicHl, variantsHl, iconsHl, verticalHl] = await Promise.all([
+  const [basicHl, variantsHl, iconsHl, verticalHl, scrollHl] = await Promise.all([
     highlight(codes.basic, "tsx"),
     highlight(codes.variants, "tsx"),
     highlight(codes.icons, "tsx"),
     highlight(codes.vertical, "tsx"),
+    highlight(codes.scroll, "tsx"),
   ])
 
   return (
@@ -110,6 +139,14 @@ export default async function TabsPage() {
           <h2 className="text-xl font-semibold text-neutral-800 mb-4">Vertical placement</h2>
           <ComponentDemo code={verticalHl} rawCode={codes.vertical} centered={false}>
             <VerticalDemo />
+          </ComponentDemo>
+        </section>
+
+        <section id="scroll" className="scroll-mt-24">
+          <h2 className="text-xl font-semibold text-neutral-800 mb-4">Scroll behavior</h2>
+          <p className="text-sm text-neutral-500 mb-4">Set <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded font-mono">behavior="scroll"</code> to keep all sections visible. Clicking a tab scrolls to its section, while <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded font-mono">scrollSpy</code> keeps the active tab synchronized with manual scrolling.</p>
+          <ComponentDemo code={scrollHl} rawCode={codes.scroll} centered={false}>
+            <ScrollBehaviorDemo />
           </ComponentDemo>
         </section>
 

@@ -22,6 +22,11 @@ export type BreadcrumbVariant = 'filled' | 'outlined' | 'soft' | 'text' | 'line'
 export type BreadcrumbSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 /**
+ * Horizontal distribution of the breadcrumb header and trail.
+ */
+export type BreadcrumbJustify = 'between' | 'start' | 'end'
+
+/**
  * Defines a single historical path node in the breadcrumb trail.
  */
 export interface BreadcrumbPath {
@@ -63,6 +68,11 @@ export interface BreadcrumbProps {
    */
   size?: BreadcrumbSize
   /**
+   * Controls how the header and breadcrumb trail are distributed horizontally.
+   * @default "between"
+   */
+  justify?: BreadcrumbJustify
+  /**
    * Additional CSS classes to apply to the root container.
    */
   className?: string
@@ -72,6 +82,15 @@ export interface BreadcrumbProps {
    * @default false
    */
   contained?: boolean
+  /**
+   * Text or custom content shown below the active label. Pass null to hide it.
+   * @default "Current Position"
+   */
+  currentPosition?: ReactNode
+  /**
+   * Optional content rendered after the breadcrumb trail on its right side.
+   */
+  rightContent?: ReactNode
   /**
    * A custom element to use as the separator between nodes.
    * Defaults to a subtle slash or chevron icon.

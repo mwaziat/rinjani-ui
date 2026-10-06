@@ -8,7 +8,8 @@ import {
   activeIconSizes,
   activeLabelSizes,
   activeSubtitleSizes,
-  pathSizes 
+  pathSizes,
+  breadcrumbJustifyStyles,
 } from './Breadcrumb.styles'
 import { ChevronRightIcon } from '../Icons'
 
@@ -39,8 +40,11 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   color = 'primary',
   variant = 'line',
   size = 'md',
+  justify = 'between',
   className = '',
   contained = true,
+  currentPosition = 'Current Position',
+  rightContent,
   separator = <ChevronRightIcon size={14} />
 }: BreadcrumbProps) => {
   const wrapperStyles = contained ? containedBreadcrumbStyles : ''
@@ -48,7 +52,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const pathVariantClass = pathVariants[variant][color]
 
   return (
-    <div className={`${baseBreadcrumbWrapperStyles} ${wrapperStyles} ${className}`}>
+    <div className={`${baseBreadcrumbWrapperStyles} ${breadcrumbJustifyStyles[justify]} ${wrapperStyles} ${className}`}>
       <div className="flex items-center gap-3">
         {activeIcon && (
           <div className={`rounded-lg ${activeIconSizes[size]} ${selectedVariant}`}>
@@ -59,39 +63,45 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <h1 className={`font-semibold capitalize leading-none tracking-tight text-neutral-800 ${activeLabelSizes[size]}`}>
             {activeLabel}
           </h1>
-          <p className={`mt-1 font-normal tracking-wide text-neutral-400 ${activeSubtitleSizes[size]}`}>
-            Current Position
-          </p>
+          {currentPosition !== null && (
+            <p className={`mt-1 font-normal tracking-wide text-neutral-400 ${activeSubtitleSizes[size]}`}>
+              {currentPosition}
+            </p>
+          )}
         </div>
       </div>
 
-      <nav className="flex items-center gap-2 overflow-x-auto py-1 no-scrollbar">
-        {paths.map((path, index) => (
-          <React.Fragment key={path.href}>
-            {index > 0 && <span className="shrink-0 text-neutral-400 flex items-center justify-center">{separator}</span>}
-            <a href={path.href} className="group flex items-center transition-all">
-              <div className={`flex items-center rounded-lg border transition-all ${pathSizes[size]} ${pathVariantClass}`}>
-                {path.icon && (
-                  <span className={`shrink-0 flex items-center transition-colors`}>
-                    {path.icon}
+      <div className="flex min-w-0 items-center gap-4">
+        <nav className="flex min-w-0 max-w-full items-center gap-2 overflow-x-auto py-1 no-scrollbar">
+          {paths.map((path, index) => (
+            <React.Fragment key={path.href}>
+              {index > 0 && <span className="shrink-0 text-neutral-400 flex items-center justify-center">{separator}</span>}
+              <a href={path.href} className="group flex items-center transition-all">
+                <div className={`flex items-center rounded-lg border transition-all ${pathSizes[size]} ${pathVariantClass}`}>
+                  {path.icon && (
+                    <span className={`shrink-0 flex items-center transition-colors`}>
+                      {path.icon}
+                    </span>
+                  )}
+                  <span className={`whitespace-nowrap font-medium transition-colors`}>
+                    {path.label}
                   </span>
-                )}
-                <span className={`whitespace-nowrap font-medium transition-colors`}>
-                  {path.label}
-                </span>
-              </div>
-            </a>
-          </React.Fragment>
-        ))}
+                </div>
+              </a>
+            </React.Fragment>
+          ))}
 
-        {paths.length > 0 && <span className="shrink-0 text-neutral-400 flex items-center justify-center">{separator}</span>}
+          {paths.length > 0 && <span className="shrink-0 text-neutral-400 flex items-center justify-center">{separator}</span>}
 
-        <div className={`flex items-center ${pathSizes[size].split(' ').filter(c => c.startsWith('px-') || c.startsWith('py-') || c.startsWith('text-')).join(' ')}`}>
-          <span className={`whitespace-nowrap font-semibold text-neutral-800`}>
-            {activeLabel}
-          </span>
-        </div>
-      </nav>
+          <div className={`flex items-center ${pathSizes[size].split(' ').filter(c => c.startsWith('px-') || c.startsWith('py-') || c.startsWith('text-')).join(' ')}`}>
+            <span className={`whitespace-nowrap font-semibold text-neutral-800`}>
+              {activeLabel}
+            </span>
+          </div>
+        </nav>
+
+        {rightContent && <div className="shrink-0">{rightContent}</div>}
+      </div>
     </div>
   )
 }
