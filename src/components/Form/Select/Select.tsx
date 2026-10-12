@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
+import { useRinjaniLocale } from '../../../i18n'
 import type { SelectProps } from './Select.types'
 import { buildSelectValue, getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import {
@@ -46,10 +47,10 @@ export const Select = ({
   options,
   value,
   onChange,
-  placeholder = 'Select option...',
+  placeholder,
   floating = false,
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   leftIcon,
   rightIcon,
@@ -61,6 +62,8 @@ export const Select = ({
   readOnly = false,
   id,
 }: SelectProps) => {
+  const { messages } = useRinjaniLocale()
+  const resolvedPlaceholder = placeholder ?? messages.select.placeholder
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [portalPos, setPortalPos] = useState<{ top?: number; bottom?: number; left: number; width: number; maxHeight: number; isPositioned: boolean }>({ left: 0, width: 0, maxHeight: 240, isPositioned: false })
@@ -182,7 +185,7 @@ export const Select = ({
           )}
 
           <span className={`min-w-0 flex-1 ${!selectedOption ? 'font-normal text-neutral-400' : ''}`}>
-            {selectedOption ? selectedOption.label : (floating ? (isFloating ? placeholder : '\u00a0') : placeholder)}
+            {selectedOption ? selectedOption.label : (floating ? (isFloating ? resolvedPlaceholder : '\u00a0') : resolvedPlaceholder)}
           </span>
 
           {floating && label && (
@@ -248,7 +251,7 @@ export const Select = ({
             ))}
             {options.length === 0 && (
               <div className="px-4 py-6 text-center text-xs uppercase tracking-widest text-neutral-400">
-                No data available
+                {messages.select.noData}
               </div>
             )}
           </div>

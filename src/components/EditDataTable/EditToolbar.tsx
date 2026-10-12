@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon, SaveIcon, XIcon } from '../Icons'
 import { Button } from '../Button'
 import { InputField } from '../Form'
+import { useRinjaniLocale } from '../../i18n'
 import type { EditToolbarConfig, EditTableRowState } from './EditDataTable.types'
 import { iconSizeClasses } from './EditDataTable.styles'
 
@@ -13,11 +14,12 @@ interface EditToolbarProps<T> {
 }
 
 export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = [], activeEditStates = [] }: EditToolbarProps<T>) {
+  const { messages } = useRinjaniLocale()
   const {
     title,
     description,
     showSearch = true,
-    searchPlaceholder = 'Search...',
+    searchPlaceholder,
     onSearchChange,
     showAdd = false,
     onAdd,
@@ -37,6 +39,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
     sortOrder = ['search', 'add', 'refresh', 'editAll', 'deleteAll'],
     customElements,
   } = config
+  const resolvedSearchPlaceholder = searchPlaceholder ?? messages.editDataTable.searchPlaceholder
 
   const [searchValue, setSearchValue] = useState('')
   const [isSavingAll, setIsSavingAll] = useState(false)
@@ -107,7 +110,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                   spellCheck={false}
                   inputMode="search"
                   value={searchValue}
-                  placeholder={searchPlaceholder}
+                  placeholder={resolvedSearchPlaceholder}
                   onChange={handleSearch}
                   leftIcon={<SearchIcon />}
                   size={size}
@@ -128,7 +131,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                   size={size}
                   onClick={onRefresh}
                 >
-                  Refresh
+                  {messages.editDataTable.refresh}
                 </Button>
               </div>
             )
@@ -144,7 +147,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                   size={size}
                   onClick={onAdd}
                 >
-                  Add New
+                  {messages.editDataTable.addNew}
                 </Button>
               </div>
             )
@@ -172,7 +175,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                         }
                       }}
                     >
-                      {isSavingAll ? 'Saving...' : 'Save All'}
+                      {isSavingAll ? messages.editDataTable.saving : messages.editDataTable.saveAll}
                     </Button>
                   </div>
                   {showCancelAll && (
@@ -185,7 +188,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                         disabled={isSavingAll}
                         onClick={() => onCancelAll?.(activeEditRows)}
                       >
-                        Cancel All
+                        {messages.editDataTable.cancelAll}
                       </Button>
                     </div>
                   )}
@@ -194,7 +197,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
             }
 
             const hasSelection = selectedRowKeys.length > 0
-            const editLabel = hasSelection ? 'Edit Selected' : 'Edit All'
+            const editLabel = hasSelection ? messages.editDataTable.editSelected : messages.editDataTable.editAll
 
             return showEditAll && (
               <div key="editAll" className="shrink-0">
@@ -222,7 +225,7 @@ export function EditToolbar<T>({ config, selectedRowKeys = [], activeEditRows = 
                   disabled={selectedRowKeys.length === 0}
                   onClick={() => onDeleteAll?.(selectedRowKeys)}
                 >
-                  Delete All
+                  {messages.editDataTable.deleteAll}
                 </Button>
               </div>
             )

@@ -50,7 +50,7 @@ export const PanelNavbar = ({
   const rightElements = activeElements.filter(el => !el.placement || el.placement === 'right').sort((a, b) => a.order - b.order)
 
   return (
-    <nav className="sticky top-0 z-60 flex h-16 items-center justify-between border-b border-neutral-100 bg-white/80 px-4 lg:px-8 backdrop-blur-sm">
+    <nav className="sticky top-0 z-60 flex h-16 items-center justify-between border-b border-neutral-100 bg-white px-4 lg:px-8">
       
       <div className="flex shrink-0 items-center">
         <button

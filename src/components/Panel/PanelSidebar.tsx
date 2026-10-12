@@ -71,7 +71,7 @@ export const PanelSidebar = ({
     <>
       {isOpenMobile && (
         <div
-          className="fixed inset-0 z-55 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-55 bg-black/50 lg:hidden transition-opacity"
           onClick={toggleMobile}
         />
       )}
@@ -114,7 +114,7 @@ export const PanelSidebar = ({
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 w-full bg-white/95 px-3 py-3 backdrop-blur-sm border-t border-neutral-100">
+        <div className="absolute bottom-0 left-0 w-full border-t border-neutral-100 bg-white px-3 py-3">
           <button
             onClick={onLogout}
             disabled={isLoggingOut}

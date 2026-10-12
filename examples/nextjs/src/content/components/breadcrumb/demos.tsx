@@ -14,15 +14,22 @@ export function BasicDemo() {
     <Breadcrumb
       paths={basePaths}
       activeLabel="Breadcrumb"
+      contained={false}
     />
   )
 }
 
 export function ColorsDemo() {
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex w-full flex-col gap-3">
       {(["primary", "secondary", "success", "danger", "warning"] as const).map((color) => (
-        <Breadcrumb key={color} paths={[{ label: "Home", href: "/" }]} activeLabel={color} color={color} />
+        <Breadcrumb
+          key={color}
+          paths={[{ label: "Home", href: "/" }]}
+          activeLabel={color}
+          color={color}
+          contained={false}
+        />
       ))}
     </div>
   )
@@ -30,7 +37,7 @@ export function ColorsDemo() {
 
 export function ContainedDemo() {
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex w-full flex-col gap-3">
       <Breadcrumb paths={basePaths} activeLabel="Filled" contained variant="filled" />
       <Breadcrumb paths={basePaths} activeLabel="Outlined" contained variant="outlined" />
       <Breadcrumb paths={basePaths} activeLabel="Soft" contained variant="soft" />
@@ -47,23 +54,24 @@ export function WithIconsDemo() {
         { label: "Components", href: "/components" },
       ]}
       activeLabel="Breadcrumb"
+      contained={false}
     />
   )
 }
 
 export function CustomSeparatorDemo() {
   return (
-    <div className="flex flex-col gap-3">
-      <Breadcrumb paths={basePaths} activeLabel="Slash" separator="/" />
-      <Breadcrumb paths={basePaths} activeLabel="Arrow" separator={<FiChevronRight size={14} />} />
-      <Breadcrumb paths={basePaths} activeLabel="Dot" separator="·" />
+    <div className="flex w-full flex-col gap-3">
+      <Breadcrumb paths={basePaths} activeLabel="Slash" separator="/" contained={false} />
+      <Breadcrumb paths={basePaths} activeLabel="Arrow" separator={<FiChevronRight size={14} />} contained={false} />
+      <Breadcrumb paths={basePaths} activeLabel="Dot" separator="·" contained={false} />
     </div>
   )
 }
 
 export function AlignmentDemo() {
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <Breadcrumb
         paths={basePaths}
         activeLabel="List"
@@ -85,9 +93,15 @@ export function AlignmentDemo() {
 
 export function SizesDemo() {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       {(["xs", "sm", "md", "lg"] as const).map((size) => (
-        <Breadcrumb key={size} paths={basePaths} activeLabel={`Size ${size}`} size={size} />
+        <Breadcrumb
+          key={size}
+          paths={basePaths}
+          activeLabel={`Size ${size}`}
+          size={size}
+          contained={false}
+        />
       ))}
     </div>
   )

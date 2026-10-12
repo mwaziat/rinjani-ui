@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { HTMLAttributes } from 'react'
 
 export interface CardProps {
   /**
@@ -51,6 +52,22 @@ export interface CardContentProps {
    * Additional CSS classes to override or extend the content area styles.
    */
   className?: string
+}
+
+export interface CardMediaProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Image URL to render as the card media.
+   * Use `children` instead when the media needs custom content or a different element.
+   */
+  image?: string
+  /** Alias for `image`, matching common media component APIs. */
+  src?: string
+  /** Alternative text used when rendering an image. */
+  alt?: string
+  /** Fixed media height. CSS values such as `12rem` are supported. */
+  height?: number | string
+  /** How an image should fit inside the media area. */
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
 }
 
 export interface CardFooterProps {

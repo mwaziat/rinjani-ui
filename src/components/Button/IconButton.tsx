@@ -1,16 +1,7 @@
 import React from 'react'
 import type { IconButtonProps } from './Button.types'
-import { baseButtonStyles, radiusBySize, variants } from './Button.styles'
+import { baseButtonStyles, iconButtonSizes, radiusBySize, variants } from './Button.styles'
 import { LoaderIcon } from '../Icons'
-
-const iconButtonSizes = {
-  xxs: 'h-6 w-6',
-  xs: 'h-8 w-8',
-  sm: 'h-10 w-10',
-  md: 'h-12 w-12',
-  lg: 'h-14 w-14',
-  xl: 'h-16 w-16'
-}
 
 /**
  * A specialized Button component optimized for rendering a single icon without text.

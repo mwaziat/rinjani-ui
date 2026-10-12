@@ -116,6 +116,64 @@ function App() {
 `rinjani-ui/style.css` contains a standalone Tailwind theme/utilities pipeline and Rinjani's default theme tokens. Importing it together with the application's own `@import "tailwindcss"` runs overlapping global CSS layers more than once. This can cause Preflight resets, theme variables, utility order, or color tokens to override each other. In an existing Tailwind application, import `rinjani-ui/theme.css` instead; it contains the default tokens and precompiled Rinjani utilities without adding a second Preflight/base reset. Rinjani components are not isolated in a CSS shadow root and do not have a separate CSS lifecycle.
 
 The React containers (`DialogContainer` and `ToastContainer`) do have their own client-side React lifecycle, but their visual styles still come from the application's Tailwind build in Mode A.
+
+## Optional localization
+
+Rinjani UI includes an optional lightweight locale provider for text owned by the library, such as select placeholders, autocomplete messages, table pagination, loading states, and accessibility labels. Components work without the provider and default to English, so existing integrations do not need to change.
+
+The provider accepts `en`, `id`, and regional values such as `en-US` or `id-ID`:
+
+```tsx
+"use client";
+
+import { RinjaniLocaleProvider } from "rinjani-ui";
+import type { ReactNode } from "react";
+
+export function Providers({ children }: { children: ReactNode }) {
+  return (
+    <RinjaniLocaleProvider locale="id">
+      {children}
+    </RinjaniLocaleProvider>
+  );
+}
+```
+
+With `next-intl`, pass the active locale from the application instead of adding another locale detector:
+
+```tsx
+"use client";
+
+import { useLocale } from "next-intl";
+import { RinjaniLocaleProvider } from "rinjani-ui";
+import type { ReactNode } from "react";
+
+export function Providers({ children }: { children: ReactNode }) {
+  const locale = useLocale();
+
+  return (
+    <RinjaniLocaleProvider locale={locale}>
+      {children}
+    </RinjaniLocaleProvider>
+  );
+}
+```
+
+You can override only the library messages you need. Explicit component props such as `placeholder`, `emptyText`, or `searchPlaceholder` always take priority over provider translations:
+
+```tsx
+<RinjaniLocaleProvider
+  locale="id"
+  translations={{
+    autocomplete: { noResults: "Data tidak ditemukan" },
+    dataTable: { rowsPerPage: "Data per halaman:" },
+  }}
+>
+  {children}
+</RinjaniLocaleProvider>
+```
+
+The provider does not translate application-owned content such as field labels, descriptions, table column headers, or option labels.
+
 ## Available Components
 
 Rinjani UI has grown from a simple Button library into a comprehensive UI kit. Here are the components currently available:

@@ -3,7 +3,9 @@ import * as path from "path";
 
 const nextConfig: NextConfig = {
   turbopack: {
-    root: __dirname,
+    // The docs app consumes the workspace package through a local file dependency.
+    // Keep the repository root visible so Turbopack can follow that junction.
+    root: path.resolve(__dirname, "../.."),
   },
   transpilePackages: ["rinjani-ui"],
   experimental: {

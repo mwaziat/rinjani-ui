@@ -1,4 +1,5 @@
 export { Card } from './Card'
+export { CardMedia } from './CardMedia'
 export { CardHeader } from './CardHeader'
 export { CardContent } from './CardContent'
 export { CardFooter } from './CardFooter'

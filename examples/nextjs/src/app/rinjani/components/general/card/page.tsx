@@ -4,7 +4,7 @@ import { ComponentDemo } from "@/components/docs/ComponentDemo"
 import { PropsTable } from "@/components/docs/PropsTable"
 import { TableOfContents } from "@/components/docs/TableOfContents"
 import { PageHeader } from "@/components/docs/PageHeader"
-import { cardProps, cardHeaderProps, cardContentProps, cardFooterProps } from "./_props"
+import { cardProps, cardHeaderProps, cardContentProps, cardMediaProps, cardFooterProps } from "./_props"
 import { BasicDemo, HeaderActionsDemo, WithIconDemo, NoPaddingDemo, ContentOnlyDemo } from "./_demos"
 
 const tocItems = [
@@ -16,6 +16,7 @@ const tocItems = [
   { id: "api-card", label: "Card API", depth: 2 as const },
   { id: "api-header", label: "Card.Header API", depth: 2 as const },
   { id: "api-content", label: "Card.Content API", depth: 2 as const },
+  { id: "api-media", label: "CardMedia API", depth: 2 as const },
   { id: "api-footer", label: "Card.Footer API", depth: 2 as const },
 ]
 
@@ -68,11 +69,16 @@ export default function Example() {
   )
 }`,
   noPadding: `import { Card } from 'rinjani-ui'
+import { CardMedia } from 'rinjani-ui'
 
 export default function Example() {
   return (
     <Card className="w-72" noPadding>
-      <div className="h-32 bg-gradient-to-br from-primary-400 to-primary-600 rounded-t-xl" />
+      <CardMedia
+        src="/hotel.jpg"
+        alt="Hotel"
+        height={128}
+      />
       <div className="p-4">
         <p className="text-sm font-semibold">Edge-to-edge image</p>
       </div>
@@ -162,6 +168,11 @@ export default async function CardPage() {
         <section id="api-content" className="scroll-mt-24 mt-10">
           <h2 className="text-xl font-semibold text-neutral-800 mb-1">Card.Content API</h2>
           <PropsTable props={cardContentProps} />
+        </section>
+
+        <section id="api-media" className="scroll-mt-24 mt-10">
+          <h2 className="text-xl font-semibold text-neutral-800 mb-1">CardMedia API</h2>
+          <PropsTable props={cardMediaProps} />
         </section>
 
         <section id="api-footer" className="scroll-mt-24 mt-10">

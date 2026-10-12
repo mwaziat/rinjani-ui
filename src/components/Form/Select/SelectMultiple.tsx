@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, XIcon, AlertCircleIcon } from '../../Icons'
+import { useRinjaniLocale } from '../../../i18n'
 import type { SelectMultipleProps } from './Select.types'
 import { getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
@@ -20,10 +21,10 @@ export const SelectMultiple = ({
   options,
   value = [],
   onChange,
-  placeholder = 'Select options...',
+  placeholder,
   floating = false,
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   leftIcon,
   rightIcon,
@@ -34,8 +35,11 @@ export const SelectMultiple = ({
   disabled = false,
   readOnly = false,
   id,
-  emptyText = 'No data available',
+  emptyText,
 }: SelectMultipleProps) => {
+  const { messages } = useRinjaniLocale()
+  const resolvedPlaceholder = placeholder ?? messages.select.multiplePlaceholder
+  const resolvedEmptyText = emptyText ?? messages.select.noData
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [portalPos, setPortalPos] = useState<{ top?: number; bottom?: number; left: number; width: number; maxHeight: number; isPositioned: boolean }>({ left: 0, width: 0, maxHeight: 240, isPositioned: false })
@@ -196,7 +200,7 @@ export const SelectMultiple = ({
           <div className="min-w-0 flex flex-1 flex-wrap gap-1.5">
             {selectedOptions.length === 0 && (
               <span className="font-normal text-neutral-400">
-                {floating ? (isFloating ? placeholder : '\u00a0') : placeholder}
+                {floating ? (isFloating ? resolvedPlaceholder : '\u00a0') : resolvedPlaceholder}
               </span>
             )}
 
@@ -279,7 +283,7 @@ export const SelectMultiple = ({
 
             {options.length === 0 && (
               <div className="px-4 py-6 text-center text-xs uppercase tracking-widest text-neutral-400">
-                {emptyText}
+                {resolvedEmptyText}
               </div>
             )}
           </div>

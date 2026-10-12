@@ -1,5 +1,6 @@
 import React from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icons'
+import { useRinjaniLocale } from '../../i18n'
 import type { PaginationConfig } from './DataTable.types'
 import { sizeClasses, selectSizeClasses, radiusBySize, activeVariants, selectColorMap, iconSizeClasses } from './DataTable.styles'
 import { getPageNumbers } from './DataTable.utils'
@@ -9,6 +10,7 @@ interface PaginationProps {
 }
 
 export const Pagination = ({ config }: PaginationProps) => {
+  const { messages } = useRinjaniLocale()
   const {
     page,
     limit,
@@ -54,10 +56,10 @@ export const Pagination = ({ config }: PaginationProps) => {
     <div className="flex flex-col lg:flex-row justify-between items-center p-5 text-sm text-neutral-500 border-t border-neutral-100 gap-4">
       <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
         <div>
-          Showing <span className="font-medium text-neutral-900">{totalItems === 0 ? 0 : startItem}</span> to <span className="font-medium text-neutral-900">{endItem}</span> of <span className="font-medium text-neutral-900">{totalItems}</span> results
+          {messages.dataTable.showing} <span className="font-medium text-neutral-900">{totalItems === 0 ? 0 : startItem}</span> {messages.dataTable.to} <span className="font-medium text-neutral-900">{endItem}</span> {messages.dataTable.of} <span className="font-medium text-neutral-900">{totalItems}</span> {messages.dataTable.results}
         </div>
         <div className="flex items-center gap-2">
-          <span className="whitespace-nowrap">Rows per page:</span>
+          <span className="whitespace-nowrap">{messages.dataTable.rowsPerPage}</span>
           <select
             value={limit}
             onChange={handleLimitChange}
@@ -74,6 +76,7 @@ export const Pagination = ({ config }: PaginationProps) => {
         <button
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
+          aria-label={messages.dataTable.previousPage}
           className={`flex items-center justify-center font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${inactiveClass} ${currentSizeClass}`}
         >
           <ChevronLeftIcon size={currentIconSize} />
@@ -97,6 +100,7 @@ export const Pagination = ({ config }: PaginationProps) => {
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || totalPages === 0}
+          aria-label={messages.dataTable.nextPage}
           className={`flex items-center justify-center font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${inactiveClass} ${currentSizeClass}`}
         >
           <ChevronRightIcon size={currentIconSize} />

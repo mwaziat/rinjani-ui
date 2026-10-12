@@ -8,6 +8,7 @@ import type { DataTableProps, ColumnDef } from './DataTable.types'
 import type { SortState } from '../TableSorting'
 import { hoverColorClasses, stripedColorClasses, checkboxColorClasses, alignClasses } from './DataTable.styles'
 import { getDepth, getLeafColumns, generateHeaderRows } from './DataTable.utils'
+import { useRinjaniLocale } from '../../i18n'
 
 export function DataTable<T>({
   data,
@@ -28,6 +29,7 @@ export function DataTable<T>({
   expandable,
   contained = true,
 }: DataTableProps<T>) {
+  const { messages } = useRinjaniLocale()
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [isScrolledX, setIsScrolledX] = useState(false)
   const [localSelectedKeys, setLocalSelectedKeys] = useState<(string | number)[]>([])
@@ -254,7 +256,7 @@ export function DataTable<T>({
                   <td colSpan={totalColumnsCount} className="py-12 text-center text-neutral-500">
                     <div className="flex flex-col items-center justify-center gap-4">
                       <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-                      <span className="font-medium text-neutral-600">Loading data...</span>
+                      <span className="font-medium text-neutral-600">{messages.dataTable.loading}</span>
                     </div>
                   </td>
                 </tr>
@@ -262,7 +264,7 @@ export function DataTable<T>({
             ) : displayedData.length === 0 ? (
               <tr>
                 <td colSpan={totalColumnsCount} className="p-8 text-center text-neutral-500">
-                  {emptyDisplay || 'No data available.'}
+                  {emptyDisplay || messages.dataTable.noData}
                 </td>
               </tr>
             ) : (

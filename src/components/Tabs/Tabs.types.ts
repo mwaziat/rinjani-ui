@@ -69,7 +69,7 @@ export interface TabsProps {
   variant?: TabVariant
   /** 
    * Size of the tabs. 
-   * @default "sm"
+   * @default "md"
    */
   size?: TabSize
   /** 

@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Card, CardHeader, CardContent, CardFooter, Button, Badge } from "rinjani-ui"
+import { Card, CardMedia, CardHeader, CardContent, CardFooter, Button, Badge } from "rinjani-ui"
 import { FiSettings } from "react-icons/fi"
 
 export function BasicDemo() {
@@ -48,10 +48,10 @@ export function WithIconDemo() {
 export function NoPaddingDemo() {
   return (
     <Card className="w-72" noPadding>
-      <div className="h-32 bg-gradient-to-br from-primary-400 to-primary-600 rounded-t-xl" />
+      <CardMedia height={128} className="bg-gradient-to-br from-primary-400 to-primary-600" />
       <div className="p-4">
         <p className="text-sm font-semibold text-neutral-800">Edge-to-edge image</p>
-        <p className="text-sm text-neutral-500 mt-1">noPadding lets content touch the card borders.</p>
+        <p className="text-sm text-neutral-500 mt-1">CardMedia stays flush while the content keeps its own padding.</p>
       </div>
     </Card>
   )

@@ -8,6 +8,7 @@ import {
   activeIconSizes,
   activeLabelSizes,
   activeSubtitleSizes,
+  radiusBySize,
   pathSizes,
   breadcrumbJustifyStyles,
 } from './Breadcrumb.styles'
@@ -50,12 +51,13 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const wrapperStyles = contained ? containedBreadcrumbStyles : ''
   const selectedVariant = colorVariants[color]
   const pathVariantClass = pathVariants[variant][color]
+  const radiusClass = radiusBySize[size]
 
   return (
     <div className={`${baseBreadcrumbWrapperStyles} ${breadcrumbJustifyStyles[justify]} ${wrapperStyles} ${className}`}>
       <div className="flex items-center gap-3">
         {activeIcon && (
-          <div className={`rounded-lg ${activeIconSizes[size]} ${selectedVariant}`}>
+          <div className={`${radiusClass} ${activeIconSizes[size]} ${selectedVariant}`}>
             {activeIcon}
           </div>
         )}
@@ -77,7 +79,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
             <React.Fragment key={path.href}>
               {index > 0 && <span className="shrink-0 text-neutral-400 flex items-center justify-center">{separator}</span>}
               <a href={path.href} className="group flex items-center transition-all">
-                <div className={`flex items-center rounded-lg border transition-all ${pathSizes[size]} ${pathVariantClass}`}>
+                <div className={`flex items-center ${radiusClass} border transition-all ${pathSizes[size]} ${pathVariantClass}`}>
                   {path.icon && (
                     <span className={`shrink-0 flex items-center transition-colors`}>
                       {path.icon}

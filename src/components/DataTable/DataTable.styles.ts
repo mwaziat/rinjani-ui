@@ -41,27 +41,27 @@ export const alignClasses: Record<string, string> = {
 }
 
 export const sizeClasses = {
-  xxs: "min-w-7 h-7 text-[10px] px-1",
+  xxs: "min-w-6 h-6 text-[10px] px-1",
   xs: "min-w-8 h-8 text-xs px-1",
-  sm: "min-w-9 h-9 text-sm px-1.5",
-  md: "min-w-11 h-11 text-base px-2",
-  lg: "min-w-[52px] h-[52px] text-lg px-2",
-  xl: "min-w-14 h-14 text-xl px-2"
+  sm: "min-w-10 h-10 text-sm px-1.5",
+  md: "min-w-12 h-12 text-base px-2",
+  lg: "min-w-14 h-14 text-lg px-2",
+  xl: "min-w-16 h-16 text-xl px-2"
 }
 
 export const selectSizeClasses = {
-  xxs: "h-7 text-[10px] pl-2 pr-6",
+  xxs: "h-6 text-[10px] pl-2 pr-6",
   xs: "h-8 text-xs pl-2 pr-6",
-  sm: "h-9 text-sm pl-2.5 pr-7",
-  md: "h-11 text-base pl-3 pr-8",
-  lg: "h-[52px] text-lg pl-4 pr-10",
-  xl: "h-14 text-xl pl-4 pr-10",
+  sm: "h-10 text-sm pl-2.5 pr-7",
+  md: "h-12 text-base pl-3 pr-8",
+  lg: "h-14 text-lg pl-4 pr-10",
+  xl: "h-16 text-xl pl-4 pr-10",
 }
 
 export const radiusBySize = {
-  xxs: 'rounded-md',
-  xs: 'rounded-md',
-  sm: 'rounded-lg',
+  xxs: 'rounded',
+  xs: 'rounded',
+  sm: 'rounded-md',
   md: 'rounded-lg',
   lg: 'rounded-xl',
   xl: 'rounded-xl',
@@ -117,12 +117,12 @@ export const selectColorMap: Record<string, string> = {
 }
 
 export const inputSizeClasses = {
-  xxs: "h-7 text-[10px] pl-7 pr-2",
+  xxs: "h-6 text-[10px] pl-7 pr-2",
   xs: "h-8 text-xs pl-8 pr-2.5",
-  sm: "h-9 text-sm pl-9 pr-3",
-  md: "h-11 text-base pl-10 pr-4",
-  lg: "h-[52px] text-lg pl-11 pr-5",
-  xl: "h-14 text-xl pl-12 pr-6"
+  sm: "h-10 text-sm pl-9 pr-3",
+  md: "h-12 text-base pl-10 pr-4",
+  lg: "h-14 text-lg pl-11 pr-5",
+  xl: "h-16 text-xl pl-12 pr-6"
 }
 
 export const iconSizeClasses: Record<string, number> = {

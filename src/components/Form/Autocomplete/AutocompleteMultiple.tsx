@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon, XIcon, AlertCircleIcon } from '../../Icons'
+import { useRinjaniLocale } from '../../../i18n'
 import type { AutocompleteMultipleProps } from './AutocompleteMultiple.types'
 import { filterOptionsByLabel, getSelectValueKey, isMutableInteraction, scrollOptionIntoView, toOptionKey, useOptionResolver, useStableInputId, iconSizeMap, clearIconSizeMap } from '../shared'
 import type { SelectOption, SelectValue } from '../types'
@@ -49,10 +50,10 @@ export const AutocompleteMultiple = ({
   options,
   value = [],
   onChange,
-  placeholder = 'Select options...',
+  placeholder,
   floating = false,
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   leftIcon,
   rightIcon,
@@ -63,15 +64,20 @@ export const AutocompleteMultiple = ({
   disabled = false,
   readOnly = false,
   id,
-  emptyText = 'No results found',
+  emptyText,
   enableAddItem = false,
-  addItemLabel = 'Add New Item',
-  addItemPlaceholder = 'Type new item',
+  addItemLabel,
+  addItemPlaceholder,
   addItemMode = 'default',
   onAddItem,
   onAddItemClick,
   onSearch,
 }: AutocompleteMultipleProps) => {
+  const { messages } = useRinjaniLocale()
+  const resolvedPlaceholder = placeholder ?? messages.autocomplete.multiplePlaceholder
+  const resolvedEmptyText = emptyText ?? messages.autocomplete.noResults
+  const resolvedAddItemLabel = addItemLabel ?? messages.autocomplete.addNewItem
+  const resolvedAddItemPlaceholder = addItemPlaceholder ?? messages.autocomplete.addItemPlaceholder
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [portalPos, setPortalPos] = useState<{ top?: number; bottom?: number; left: number; width: number; maxHeight: number; isPositioned: boolean }>({ left: 0, width: 0, maxHeight: 240, isPositioned: false })
@@ -310,7 +316,7 @@ export const AutocompleteMultiple = ({
           <div className="min-w-0 flex flex-1 flex-wrap gap-1.5">
             {selectedOptions.length === 0 && (
               <span className="font-normal text-neutral-400">
-                {floating ? (isFloating ? placeholder : '\u00a0') : placeholder}
+                {floating ? (isFloating ? resolvedPlaceholder : '\u00a0') : resolvedPlaceholder}
               </span>
             )}
 
@@ -378,7 +384,7 @@ export const AutocompleteMultiple = ({
                 ref={searchInputRef}
                 type="text"
                 value={query}
-                placeholder="Search..."
+                placeholder={messages.autocomplete.search}
                 className={`w-full rounded-md border border-neutral-300 bg-white py-2.5 pl-9 pr-3 text-sm font-normal text-neutral-900 outline-none placeholder:font-normal placeholder:text-neutral-400 ${error ? 'focus:border-danger-500 focus:ring-0' : colorMap[color].input}`}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
@@ -432,7 +438,7 @@ export const AutocompleteMultiple = ({
             {filteredOptions.length === 0 && (
               <div className="space-y-3 px-4 py-4">
                 <div className="text-center text-xs font-medium uppercase tracking-widest text-neutral-400">
-                  {emptyText}
+                  {resolvedEmptyText}
                 </div>
 
                 {enableAddItem && !isAddItemOpen && (
@@ -445,7 +451,7 @@ export const AutocompleteMultiple = ({
                     }}
                   >
                     <PlusIcon size={14} />
-                    {addItemLabel}
+                    {resolvedAddItemLabel}
                   </button>
                 )}
 
@@ -455,7 +461,7 @@ export const AutocompleteMultiple = ({
                       <input
                         type="text"
                         value={addItemValue}
-                        placeholder={addItemPlaceholder}
+                        placeholder={resolvedAddItemPlaceholder}
                         className={`flex-1 rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-900 outline-none placeholder:text-neutral-300 ${colorMap[color].input}`}
                         onChange={(event) => setAddItemValue(event.target.value)}
                         onKeyDown={(event) => {
@@ -473,7 +479,7 @@ export const AutocompleteMultiple = ({
                           setIsAddItemOpen(false)
                           setAddItemValue('')
                         }}
-                        aria-label="Cancel add item"
+                        aria-label={messages.autocomplete.cancelAddItem}
                       >
                         <XIcon size={16} />
                       </button>
@@ -484,7 +490,7 @@ export const AutocompleteMultiple = ({
                           event.preventDefault()
                           handleSaveAddItem()
                         }}
-                        aria-label="Save new item"
+                        aria-label={messages.autocomplete.saveNewItem}
                       >
                         <CheckIcon size={16} />
                       </button>

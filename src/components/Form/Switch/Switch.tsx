@@ -29,7 +29,7 @@ export const Switch = ({
   onChange,
   label,
   name,
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   error,
   required,

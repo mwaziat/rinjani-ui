@@ -65,6 +65,51 @@ export const cardContentProps: PropRow[] = [
   },
 ]
 
+export const cardMediaProps: PropRow[] = [
+  {
+    name: "image",
+    type: "string",
+    default: "—",
+    description: "Image URL to render as the card media.",
+  },
+  {
+    name: "src",
+    type: "string",
+    default: "—",
+    description: "Alias for image. Use either image/src or custom children.",
+  },
+  {
+    name: "alt",
+    type: "string",
+    default: '""',
+    description: "Alternative text for the rendered image.",
+  },
+  {
+    name: "height",
+    type: "number | string",
+    default: "—",
+    description: "Fixed media height, including CSS values such as 12rem.",
+  },
+  {
+    name: "objectFit",
+    type: '"cover" | "contain" | "fill" | "none" | "scale-down"',
+    default: '"cover"',
+    description: "Controls how an image fits inside the media area.",
+  },
+  {
+    name: "children",
+    type: "ReactNode",
+    default: "—",
+    description: "Custom media content when image/src is not provided.",
+  },
+  {
+    name: "className",
+    type: "string",
+    default: "—",
+    description: "Additional CSS classes for the media container.",
+  },
+]
+
 export const cardFooterProps: PropRow[] = [
   {
     name: "children",

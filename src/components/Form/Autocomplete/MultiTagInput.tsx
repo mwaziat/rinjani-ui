@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { PlusIcon, XIcon, AlertCircleIcon } from '../../Icons'
+import { useRinjaniLocale } from '../../../i18n'
 import type { MultiTagInputProps } from './MultiTagInput.types'
 import { useStableInputId, iconSizeMap } from '../shared'
 import type { MultiTagValue, MultiTagValueMode } from '../types'
@@ -42,10 +43,10 @@ export const MultiTagInput = ({
   label,
   values = [],
   onChange,
-  placeholder = 'Type and press Enter...',
+  placeholder,
   floating = false,
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   leftIcon,
   rightIcon,
@@ -59,6 +60,8 @@ export const MultiTagInput = ({
   readOnly = false,
   id,
 }: MultiTagInputProps) => {
+  const { messages } = useRinjaniLocale()
+  const resolvedPlaceholder = placeholder ?? messages.multiTagInput.placeholder
   const [inputValue, setInputValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const inputId = useStableInputId(id, 'multitag')
@@ -167,7 +170,7 @@ export const MultiTagInput = ({
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           disabled={disabled}
           readOnly={readOnly}
           aria-readonly={readOnly}

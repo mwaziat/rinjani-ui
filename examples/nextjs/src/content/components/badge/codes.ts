@@ -1,21 +1,20 @@
-"use client"
+export const badgeCodes = {
+  basic: `import { Badge } from 'rinjani-ui'
 
-import React from "react"
-import { Badge } from "rinjani-ui"
-import { FiCheck, FiX, FiStar, FiAlertCircle } from "react-icons/fi"
-
-export function BasicDemo() {
+export default function Example() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex gap-3">
       <Badge variant="filled">Filled</Badge>
       <Badge variant="outlined">Outlined</Badge>
       <Badge variant="soft">Soft</Badge>
       <Badge variant="text">Text</Badge>
     </div>
   )
-}
+}`,
 
-export function ColorsDemo() {
+  colors: `import { Badge } from 'rinjani-ui'
+
+export default function Example() {
   return (
     <div className="flex flex-wrap gap-3">
       <Badge color="primary">Primary</Badge>
@@ -27,22 +26,26 @@ export function ColorsDemo() {
       <Badge color="neutral">Neutral</Badge>
     </div>
   )
-}
+}`,
 
-export function SizesDemo() {
+  sizes: `import { Badge } from 'rinjani-ui'
+
+export default function Example() {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Badge size="xxs">XXSmall</Badge>
-      <Badge size="xs">XSmall</Badge>
-      <Badge size="sm">Small</Badge>
-      <Badge size="md">Medium</Badge>
-      <Badge size="lg">Large</Badge>
-      <Badge size="xl">XLarge</Badge>
+      <Badge size="xxs">Badge XXS</Badge>
+      <Badge size="xs">Badge XS</Badge>
+      <Badge size="sm">Badge SM</Badge>
+      <Badge size="md">Badge MD</Badge>
+      <Badge size="lg">Badge LG</Badge>
+      <Badge size="xl">Badge XL</Badge>
     </div>
   )
-}
+}`,
 
-export function PillDemo() {
+  pill: `import { Badge } from 'rinjani-ui'
+
+export default function Example() {
   return (
     <div className="flex flex-wrap gap-3">
       <Badge isPill>Default</Badge>
@@ -51,9 +54,12 @@ export function PillDemo() {
       <Badge isPill color="warning" variant="soft">Warning</Badge>
     </div>
   )
-}
+}`,
 
-export function WithIconsDemo() {
+  icons: `import { Badge } from 'rinjani-ui'
+import { FiCheck, FiX, FiStar, FiAlertCircle } from 'react-icons/fi'
+
+export default function Example() {
   return (
     <div className="flex flex-wrap gap-3">
       <Badge leftIcon={<FiCheck size={12} />} color="success">Approved</Badge>
@@ -62,15 +68,26 @@ export function WithIconsDemo() {
       <Badge rightIcon={<FiAlertCircle size={12} />} color="info" variant="outlined">Notice</Badge>
     </div>
   )
-}
+}`,
 
-export function StatusDemo() {
+  status: `import { Badge } from 'rinjani-ui'
+
+export default function Example() {
   return (
     <div className="flex flex-wrap gap-3">
-      <Badge color="success" variant="soft" isPill leftIcon={<span className="w-1.5 h-1.5 rounded-full bg-success-500 inline-block" />}>Active</Badge>
-      <Badge color="warning" variant="soft" isPill leftIcon={<span className="w-1.5 h-1.5 rounded-full bg-warning-500 inline-block" />}>Pending</Badge>
-      <Badge color="danger" variant="soft" isPill leftIcon={<span className="w-1.5 h-1.5 rounded-full bg-danger-500 inline-block" />}>Inactive</Badge>
-      <Badge color="neutral" variant="soft" isPill leftIcon={<span className="w-1.5 h-1.5 rounded-full bg-neutral-400 inline-block" />}>Draft</Badge>
+      <Badge color="success" variant="soft" isPill
+        leftIcon={<span className="inline-block h-1.5 w-1.5 rounded-full bg-success-500" />}>
+        Active
+      </Badge>
+      <Badge color="warning" variant="soft" isPill
+        leftIcon={<span className="inline-block h-1.5 w-1.5 rounded-full bg-warning-500" />}>
+        Pending
+      </Badge>
+      <Badge color="danger" variant="soft" isPill
+        leftIcon={<span className="inline-block h-1.5 w-1.5 rounded-full bg-danger-500" />}>
+        Inactive
+      </Badge>
     </div>
   )
-}
+}`,
+} as const

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { SearchIcon, PlusIcon, RefreshIcon, TrashIcon, PencilIcon } from '../Icons'
 import { Button } from '../Button'
 import { InputField } from '../Form'
+import { useRinjaniLocale } from '../../i18n'
 import type { ToolbarConfig } from './DataTable.types'
 import { iconSizeClasses } from './DataTable.styles'
 
@@ -11,11 +12,12 @@ interface ToolbarProps {
 }
 
 export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
+  const { messages } = useRinjaniLocale()
   const {
     title,
     description,
     showSearch = true,
-    searchPlaceholder = 'Search...',
+    searchPlaceholder,
     onSearchChange,
     showAdd = false,
     onAdd,
@@ -31,6 +33,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
     sortOrder = ['search', 'add', 'refresh', 'editAll', 'deleteAll'],
     customElements,
   } = config
+  const resolvedSearchPlaceholder = searchPlaceholder ?? messages.dataTable.searchPlaceholder
 
   const [searchValue, setSearchValue] = useState('')
 
@@ -103,7 +106,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                   spellCheck={false}
                   inputMode="search"
                   value={searchValue}
-                  placeholder={searchPlaceholder}
+                  placeholder={resolvedSearchPlaceholder}
                   onChange={handleSearch}
                   leftIcon={<SearchIcon />}
                   size={size}
@@ -124,7 +127,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                   size={size}
                   onClick={onRefresh}
                 >
-                  Refresh
+                  {messages.dataTable.refresh}
                 </Button>
               </div>
             )
@@ -140,7 +143,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                   size={size}
                   onClick={onAdd}
                 >
-                  Add New
+                  {messages.dataTable.addNew}
                 </Button>
               </div>
             )
@@ -157,7 +160,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                   disabled={selectedRowKeys.length === 0}
                   onClick={() => onEditAll?.(selectedRowKeys)}
                 >
-                  Edit All
+                  {messages.dataTable.editAll}
                 </Button>
               </div>
             )
@@ -174,7 +177,7 @@ export const Toolbar = ({ config, selectedRowKeys = [] }: ToolbarProps) => {
                   disabled={selectedRowKeys.length === 0}
                   onClick={() => onDeleteAll?.(selectedRowKeys)}
                 >
-                  Delete All
+                  {messages.dataTable.deleteAll}
                 </Button>
               </div>
             )

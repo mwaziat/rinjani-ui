@@ -1,6 +1,10 @@
 export const cardStyles = {
   root: 'bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-xs transition-shadow duration-300 hover:shadow-sm',
   contentPadding: 'p-6',
+  media: {
+    root: 'relative block w-full overflow-hidden',
+    image: 'block h-full w-full',
+  },
   header: {
     root: 'flex items-center justify-between mb-6 gap-4',
     iconWrapper: 'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neutral-50 text-neutral-600',

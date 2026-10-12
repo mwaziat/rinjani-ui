@@ -23,7 +23,7 @@ export const radiusBySize = {
   xxs: 'rounded',
   xs: 'rounded',
   sm: 'rounded-md',
-  md: 'rounded-md',
+  md: 'rounded-lg',
   lg: 'rounded-lg',
   xl: 'rounded-xl',
 } satisfies Record<TooltipSize, string>

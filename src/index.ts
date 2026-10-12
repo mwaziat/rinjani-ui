@@ -1,6 +1,7 @@
 export * from './components/Button'
 export * from './components/Badge'
 export * from './components/Card'
+export * from './i18n'
 export * from './components/Tooltip'
 export * from './components/Breadcrumb'
 export * from './components/Alert'

@@ -143,7 +143,7 @@ export interface TreeProps {
 	renderHeader?: ((props: TreeHeaderRenderProps) => React.ReactNode) | undefined
 	/** Color theme for the tree. @default "primary" */
 	color?: TreeColor | undefined
-	/** Size theme for the tree. @default "md" */
+	/** Size theme for the tree. @default "sm" */
 	size?: TreeSize | undefined
 	/** Visual style for the tree. @default "minimal" */
 	variant?: TreeVariant | undefined

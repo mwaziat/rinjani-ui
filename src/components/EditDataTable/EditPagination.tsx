@@ -3,12 +3,14 @@ import { ChevronLeftIcon, ChevronRightIcon } from '../Icons'
 import type { EditPaginationConfig } from './EditDataTable.types'
 import { sizeClasses, selectSizeClasses, radiusBySize, activeVariants, selectColorMap, iconSizeClasses } from './EditDataTable.styles'
 import { getPageNumbers } from './EditDataTable.utils'
+import { useRinjaniLocale } from '../../i18n'
 
 interface EditPaginationProps {
   config: EditPaginationConfig
 }
 
 export const EditPagination = ({ config }: EditPaginationProps) => {
+  const { messages } = useRinjaniLocale()
   const {
     page,
     limit,
@@ -55,10 +57,10 @@ export const EditPagination = ({ config }: EditPaginationProps) => {
     <div className="flex flex-col lg:flex-row justify-between items-center p-5 text-sm text-neutral-500 border-t border-neutral-100 gap-4">
       <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
         <div>
-          Showing <span className="font-medium text-neutral-900">{totalItems === 0 ? 0 : startItem}</span> to <span className="font-medium text-neutral-900">{endItem}</span> of <span className="font-medium text-neutral-900">{totalItems}</span> results
+          {messages.editDataTable.showing} <span className="font-medium text-neutral-900">{totalItems === 0 ? 0 : startItem}</span> {messages.editDataTable.to} <span className="font-medium text-neutral-900">{endItem}</span> {messages.editDataTable.of} <span className="font-medium text-neutral-900">{totalItems}</span> {messages.editDataTable.results}
         </div>
         <div className="flex items-center gap-2">
-          <span className="whitespace-nowrap">Rows per page:</span>
+          <span className="whitespace-nowrap">{messages.editDataTable.rowsPerPage}</span>
           <select
             value={limit}
             onChange={handleLimitChange}
@@ -75,6 +77,7 @@ export const EditPagination = ({ config }: EditPaginationProps) => {
         <button
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
+          aria-label={messages.editDataTable.previousPage}
           className={`flex items-center justify-center font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${inactiveClass} ${currentSizeClass}`}
         >
           <ChevronLeftIcon size={currentIconSize} />
@@ -98,6 +101,7 @@ export const EditPagination = ({ config }: EditPaginationProps) => {
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages || totalPages === 0}
+          aria-label={messages.editDataTable.nextPage}
           className={`flex items-center justify-center font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${inactiveClass} ${currentSizeClass}`}
         >
           <ChevronRightIcon size={currentIconSize} />

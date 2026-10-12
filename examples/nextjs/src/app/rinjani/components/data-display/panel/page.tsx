@@ -101,7 +101,7 @@ export default async function PanelPage() {
           <p className="text-sm text-neutral-600 mb-4">
             Wrap your page content in <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">PanelLayout</code> in a client layout component.
           </p>
-          <CodeBlock code={setupHl} rawCode={codes.setup} />
+          <CodeBlock html={setupHl} source={codes.setup} language="tsx" />
         </section>
 
         <section id="menu" className="scroll-mt-24 mt-10">
@@ -110,7 +110,7 @@ export default async function PanelPage() {
             Each <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">SidebarMenuNode</code> requires a unique numeric <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">id</code> and a <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">label</code>.
             Set <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">href</code> for leaf items and <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">children</code> for groups.
           </p>
-          <CodeBlock code={menuHl} rawCode={codes.menu} />
+          <CodeBlock html={menuHl} source={codes.menu} language="tsx" />
         </section>
 
         <section id="active" className="scroll-mt-24 mt-10">
@@ -119,7 +119,7 @@ export default async function PanelPage() {
             Pass a <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">Set&lt;number&gt;</code> of active node IDs.
             In Next.js, derive this from <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded font-mono">usePathname()</code>.
           </p>
-          <CodeBlock code={activeHl} rawCode={codes.active} />
+          <CodeBlock html={activeHl} source={codes.active} language="tsx" />
         </section>
 
         <section id="api-layout" className="scroll-mt-24 mt-10">

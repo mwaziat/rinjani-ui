@@ -13,7 +13,7 @@ export interface SwitchProps {
   label?: ReactNode
   /** The HTML `name` attribute applied to the underlying checkbox input. */
   name?: string
-  /** The size of the switch. @default "md" */
+  /** The size of the switch. @default "sm" */
   size?: FormSize
   /** The color theme applied when the switch is in the "on" state. @default "primary" */
   color?: FormColor

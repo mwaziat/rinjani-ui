@@ -59,12 +59,12 @@ export interface BreadcrumbProps {
   /**
    * The visual style variant of the breadcrumb.
    * Note: Only clearly visible if `contained` is set to true.
-   * @default "text"
+   * @default "line"
    */
   variant?: BreadcrumbVariant
   /**
    * The size of the breadcrumb affecting font-size and spacing.
-   * @default "sm"
+   * @default "md"
    */
   size?: BreadcrumbSize
   /**
@@ -79,7 +79,7 @@ export interface BreadcrumbProps {
   /**
    * If true, wraps the breadcrumb trail inside a styled container block 
    * based on the chosen `variant`.
-   * @default false
+   * @default true
    */
   contained?: boolean
   /**

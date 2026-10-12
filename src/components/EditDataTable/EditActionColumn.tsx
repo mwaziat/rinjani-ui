@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { EyeIcon, PencilIcon, TrashIcon, CheckIcon, XIcon, MoreVerticalIcon } from '../Icons'
 import { IconButton } from '../Button'
 import { Dropdown, DropdownList, DropdownItem } from '../Dropdown'
+import { useRinjaniLocale } from '../../i18n'
 import type { EditActionColumnConfig, EditTableRowState, EditRowStateUpdater } from './EditDataTable.types'
 
 interface EditActionColumnProps<T> {
@@ -11,6 +12,7 @@ interface EditActionColumnProps<T> {
 }
 
 export function EditActionColumn<T>({ config, rowState, onStateChange }: EditActionColumnProps<T>) {
+  const { messages } = useRinjaniLocale()
   const [isSaving, setIsSaving] = useState(false)
   const {
     type = 'inline',
@@ -90,7 +92,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
       if (key === 'detail' && !isEditing) {
         return onDetail ? (
           <DropdownItem key="detail" leftIcon={<EyeIcon size={14} />} onClick={() => onDetail(rowState.original)}>
-            Detail
+            {messages.editDataTable.detail}
           </DropdownItem>
         ) : null
       }
@@ -99,17 +101,17 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
           return (
             <React.Fragment key="edit-actions">
                 <DropdownItem key="save" leftIcon={<CheckIcon size={14} />} onClick={handleSaveClick}>
-                {isSaving ? 'Saving...' : 'Save'}
+                {isSaving ? messages.editDataTable.saving : messages.editDataTable.save}
               </DropdownItem>
                 <DropdownItem key="cancel" leftIcon={<XIcon size={14} />} color="danger" onClick={handleCancelClick}>
-                Cancel
+                {messages.editDataTable.cancel}
               </DropdownItem>
             </React.Fragment>
           )
         } else {
           return (
             <DropdownItem key="edit" leftIcon={<PencilIcon size={14} />} onClick={handleEditClick}>
-              Edit
+              {messages.editDataTable.edit}
             </DropdownItem>
           )
         }
@@ -117,7 +119,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
       if (key === 'delete' && !isEditing) {
         return onDelete ? (
           <DropdownItem key="delete" leftIcon={<TrashIcon size={14} />} color="danger" onClick={() => onDelete(rowState.original)}>
-            Delete
+            {messages.editDataTable.delete}
           </DropdownItem>
         ) : null
       }
@@ -166,7 +168,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
           color={color}
           size={size}
           onClick={() => onDetail(rowState.original)}
-          title="Detail"
+          title={messages.editDataTable.detail}
         />
       ) : null
     }
@@ -181,7 +183,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
               color="primary"
               size={size}
               onClick={handleSaveClick}
-              title="Save"
+              title={messages.editDataTable.save}
               disabled={isSaving}
             />
             <IconButton
@@ -191,7 +193,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
               color="danger"
               size={size}
               onClick={handleCancelClick}
-              title="Cancel"
+              title={messages.editDataTable.cancel}
             />
           </React.Fragment>
         )
@@ -204,7 +206,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
             color={color}
             size={size}
             onClick={handleEditClick}
-            title="Edit"
+            title={messages.editDataTable.edit}
           />
         )
       }
@@ -218,7 +220,7 @@ export function EditActionColumn<T>({ config, rowState, onStateChange }: EditAct
           color="danger"
           size={size}
           onClick={() => onDelete(rowState.original)}
-          title="Delete"
+          title={messages.editDataTable.delete}
         />
       ) : null
     }

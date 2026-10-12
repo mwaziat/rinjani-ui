@@ -4,27 +4,27 @@ export const baseButtonStyles = "inline-flex items-center justify-center font-se
 export const baseIconButtonStyles = "inline-flex items-center justify-center transition-all active:scale-90 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer shrink-0"
 
 export const buttonSizes: Record<ButtonSize, string> = {
-  xxs: "min-h-7 px-2 py-1 text-[10px] gap-1",
+  xxs: "min-h-6 px-2 py-1 text-[10px] gap-1",
   xs: "min-h-8 px-2.5 py-1.5 text-xs gap-1.5",
-  sm: "min-h-9 px-3 py-2 text-sm gap-1.5",
-  md: "min-h-11 px-4 py-2.5 text-base gap-2",
-  lg: "min-h-[52px] px-5 py-3 text-lg gap-2.5",
-  xl: "min-h-14 px-6 py-3.5 text-xl gap-3"
+  sm: "min-h-10 px-3 py-2 text-sm gap-1.5",
+  md: "min-h-12 px-4 py-2.5 text-base gap-2",
+  lg: "min-h-14 px-5 py-3 text-lg gap-2.5",
+  xl: "min-h-16 px-6 py-3.5 text-xl gap-3"
 }
 
 export const iconButtonSizes: Record<ButtonSize, string> = {
-  xxs: "h-7 w-7 text-[14px]",
+  xxs: "h-6 w-6 text-[14px]",
   xs: "h-8 w-8 text-[16px]",
-  sm: "h-9 w-9 text-[18px]",
-  md: "h-11 w-11 text-[22px]",
-  lg: "h-[52px] w-[52px] text-[26px]",
-  xl: "h-14 w-14 text-[30px]"
+  sm: "h-10 w-10 text-[18px]",
+  md: "h-12 w-12 text-[22px]",
+  lg: "h-14 w-14 text-[26px]",
+  xl: "h-16 w-16 text-[30px]"
 }
 
 export const radiusBySize: Record<ButtonSize, string> = {
-  xxs: 'rounded-md',
-  xs: 'rounded-md',
-  sm: 'rounded-lg',
+  xxs: 'rounded',
+  xs: 'rounded',
+  sm: 'rounded-md',
   md: 'rounded-lg',
   lg: 'rounded-xl',
   xl: 'rounded-xl',

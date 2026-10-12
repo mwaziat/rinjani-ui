@@ -18,6 +18,7 @@ import {
   setChildrenById,
   type FlatTreeEntry,
 } from './Tree.utils'
+import { useRinjaniLocale } from '../../i18n'
 
 const EMPTY_NODES: TreeNodeData[] = []
 
@@ -75,14 +76,19 @@ export const Tree = ({
   size = 'sm',
   variant = 'minimal',
   actionsOnHover = false,
-  title = 'Tree Structure',
-  description = 'Manage hierarchical data',
-  emptyText = 'No data available',
+  title,
+  description,
+  emptyText,
   showRootAction = true,
-  rootActionLabel = 'Add Root',
+  rootActionLabel,
   defaultExpanded = true,
   className = '',
 }: TreeProps) => {
+  const { messages } = useRinjaniLocale()
+  const resolvedTitle = title ?? messages.tree.title
+  const resolvedDescription = description ?? messages.tree.description
+  const resolvedEmptyText = emptyText ?? messages.tree.noData
+  const resolvedRootActionLabel = rootActionLabel ?? messages.tree.addRoot
   const isSelfManaged = typeof loadChildren === 'function'
   const [, startTransition] = React.useTransition()
   const effectiveData = data ?? EMPTY_NODES
@@ -193,8 +199,8 @@ export const Tree = ({
       [
         {
           key: 'add-child',
-          label: 'Add Child',
-          title: 'Add Child',
+          label: messages.tree.addChild,
+          title: messages.tree.addChild,
           icon: <PlusIcon size={14} />,
           isActive: true,
           onClick: actions?.addChild?.onClick || ((node: TreeNodeData) => onAction?.('add-child', node)),
@@ -210,8 +216,8 @@ export const Tree = ({
         },
         {
           key: 'edit',
-          label: 'Edit',
-          title: 'Edit',
+          label: messages.tree.edit,
+          title: messages.tree.edit,
           icon: <PencilIcon size={14} />,
           isActive: true,
           onClick: actions?.edit?.onClick || ((node: TreeNodeData) => onAction?.('edit', node)),
@@ -223,8 +229,8 @@ export const Tree = ({
         },
         {
           key: 'delete',
-          label: 'Delete',
-          title: 'Delete',
+          label: messages.tree.delete,
+          title: messages.tree.delete,
           icon: <TrashIcon size={14} />,
           isActive: true,
           onClick: actions?.delete?.onClick || ((node: TreeNodeData) => onAction?.('delete', node)),
@@ -238,8 +244,8 @@ export const Tree = ({
           ? [
               {
                 key: 'detail',
-                label: 'Detail',
-                title: 'Detail',
+                label: messages.tree.detail,
+                title: messages.tree.detail,
                 icon: <EyeIcon size={14} />,
                 isActive: true,
                 onClick: actions.detail.onClick || ((node: TreeNodeData) => onAction?.('detail', node)),
@@ -380,12 +386,12 @@ export const Tree = ({
   return (
     <div className={`flex flex-col w-full gap-4 ${className}`}>
       {renderHeader ? (
-        renderHeader({ title, description, color, size, variant, showRootAction, rootActionLabel, onAddRoot })
+        renderHeader({ title: resolvedTitle, description: resolvedDescription, color, size, variant, showRootAction, rootActionLabel: resolvedRootActionLabel, onAddRoot })
       ) : (
         <div className={`flex items-center justify-between rounded-xl p-4 ${resolveVariantClass(variant)}`}>
           <div className="flex flex-col">
-            <h2 className={`${titleClassBySize[size]} font-semibold uppercase tracking-tight text-neutral-900`}>{title}</h2>
-            <p className="text-[10px] font-normal uppercase tracking-widest text-neutral-500 mt-1">{description}</p>
+            <h2 className={`${titleClassBySize[size]} font-semibold uppercase tracking-tight text-neutral-900`}>{resolvedTitle}</h2>
+            <p className="text-[10px] font-normal uppercase tracking-widest text-neutral-500 mt-1">{resolvedDescription}</p>
           </div>
 
           {showRootAction && onAddRoot && (
@@ -395,7 +401,7 @@ export const Tree = ({
               leftIcon={<PlusIcon size={16} />}
               onClick={onAddRoot}
             >
-              {rootActionLabel}
+              {resolvedRootActionLabel}
             </Button>
           )}
         </div>
@@ -404,7 +410,7 @@ export const Tree = ({
       <div
         ref={treeRef}
         role="tree"
-        aria-label={title}
+        aria-label={resolvedTitle}
         onKeyDown={handleKeyDown}
         className={`rounded-xl p-2 outline-none ${resolveVariantClass(variant)}`}
       >
@@ -441,7 +447,7 @@ export const Tree = ({
             />
           ))
         ) : (
-          <div className="p-8 text-center text-[10px] font-normal uppercase tracking-widest text-neutral-400">{emptyText}</div>
+          <div className="p-8 text-center text-[10px] font-normal uppercase tracking-widest text-neutral-400">{resolvedEmptyText}</div>
         )}
       </div>
     </div>

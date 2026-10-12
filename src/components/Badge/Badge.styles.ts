@@ -3,17 +3,17 @@ import type { BadgeSize, BadgeVariant, BadgeColor } from './Badge.types'
 export const baseStyles = "inline-flex items-center justify-center font-semibold tracking-wide whitespace-nowrap transition-colors"
 
 export const sizes: Record<BadgeSize, string> = {
-  xxs: "px-1.5 py-0.5 text-[9px] gap-1",
-  xs: "px-2 py-0.5 text-[10px] gap-1",
-  sm: "px-2.5 py-1 text-xs gap-1.5",
-  md: "px-3 py-1.5 text-sm gap-1.5",
-  lg: "px-3.5 py-2 text-base gap-2",
-  xl: "px-4 py-2 text-lg gap-2"
+  xxs: "min-h-4 px-1.5 text-[9px] gap-1",
+  xs: "min-h-5 px-2 text-[10px] gap-1",
+  sm: "min-h-6 px-2.5 text-xs gap-1.5",
+  md: "min-h-8 px-3 text-sm gap-1.5",
+  lg: "min-h-10 px-3.5 text-base gap-2",
+  xl: "min-h-12 px-4 text-lg gap-2"
 }
 
 export const radiusBySize: Record<BadgeSize, string> = {
   xxs: 'rounded',
-  xs: 'rounded-md',
+  xs: 'rounded',
   sm: 'rounded-md',
   md: 'rounded-lg',
   lg: 'rounded-lg',

@@ -11,6 +11,7 @@ import { paddingClasses, hoverColorClasses, stripedColorClasses, checkboxColorCl
 import { getLeafColumns } from './EditDataTable.utils'
 import { getSortKey, sortRows, toggleSortState } from '../TableSorting'
 import type { SortState } from '../TableSorting'
+import { useRinjaniLocale } from '../../i18n'
 
 export function EditDataTable<T>({
   data,
@@ -30,6 +31,7 @@ export function EditDataTable<T>({
   rowSelection,
   contained = true,
 }: EditDataTableProps<T>) {
+  const { messages } = useRinjaniLocale()
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [isScrolledX, setIsScrolledX] = useState(false)
   const [localSelectedKeys, setLocalSelectedKeys] = useState<(string | number)[]>([])
@@ -270,7 +272,7 @@ export function EditDataTable<T>({
             ) : displayedTableData.length === 0 ? (
               <tr>
                 <td colSpan={totalColumnsCount} className="p-8 text-center text-neutral-500">
-                  {emptyDisplay || 'No data available.'}
+                  {emptyDisplay || messages.editDataTable.noData}
                 </td>
               </tr>
             ) : (

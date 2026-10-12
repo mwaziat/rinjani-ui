@@ -36,7 +36,7 @@ export const Checkbox = ({
   values,
   onChange,
   name,
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   error,
   required,

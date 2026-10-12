@@ -6,6 +6,7 @@ import { PreviewList } from './PreviewList'
 import { dropzoneActiveColorClasses, dropzoneSizeClasses, dropzoneVariantClasses } from './Dropzone.styles'
 import type { DropzoneProps, FileWithPreview } from './Dropzone.types'
 import { createPreviewFile, revokePreview } from './Dropzone.utils'
+import { useRinjaniLocale } from '../../i18n'
 
 /**
  * A comprehensive drag-and-drop file upload component.
@@ -33,7 +34,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
   maxFiles,
   multiple = false,
   title,
-  size = 'md',
+  size = 'sm',
   variant = 'outlined',
   color = 'primary',
   layout = 'default',
@@ -48,9 +49,11 @@ export const Dropzone: React.FC<DropzoneProps> = ({
   id,
   previewPlacement = 'outside',
   showPreview = true,
-  emptyText = 'No file selected yet',
+  emptyText,
   onValidationError,
 }): React.ReactNode => {
+  const { messages } = useRinjaniLocale()
+  const resolvedEmptyText = emptyText ?? messages.dropzone.noFileSelected
   const [isDragActive, setIsDragActive] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -182,7 +185,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
           values={values}
           multiple={multiple}
           placement="grid"
-          emptyText={emptyText}
+          emptyText={resolvedEmptyText}
           onRemove={handleRemove}
           maxPreview={maxPreview}
           uploadNode={showGridUploadTile ? (
@@ -257,7 +260,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
           </p>
         )}
 
-        {showInsidePreview && <PreviewList values={values} multiple={multiple} placement="inside" emptyText={emptyText} onRemove={handleRemove} maxPreview={maxPreview} />}
+        {showInsidePreview && <PreviewList values={values} multiple={multiple} placement="inside" emptyText={resolvedEmptyText} onRemove={handleRemove} maxPreview={maxPreview} />}
       </div>
 
       {!activeError && constraintsText && (
@@ -266,7 +269,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
         </div>
       )}
 
-      {showOutsidePreview && <PreviewList values={values} multiple={multiple} placement="outside" emptyText={emptyText} onRemove={handleRemove} maxPreview={maxPreview} />}
+      {showOutsidePreview && <PreviewList values={values} multiple={multiple} placement="outside" emptyText={resolvedEmptyText} onRemove={handleRemove} maxPreview={maxPreview} />}
 
       {activeError && (
         <div className="mt-1.5 flex items-center gap-1.5 pl-1 text-[10px] font-bold uppercase tracking-wider text-danger-500">

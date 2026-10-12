@@ -1,5 +1,6 @@
 import React from 'react'
 import type { EditTableLoadingProps } from './EditDataTable.types'
+import { useRinjaniLocale } from '../../i18n'
 
 export function EditTableLoading<T>({
   loadingVariant,
@@ -11,6 +12,7 @@ export function EditTableLoading<T>({
   currentPadding,
   cellBorderClass,
 }: EditTableLoadingProps<T>) {
+  const { messages } = useRinjaniLocale()
   if (loadingVariant === 'skeleton') {
     return (
       <>
@@ -42,7 +44,7 @@ export function EditTableLoading<T>({
       <td colSpan={totalColumnsCount} className="py-12 text-center text-neutral-500">
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="font-medium text-neutral-600">Loading data...</span>
+          <span className="font-medium text-neutral-600">{messages.editDataTable.loading}</span>
         </div>
       </td>
     </tr>

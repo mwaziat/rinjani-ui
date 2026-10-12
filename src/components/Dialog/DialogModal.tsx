@@ -7,8 +7,10 @@ import type { DialogItem } from './Dialog.types'
 import { dialogManager } from './dialog-manager'
 import { backdropClasses, modalClasses } from './Dialog.styles'
 import { FEEDBACK_Z_INDEX } from '../../utils/layers'
+import { useRinjaniLocale } from '../../i18n'
 
 export const DialogModal: React.FC<{ dialog: DialogItem }> = ({ dialog }) => {
+  const { messages } = useRinjaniLocale()
   const [isProcessing, setIsProcessing] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
   const [hasEntered, setHasEntered] = useState(false)
@@ -135,7 +137,7 @@ export const DialogModal: React.FC<{ dialog: DialogItem }> = ({ dialog }) => {
                   onClick={handleCancel}
                   className="flex-1"
                 >
-                  {dialog.cancelText || 'Cancel'}
+                  {dialog.cancelText ?? messages.common.cancel}
                 </Button>
               )}
               <Button

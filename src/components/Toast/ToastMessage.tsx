@@ -6,8 +6,10 @@ import { CheckCircleIcon, XCircleIcon, AlertTriangleIcon, InfoIcon } from '../Ic
 import type { ToastItem } from './Toast.types'
 import { toastManager } from './toast-manager'
 import { bgColors, barColors, baseToastClasses } from './Toast.styles'
+import { useRinjaniLocale } from '../../i18n'
 
 export const ToastMessage: React.FC<{ toast: ToastItem }> = ({ toast }) => {
+  const { messages } = useRinjaniLocale()
   const [progress, setProgress] = useState(100)
   const [isLeaving, setIsLeaving] = useState(false)
 
@@ -95,7 +97,7 @@ export const ToastMessage: React.FC<{ toast: ToastItem }> = ({ toast }) => {
           if (!isLeaving) handleClose()
         }}
         className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
-        aria-label="Close toast"
+        aria-label={messages.toast.close}
       >
         <XIcon size={16} />
       </button>

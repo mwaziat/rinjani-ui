@@ -11,6 +11,7 @@ import {
 } from '../Icons/status'
 import { XIcon, MinusIcon, PlusIcon as ExpandIcon } from '../Icons/action'
 import { FEEDBACK_Z_INDEX } from '../../utils/layers'
+import { useRinjaniLocale } from '../../i18n'
 
 /**
  * A feedback component to communicate information, success, warnings, or errors to the user.
@@ -43,6 +44,7 @@ export const Alert: React.FC<AlertProps> = ({
   action,
   duration,
 }: AlertProps) => {
+  const { messages } = useRinjaniLocale()
   const [isVisible, setIsVisible] = useState(true)
   const [isMinimized, setIsMinimized] = useState(false)
   const [progress, setProgress] = useState(100)
@@ -129,7 +131,7 @@ export const Alert: React.FC<AlertProps> = ({
           type="button"
           onClick={showCloseButton ? handleClose : handleToggleMinimize}
           className={`absolute right-3 ${isMinimized ? 'top-1/2 -translate-y-1/2' : 'top-3'} transition-colors ${variant === 'filled' ? 'text-white/70 hover:text-white' : 'text-neutral-400 hover:text-neutral-600'}`}
-          aria-label={showCloseButton ? "Close alert" : (isMinimized ? "Expand alert" : "Minimize alert")}
+          aria-label={showCloseButton ? messages.alert.close : (isMinimized ? messages.alert.expand : messages.alert.minimize)}
         >
           {showCloseButton ? <XIcon size={18} /> : (isMinimized ? <ExpandIcon size={18} /> : <MinusIcon size={18} />)}
         </button>

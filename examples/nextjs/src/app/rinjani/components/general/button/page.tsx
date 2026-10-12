@@ -1,10 +1,11 @@
-import React from "react"
 import { highlight } from "@/lib/highlight"
 import { ComponentDemo } from "@/components/docs/ComponentDemo"
+import { DocNavigation } from "@/components/docs/DocNavigation"
 import { PropsTable } from "@/components/docs/PropsTable"
 import { TableOfContents } from "@/components/docs/TableOfContents"
 import { PageHeader } from "@/components/docs/PageHeader"
-import { buttonProps, iconButtonProps } from "./_props"
+import { buttonProps, iconButtonProps } from "@/content/components/button/props"
+import { buttonCodes } from "@/content/components/button/codes"
 import {
   BasicDemo,
   ColorsDemo,
@@ -15,156 +16,26 @@ import {
   DisabledDemo,
   FullWidthDemo,
   IconButtonDemo,
-} from "./_demos"
+} from "@/content/components/button/demos"
 
 const tocItems = [
-  { id: "basic", label: "Basic usage", depth: 2 as const },
-  { id: "colors", label: "Colors", depth: 2 as const },
-  { id: "sizes", label: "Sizes", depth: 2 as const },
-  { id: "with-icons", label: "With icons", depth: 2 as const },
-  { id: "pill", label: "Pill shape", depth: 2 as const },
-  { id: "loading", label: "Loading state", depth: 2 as const },
-  { id: "disabled", label: "Disabled", depth: 2 as const },
-  { id: "full-width", label: "Full width", depth: 2 as const },
-  { id: "icon-button", label: "IconButton", depth: 2 as const },
-  { id: "api-button", label: "Button API", depth: 2 as const },
-  { id: "api-iconbutton", label: "IconButton API", depth: 2 as const },
+  { id: "when-to-use", label: "When to use", depth: 2 as const },
+  { id: "examples", label: "Examples", depth: 2 as const },
+  { id: "basic", label: "Basic usage", depth: 3 as const },
+  { id: "colors", label: "Colors", depth: 3 as const },
+  { id: "sizes", label: "Sizes", depth: 3 as const },
+  { id: "with-icons", label: "With icons", depth: 3 as const },
+  { id: "pill", label: "Pill shape", depth: 3 as const },
+  { id: "loading", label: "Loading state", depth: 3 as const },
+  { id: "disabled", label: "Disabled", depth: 3 as const },
+  { id: "full-width", label: "Full width", depth: 3 as const },
+  { id: "icon-button", label: "IconButton", depth: 3 as const },
+  { id: "api", label: "API", depth: 2 as const },
+  { id: "api-button", label: "Button props", depth: 3 as const },
+  { id: "api-iconbutton", label: "IconButton props", depth: 3 as const },
+  { id: "faq", label: "FAQ", depth: 2 as const },
+  { id: "related-docs", label: "Related documentation", depth: 2 as const },
 ]
-
-const codes = {
-  basic: `import { Button } from 'rinjani-ui'
-
-export default function Example() {
-  return (
-    <div className="flex gap-3">
-      <Button variant="filled">Filled</Button>
-      <Button variant="outlined">Outlined</Button>
-      <Button variant="soft">Soft</Button>
-      <Button variant="text">Text</Button>
-    </div>
-  )
-}`,
-
-  colors: `import { Button } from 'rinjani-ui'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button color="primary">Primary</Button>
-      <Button color="secondary">Secondary</Button>
-      <Button color="success">Success</Button>
-      <Button color="warning">Warning</Button>
-      <Button color="danger">Danger</Button>
-      <Button color="info">Info</Button>
-      <Button color="neutral">Neutral</Button>
-    </div>
-  )
-}`,
-
-  sizes: `import { Button } from 'rinjani-ui'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Button size="xxs">XXSmall</Button>
-      <Button size="xs">XSmall</Button>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
-      <Button size="xl">XLarge</Button>
-    </div>
-  )
-}`,
-
-  withIcons: `import { Button } from 'rinjani-ui'
-import { FiPlus, FiSave, FiDownload, FiTrash2 } from 'react-icons/fi'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button leftIcon={<FiPlus size={16} />}>Add Item</Button>
-      <Button leftIcon={<FiSave size={16} />} variant="outlined">Save</Button>
-      <Button rightIcon={<FiDownload size={16} />} variant="soft">Download</Button>
-      <Button leftIcon={<FiTrash2 size={16} />} variant="soft" color="danger">Delete</Button>
-    </div>
-  )
-}`,
-
-  pill: `import { Button } from 'rinjani-ui'
-import { FiPlus } from 'react-icons/fi'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button isPill>Filled Pill</Button>
-      <Button isPill variant="outlined">Outlined Pill</Button>
-      <Button isPill variant="soft" color="success">Success Pill</Button>
-      <Button isPill leftIcon={<FiPlus size={16} />}>Add</Button>
-    </div>
-  )
-}`,
-
-  loading: `import { Button } from 'rinjani-ui'
-import { useState } from 'react'
-
-export default function Example() {
-  const [loading, setLoading] = useState(false)
-
-  const handleClick = () => {
-    setLoading(true)
-    setTimeout(() => setLoading(false), 2000)
-  }
-
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button isLoading>Loading</Button>
-      <Button isLoading variant="outlined">Loading</Button>
-      <Button isLoading={loading} onClick={handleClick}>
-        {loading ? 'Saving...' : 'Click to load'}
-      </Button>
-    </div>
-  )
-}`,
-
-  disabled: `import { Button } from 'rinjani-ui'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button disabled>Disabled</Button>
-      <Button disabled variant="outlined">Disabled</Button>
-      <Button disabled variant="soft">Disabled</Button>
-      <Button disabled variant="text">Disabled</Button>
-    </div>
-  )
-}`,
-
-  fullWidth: `import { Button } from 'rinjani-ui'
-
-export default function Example() {
-  return (
-    <div className="w-full flex flex-col gap-3">
-      <Button fullWidth>Full Width Filled</Button>
-      <Button fullWidth variant="outlined">Full Width Outlined</Button>
-    </div>
-  )
-}`,
-
-  iconButton: `import { IconButton } from 'rinjani-ui'
-import { FiSettings, FiSave, FiTrash2, FiPlus, FiDownload } from 'react-icons/fi'
-
-export default function Example() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <IconButton icon={<FiSettings size={16} />} />
-      <IconButton icon={<FiSave size={16} />} variant="outlined" />
-      <IconButton icon={<FiTrash2 size={16} />} variant="soft" color="danger" />
-      <IconButton icon={<FiPlus size={16} />} isPill />
-      <IconButton icon={<FiDownload size={16} />} variant="soft" color="info" isPill />
-    </div>
-  )
-}`,
-}
 
 export default async function ButtonPage() {
   const [
@@ -178,32 +49,51 @@ export default async function ButtonPage() {
     fullWidthHl,
     iconButtonHl,
   ] = await Promise.all([
-    highlight(codes.basic),
-    highlight(codes.colors),
-    highlight(codes.sizes),
-    highlight(codes.withIcons),
-    highlight(codes.pill),
-    highlight(codes.loading),
-    highlight(codes.disabled),
-    highlight(codes.fullWidth),
-    highlight(codes.iconButton),
+    highlight(buttonCodes.basic),
+    highlight(buttonCodes.colors),
+    highlight(buttonCodes.sizes),
+    highlight(buttonCodes.withIcons),
+    highlight(buttonCodes.pill),
+    highlight(buttonCodes.loading),
+    highlight(buttonCodes.disabled),
+    highlight(buttonCodes.fullWidth),
+    highlight(buttonCodes.iconButton),
   ])
 
   return (
-    <div className="flex gap-10 max-w-5xl mx-auto px-6 py-10 w-full">
-      <div className="flex-1 min-w-0">
+    <div className="flex w-full gap-10 px-6 py-10">
+      <div className="min-w-0 flex-1">
         <PageHeader
           category="General"
           title="Button"
-          description="Triggers an action or event. Supports multiple variants, colors, sizes, and icon combinations."
+          description="Use Button to trigger an action, submit a form, or represent a clear next step."
         />
+
+        <section id="when-to-use" className="scroll-mt-24 mb-10">
+          <h2 className="mb-3 text-xl font-semibold text-neutral-800">When to use</h2>
+          <p className="mb-4 text-sm leading-6 text-neutral-600">
+            Use a button when the user needs to perform an action in the current context. Prefer one primary button per section.
+          </p>
+          <ul className="list-disc space-y-2 pl-5 text-sm leading-6 text-neutral-600">
+            <li><code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">filled</code> for the primary action.</li>
+            <li><code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">outlined</code> for a secondary action.</li>
+            <li><code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">soft</code> for subtle emphasis and <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">text</code> for inline actions.</li>
+            <li><code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">danger</code> for destructive actions.</li>
+          </ul>
+        </section>
+
+        <section id="examples" className="scroll-mt-24">
+          <h2 className="mb-2 text-xl font-semibold text-neutral-800">Examples</h2>
+          <p className="mb-6 text-sm leading-6 text-neutral-600">
+            Combine variants, colors, sizes, and states to match the importance of the action.
+          </p>
 
         <section id="basic" className="scroll-mt-24">
           <ComponentDemo
             title="Basic usage"
             description="Four variants cover most use cases: filled for primary actions, outlined for secondary, soft for subtle emphasis, and text for inline."
             code={basicHl}
-            rawCode={codes.basic}
+            rawCode={buttonCodes.basic}
           >
             <BasicDemo />
           </ComponentDemo>
@@ -214,7 +104,7 @@ export default async function ButtonPage() {
             title="Colors"
             description="All seven color tokens are available across every variant."
             code={colorsHl}
-            rawCode={codes.colors}
+            rawCode={buttonCodes.colors}
           >
             <ColorsDemo />
           </ComponentDemo>
@@ -225,7 +115,7 @@ export default async function ButtonPage() {
             title="Sizes"
             description="Six sizes from xxs to xl. The default is sm."
             code={sizesHl}
-            rawCode={codes.sizes}
+            rawCode={buttonCodes.sizes}
           >
             <SizesDemo />
           </ComponentDemo>
@@ -236,7 +126,7 @@ export default async function ButtonPage() {
             title="With icons"
             description="Use leftIcon or rightIcon to attach any ReactNode icon."
             code={withIconsHl}
-            rawCode={codes.withIcons}
+            rawCode={buttonCodes.withIcons}
           >
             <WithIconsDemo />
           </ComponentDemo>
@@ -247,7 +137,7 @@ export default async function ButtonPage() {
             title="Pill shape"
             description="isPill applies fully rounded corners for a pill-style button."
             code={pillHl}
-            rawCode={codes.pill}
+            rawCode={buttonCodes.pill}
           >
             <PillDemo />
           </ComponentDemo>
@@ -258,7 +148,7 @@ export default async function ButtonPage() {
             title="Loading state"
             description="isLoading shows a spinner and disables interaction. Useful for async actions."
             code={loadingHl}
-            rawCode={codes.loading}
+            rawCode={buttonCodes.loading}
           >
             <LoadingDemo />
           </ComponentDemo>
@@ -269,7 +159,7 @@ export default async function ButtonPage() {
             title="Disabled"
             description="Applies reduced opacity and removes pointer events."
             code={disabledHl}
-            rawCode={codes.disabled}
+            rawCode={buttonCodes.disabled}
           >
             <DisabledDemo />
           </ComponentDemo>
@@ -280,7 +170,7 @@ export default async function ButtonPage() {
             title="Full width"
             description="fullWidth stretches the button to its parent container width."
             code={fullWidthHl}
-            rawCode={codes.fullWidth}
+            rawCode={buttonCodes.fullWidth}
             centered={false}
           >
             <div className="w-full">
@@ -294,27 +184,83 @@ export default async function ButtonPage() {
             title="IconButton"
             description="A square (or circular) button optimized for a single icon. Uses the same variant, color, and size props."
             code={iconButtonHl}
-            rawCode={codes.iconButton}
+            rawCode={buttonCodes.iconButton}
           >
             <IconButtonDemo />
           </ComponentDemo>
         </section>
 
-        <section id="api-button" className="scroll-mt-24">
-          <h2 className="text-xl font-semibold text-neutral-800 mb-1">Button API</h2>
-          <p className="text-sm text-neutral-500 mb-4">
-            All standard HTML button attributes are also accepted via prop spreading.
-          </p>
-          <PropsTable props={buttonProps} />
         </section>
 
-        <section id="api-iconbutton" className="scroll-mt-24 mt-10">
-          <h2 className="text-xl font-semibold text-neutral-800 mb-1">IconButton API</h2>
+        <section id="api" className="scroll-mt-24 mt-12">
+          <h2 className="mb-2 text-xl font-semibold text-neutral-800">API</h2>
           <p className="text-sm text-neutral-500 mb-4">
-            Extends the same variant, color, and size system as Button.
+            Button accepts the custom props below and all standard HTML button attributes.
           </p>
-          <PropsTable props={iconButtonProps} />
+
+          <section id="api-button" className="scroll-mt-24 mt-8">
+            <h3 className="mb-1 text-base font-semibold text-neutral-800">Button props</h3>
+            <p className="mb-4 text-sm text-neutral-500">Props specific to the Button component.</p>
+            <PropsTable props={buttonProps} />
+          </section>
+
+          <section id="api-iconbutton" className="scroll-mt-24 mt-10">
+            <h3 className="mb-1 text-base font-semibold text-neutral-800">IconButton props</h3>
+            <p className="mb-4 text-sm text-neutral-500">IconButton shares the same variant, color, size, and state system.</p>
+            <PropsTable props={iconButtonProps} />
+          </section>
         </section>
+
+        <section id="faq" className="scroll-mt-24 mt-12">
+          <h2 className="mb-3 text-xl font-semibold text-neutral-800">FAQ</h2>
+          <div className="divide-y divide-neutral-200 border-y border-neutral-200">
+            <details className="group py-4">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-neutral-800">Which variant should I use?</summary>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
+                Start with filled for the main action, outlined for a secondary action, soft for subtle emphasis, and text for a low-priority inline action.
+              </p>
+            </details>
+            <details className="group py-4">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-neutral-800">When should I use isLoading instead of disabled?</summary>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
+                Use isLoading while an async action is in progress. Use disabled when the action is not currently available.
+              </p>
+            </details>
+            <details className="group py-4">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-neutral-800">Should an IconButton have visible text?</summary>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">
+                IconButton is intended for icon-only actions. Always add an aria-label that describes the action.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <DocNavigation
+          previous={{ href: "/rinjani/getting-started/changelog", title: "Changelog" }}
+          next={{ href: "/rinjani/components/general/badge", title: "Badge" }}
+          related={[
+            {
+              href: "/rinjani/getting-started/installation",
+              title: "Installation",
+              description: "Add Rinjani UI to your project.",
+            },
+            {
+              href: "/rinjani/getting-started/theming",
+              title: "Theming",
+              description: "Customize tokens and color scales.",
+            },
+            {
+              href: "/rinjani/components/general/badge",
+              title: "Badge",
+              description: "Explore compact status and metadata labels.",
+            },
+            {
+              href: "/rinjani/components/data-display/data-table",
+              title: "DataTable",
+              description: "Build tables with sorting and pagination.",
+            },
+          ]}
+        />
       </div>
 
       <TableOfContents items={tocItems} />
