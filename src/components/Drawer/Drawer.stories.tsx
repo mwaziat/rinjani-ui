@@ -20,11 +20,15 @@ const meta: Meta<typeof Drawer> = {
     isOpen: {
       control: 'boolean',
     },
+    closeOnBackdrop: {
+      control: 'boolean',
+    },
   },
   args: {
     position: 'right',
     size: 'md',
     isOpen: false,
+    closeOnBackdrop: true,
   },
 }
 

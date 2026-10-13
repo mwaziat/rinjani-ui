@@ -36,10 +36,10 @@ export default function Example() {
 
   return (
     <div className="flex flex-col gap-3">
-      <Breadcrumb paths={paths} activeLabel="Filled" contained variant="filled" />
-      <Breadcrumb paths={paths} activeLabel="Outlined" contained variant="outlined" />
-      <Breadcrumb paths={paths} activeLabel="Soft" contained variant="soft" />
-      <Breadcrumb paths={paths} activeLabel="Line" contained variant="line" />
+      <Breadcrumb paths={paths} activeLabel="Filled" contained={false} variant="filled" />
+      <Breadcrumb paths={paths} activeLabel="Outlined" contained={false} variant="outlined" />
+      <Breadcrumb paths={paths} activeLabel="Soft" contained={false} variant="soft" />
+      <Breadcrumb paths={paths} activeLabel="Line" contained={false} variant="line" />
     </div>
   )
 }`,

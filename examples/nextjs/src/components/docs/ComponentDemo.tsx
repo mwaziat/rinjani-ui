@@ -35,7 +35,7 @@ export function ComponentDemo({
       <div className="rounded-xl border border-neutral-200 overflow-hidden">
         <div
           className={`p-6 bg-white min-h-24 flex flex-wrap gap-3 ${
-            centered ? "items-center justify-center" : "items-start"
+            centered ? "items-center justify-center" : "items-start justify-start"
           }`}
         >
           {children}

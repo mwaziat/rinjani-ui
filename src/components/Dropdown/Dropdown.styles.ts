@@ -1,4 +1,5 @@
-import type { DropdownColor, DropdownSize, DropdownVariant } from './Dropdown.types'
+import type { CSSProperties } from 'react'
+import type { DropdownColor, DropdownPlacement, DropdownSize, DropdownVariant } from './Dropdown.types'
 
 export const baseStyles = "inline-flex items-center justify-center font-semibold tracking-wide transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
 
@@ -67,4 +68,38 @@ export const itemColorClasses: Record<DropdownColor, string> = {
   danger: 'text-danger-600 hover:bg-danger-50',
   info: 'text-info-600 hover:bg-info-50',
   neutral: 'text-neutral-700 hover:bg-neutral-100',
+}
+
+export const getDropdownArrowStyle = (
+  placement: Exclude<DropdownPlacement, 'auto'>,
+  offset: number,
+): CSSProperties => {
+  const isVerticalPlacement = placement.startsWith('top') || placement.startsWith('bottom')
+  const arrowStyle: CSSProperties = {
+    position: 'absolute',
+    width: '8px',
+    height: '8px',
+    backgroundColor: 'var(--color-white)',
+    borderColor: 'var(--color-neutral-200)',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    pointerEvents: 'none',
+    ...(isVerticalPlacement
+      ? { left: `${offset}px`, transform: 'translateX(-50%) rotate(45deg)' }
+      : { top: `${offset}px`, transform: 'translateY(-50%) rotate(45deg)' }),
+  }
+
+  if (placement.startsWith('top')) {
+    return { ...arrowStyle, bottom: '-5px', borderTopWidth: 0, borderLeftWidth: 0 }
+  }
+
+  if (placement.startsWith('bottom')) {
+    return { ...arrowStyle, top: '-5px', borderBottomWidth: 0, borderRightWidth: 0 }
+  }
+
+  if (placement.startsWith('left')) {
+    return { ...arrowStyle, right: '-5px', borderBottomWidth: 0, borderLeftWidth: 0 }
+  }
+
+  return { ...arrowStyle, left: '-5px', borderTopWidth: 0, borderRightWidth: 0 }
 }

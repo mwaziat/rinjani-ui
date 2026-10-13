@@ -1,6 +1,7 @@
 import type { TooltipPlacement } from './Tooltip.types'
 
 export const VIEWPORT_PADDING = 12
+export const ARROW_EDGE_PADDING = 10
 
 export const normalizePlacement = (placement: TooltipPlacement) => {
   if (placement === 'bottom' || placement === 'top' || placement === 'left' || placement === 'right') {
@@ -13,7 +14,20 @@ export const getPlacementCandidates = (placement: TooltipPlacement): Exclude<Too
   if (placement !== 'auto') {
     return [normalizePlacement(placement) as Exclude<TooltipPlacement, 'auto'>]
   }
-  return ['top', 'bottom', 'right', 'left', 'top-start', 'top-end', 'bottom-start', 'bottom-end']
+  return [
+    'top',
+    'bottom',
+    'right',
+    'left',
+    'top-start',
+    'top-end',
+    'bottom-start',
+    'bottom-end',
+    'left-start',
+    'left-end',
+    'right-start',
+    'right-end',
+  ]
 }
 
 export const getPositionForPlacement = (
@@ -75,4 +89,25 @@ export const clampPosition = (top: number, left: number, contentRect: DOMRect) =
     top: Math.min(Math.max(top, VIEWPORT_PADDING), maxTop),
     left: Math.min(Math.max(left, VIEWPORT_PADDING), maxLeft),
   }
+}
+
+export const getArrowOffset = (
+  triggerRect: DOMRect,
+  contentPosition: { top: number; left: number },
+  contentRect: DOMRect,
+  placement: Exclude<TooltipPlacement, 'auto'>,
+) => {
+  const isVerticalPlacement = placement.startsWith('top') || placement.startsWith('bottom')
+  const anchorCenter = isVerticalPlacement
+    ? triggerRect.left + triggerRect.width / 2
+    : triggerRect.top + triggerRect.height / 2
+  const contentStart = isVerticalPlacement ? contentPosition.left : contentPosition.top
+  const contentSize = isVerticalPlacement ? contentRect.width : contentRect.height
+  const idealOffset = anchorCenter - contentStart
+  const edgePadding = Math.min(ARROW_EDGE_PADDING, contentSize / 2)
+
+  return Math.min(
+    Math.max(idealOffset, edgePadding),
+    Math.max(edgePadding, contentSize - edgePadding),
+  )
 }

@@ -6,8 +6,8 @@ import { createPortal } from 'react-dom'
 import { ChevronDownIcon, ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '../Icons/general'
 import type { DropdownProps, DropdownContentPosition } from './Dropdown.types'
 
-import { baseStyles, sizes, radiusBySize, variants } from './Dropdown.styles'
-import { VIEWPORT_PADDING, getPlacementCandidates, getPositionForPlacement, getOverflowScore, clampPosition } from './Dropdown.utils'
+import { baseStyles, getDropdownArrowStyle, sizes, radiusBySize, variants } from './Dropdown.styles'
+import { VIEWPORT_PADDING, getArrowOffset, getPlacementCandidates, getPositionForPlacement, getOverflowScore, clampPosition } from './Dropdown.utils'
 
 /**
  * A highly versatile Dropdown menu component with smart positioning.
@@ -48,6 +48,8 @@ export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
     top: 0,
     left: 0,
     isPositioned: false,
+    currentPlacement: placement === 'auto' ? 'bottom-start' : placement,
+    arrowOffset: 0,
   })
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -118,6 +120,8 @@ export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
         top: nextPosition.top,
         left: nextPosition.left,
         isPositioned: true,
+        currentPlacement: bestPlacement.candidate,
+        arrowOffset: getArrowOffset(triggerRect, nextPosition, contentRect, bestPlacement.candidate),
       })
     }
 
@@ -166,6 +170,8 @@ export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
       top: triggerRect ? triggerRect.bottom + offset : 0,
       left: triggerRect ? triggerRect.left : 0,
       isPositioned: false,
+      currentPlacement: placement === 'auto' ? 'bottom-start' : placement,
+      arrowOffset: 0,
     })
 
     setIsOpen(true)
@@ -210,6 +216,12 @@ export const Dropdown = React.forwardRef<HTMLButtonElement, DropdownProps>(({
           role="menu"
           aria-labelledby={dropdownId}
         >
+          {showArrow && (
+            <div
+              aria-hidden="true"
+              style={getDropdownArrowStyle(contentPosition.currentPlacement, contentPosition.arrowOffset)}
+            />
+          )}
           {children}
         </div>,
         document.body,

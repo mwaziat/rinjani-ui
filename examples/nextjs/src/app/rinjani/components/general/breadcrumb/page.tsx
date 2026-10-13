@@ -21,7 +21,7 @@ const tocItems = [
   { id: "examples", label: "Examples", depth: 2 as const },
   { id: "basic", label: "Basic usage", depth: 3 as const },
   { id: "colors", label: "Colors", depth: 3 as const },
-  { id: "contained", label: "Contained variants", depth: 3 as const },
+  { id: "contained", label: "Variants", depth: 3 as const },
   { id: "icons", label: "With icons", depth: 3 as const },
   { id: "separator", label: "Custom separator", depth: 3 as const },
   { id: "alignment", label: "Alignment & custom content", depth: 3 as const },
@@ -76,6 +76,7 @@ export default async function BreadcrumbPage() {
               description="Previous levels are links; the active page remains a non-clickable label."
               code={basicHl}
               rawCode={breadcrumbCodes.basic}
+              centered={false}
             >
               <BasicDemo />
             </ComponentDemo>
@@ -84,7 +85,7 @@ export default async function BreadcrumbPage() {
           <section id="colors" className="scroll-mt-24">
             <ComponentDemo
               title="Colors"
-              description="Use semantic colors for the active item and link hover states."
+              description="Compare semantic colors while keeping the same Home to Management hierarchy in every row."
               code={colorsHl}
               rawCode={breadcrumbCodes.colors}
               centered={false}
@@ -95,8 +96,8 @@ export default async function BreadcrumbPage() {
 
           <section id="contained" className="scroll-mt-24">
             <ComponentDemo
-              title="Contained variants"
-              description="Set contained to wrap the trail in a styled block."
+              title="Variants"
+              description="Compare the available trail variants without adding nested cards to the documentation preview."
               code={containedHl}
               rawCode={breadcrumbCodes.contained}
               centered={false}
@@ -111,6 +112,7 @@ export default async function BreadcrumbPage() {
               description="Add icons to path nodes when they reinforce the hierarchy."
               code={iconsHl}
               rawCode={breadcrumbCodes.icons}
+              centered={false}
             >
               <WithIconsDemo />
             </ComponentDemo>
@@ -143,7 +145,7 @@ export default async function BreadcrumbPage() {
           <section id="sizes" className="scroll-mt-24">
             <ComponentDemo
               title="Sizes"
-              description="Four commonly used sizes are shown below. The default size is md."
+              description="Compare all supported sizes while keeping the breadcrumb content consistent. The default size is md."
               code={sizesHl}
               rawCode={breadcrumbCodes.sizes}
               centered={false}

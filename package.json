@@ -62,8 +62,8 @@
     "@tailwindcss/postcss": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitest/browser-playwright": "^4.1.9",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/browser-playwright": "4.1.11",
+    "@vitest/coverage-v8": "4.1.11",
     "autoprefixer": "^10.5.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
@@ -78,9 +78,14 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.62.0",
-    "vitest": "^4.1.9"
+    "vitest": "4.1.11"
   },
   "dependencies": {
     "clsx": "^2.1.1"
+  },
+  "overrides": {
+    "tsup": {
+      "esbuild": "0.28.1"
+    }
   }
 }

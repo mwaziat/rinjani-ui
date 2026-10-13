@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TooltipProps, ContentPosition } from './Tooltip.types'
-import { baseTooltipStyles, radiusBySize, sizes, variants, maxWidths } from './Tooltip.styles'
-import { clampPosition, getOverflowScore, getPlacementCandidates, getPositionForPlacement } from './Tooltip.utils'
+import { baseTooltipStyles, getTooltipArrowStyle, radiusBySize, sizes, variants, maxWidths } from './Tooltip.styles'
+import { clampPosition, getArrowOffset, getOverflowScore, getPlacementCandidates, getPositionForPlacement } from './Tooltip.utils'
 
 /**
  * A small pop-up box that appears when hovering or focusing on an element.
@@ -43,6 +43,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
     left: 0,
     isPositioned: false,
     currentPlacement: placement === 'auto' ? 'top' : placement,
+    arrowOffset: 0,
   })
   const triggerRef = useRef<HTMLDivElement>(null)
 
@@ -105,6 +106,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
         left: nextPosition.left,
         isPositioned: true,
         currentPlacement: bestPlacement.candidate,
+        arrowOffset: getArrowOffset(triggerRect, nextPosition, contentRect, bestPlacement.candidate),
       })
     }
 
@@ -157,28 +159,15 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
           role="tooltip"
         >
           {content}
-          {showArrow && variant === 'filled' && (
-            <div 
-              className={`absolute w-0 h-0 border-solid border-[5px] border-transparent`}
-              style={{
-                ...(contentPosition.currentPlacement.startsWith('top') && { bottom: '-10px', left: '50%', transform: 'translateX(-50%)', borderTopColor: 'currentColor' }),
-                ...(contentPosition.currentPlacement.startsWith('bottom') && { top: '-10px', left: '50%', transform: 'translateX(-50%)', borderBottomColor: 'currentColor' }),
-                ...(contentPosition.currentPlacement.startsWith('left') && { right: '-10px', top: '50%', transform: 'translateY(-50%)', borderLeftColor: 'currentColor' }),
-                ...(contentPosition.currentPlacement.startsWith('right') && { left: '-10px', top: '50%', transform: 'translateY(-50%)', borderRightColor: 'currentColor' }),
-              }}
-            />
-          )}
-          {showArrow && variant !== 'filled' && (
-            <div 
-              className={`absolute w-2.5 h-2.5 rotate-45 bg-inherit border-inherit`}
-              style={{
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                ...(contentPosition.currentPlacement.startsWith('top') && { bottom: '-5px', left: '50%', marginLeft: '-5px', borderTopWidth: 0, borderLeftWidth: 0 }),
-                ...(contentPosition.currentPlacement.startsWith('bottom') && { top: '-5px', left: '50%', marginLeft: '-5px', borderBottomWidth: 0, borderRightWidth: 0 }),
-                ...(contentPosition.currentPlacement.startsWith('left') && { right: '-5px', top: '50%', marginTop: '-5px', borderBottomWidth: 0, borderLeftWidth: 0 }),
-                ...(contentPosition.currentPlacement.startsWith('right') && { left: '-5px', top: '50%', marginTop: '-5px', borderTopWidth: 0, borderRightWidth: 0 }),
-              }}
+          {showArrow && (
+            <div
+              aria-hidden="true"
+              style={getTooltipArrowStyle(
+                contentPosition.currentPlacement,
+                variant,
+                color,
+                contentPosition.arrowOffset,
+              )}
             />
           )}
         </div>,

@@ -28,7 +28,7 @@ export type TooltipMaxWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | (string & {}) 
 
 /**
  * Determines where the tooltip will appear relative to the wrapped element.
- * Uses floating-ui conventions. 'auto' will let the browser decide based on available space.
+ * Uses placement conventions shared by the docs. 'auto' chooses the side with the most available space.
  */
 export type TooltipPlacement =
   | 'auto'
@@ -49,7 +49,8 @@ export interface ContentPosition {
   top: number
   left: number
   isPositioned: boolean
-  currentPlacement: TooltipPlacement
+  currentPlacement: Exclude<TooltipPlacement, 'auto'>
+  arrowOffset: number
 }
 
 export interface TooltipProps {
@@ -83,7 +84,7 @@ export interface TooltipProps {
   variant?: TooltipVariant
   /**
    * The preferred position of the tooltip relative to the trigger.
-   * @default "top"
+   * @default "auto"
    */
   placement?: TooltipPlacement
   /**
@@ -117,7 +118,7 @@ export interface TooltipProps {
   delay?: number
   /**
    * The maximum width of the tooltip bubble before text wraps to a new line.
-   * @default "sm"
+   * @default undefined
    */
   maxWidth?: TooltipMaxWidth
 }
