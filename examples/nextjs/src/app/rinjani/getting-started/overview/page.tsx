@@ -1,6 +1,7 @@
 import React from "react"
 import Link from "next/link"
 import { PageHeader } from "@/components/docs/PageHeader"
+import { DocNavigation } from "@/components/docs/DocNavigation"
 import { TableOfContents } from "@/components/docs/TableOfContents"
 import {
   FiMousePointer,
@@ -15,7 +16,7 @@ const tocItems = [
   { id: "introduction", label: "Introduction", depth: 2 as const },
   { id: "features", label: "Features", depth: 2 as const },
   { id: "components", label: "Components", depth: 2 as const },
-  { id: "next-steps", label: "Next steps", depth: 2 as const },
+  { id: "related-docs", label: "Related documentation", depth: 2 as const },
 ]
 
 const features = [
@@ -92,7 +93,7 @@ const componentGroups = [
 
 export default function OverviewPage() {
   return (
-    <div className="flex gap-10 max-w-5xl mx-auto px-6 py-10 w-full">
+    <div className="flex gap-10 mx-auto px-6 py-10 w-full">
       <div className="flex-1 min-w-0">
         <PageHeader
           title="Overview"
@@ -163,61 +164,26 @@ export default function OverviewPage() {
           </div>
         </section>
 
-        <section id="next-steps" className="scroll-mt-24 mb-12">
-          <h2 className="text-xl font-semibold text-neutral-800 mb-6">Next steps</h2>
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/rinjani/getting-started/installation"
-              className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 bg-white hover:border-primary-300 hover:shadow-sm transition-all group"
-            >
-              <div>
-                <p className="text-sm font-semibold text-neutral-800 group-hover:text-primary-600 transition-colors">
-                  Installation
-                </p>
-                <p className="text-sm text-neutral-500 mt-0.5">
-                  Add Rinjani UI to your project in under two minutes.
-                </p>
-              </div>
-              <span className="text-neutral-300 group-hover:text-primary-400 transition-colors text-lg ml-4">
-                &rarr;
-              </span>
-            </Link>
-
-            <Link
-              href="/rinjani/getting-started/theming"
-              className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 bg-white hover:border-primary-300 hover:shadow-sm transition-all group"
-            >
-              <div>
-                <p className="text-sm font-semibold text-neutral-800 group-hover:text-primary-600 transition-colors">
-                  Theming
-                </p>
-                <p className="text-sm text-neutral-500 mt-0.5">
-                  Customize color tokens to match your brand.
-                </p>
-              </div>
-              <span className="text-neutral-300 group-hover:text-primary-400 transition-colors text-lg ml-4">
-                &rarr;
-              </span>
-            </Link>
-
-            <Link
-              href="/rinjani/components/general/button"
-              className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 bg-white hover:border-primary-300 hover:shadow-sm transition-all group"
-            >
-              <div>
-                <p className="text-sm font-semibold text-neutral-800 group-hover:text-primary-600 transition-colors">
-                  Browse components
-                </p>
-                <p className="text-sm text-neutral-500 mt-0.5">
-                  Explore all 20+ components with live demos and API docs.
-                </p>
-              </div>
-              <span className="text-neutral-300 group-hover:text-primary-400 transition-colors text-lg ml-4">
-                &rarr;
-              </span>
-            </Link>
-          </div>
-        </section>
+        <DocNavigation
+          next={{ href: "/rinjani/getting-started/installation", title: "Installation" }}
+          related={[
+            {
+              href: "/rinjani/getting-started/installation",
+              title: "Installation",
+              description: "Add Rinjani UI to your project.",
+            },
+            {
+              href: "/rinjani/getting-started/theming",
+              title: "Theming",
+              description: "Customize tokens and color scales.",
+            },
+            {
+              href: "/rinjani/components/general/button",
+              title: "Button",
+              description: "Start with a simple interactive component.",
+            },
+          ]}
+        />
       </div>
 
       <TableOfContents items={tocItems} />

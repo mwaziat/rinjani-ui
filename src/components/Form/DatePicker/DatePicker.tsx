@@ -49,7 +49,7 @@ export function DatePicker<T = Date>({
   id,
   placeholder = 'Select date',
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   isClearable = false,
 }: DatePickerProps<T>): React.ReactNode {

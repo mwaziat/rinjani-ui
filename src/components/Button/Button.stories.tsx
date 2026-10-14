@@ -161,3 +161,20 @@ export const Showcase: Story = {
 }
 
 export const Playground: Story = {}
+
+export const EightPointScalePreview: Story = {
+  render: () => (
+    <div className="rounded-xl bg-white p-6 shadow-sm">
+      <h2 className="mb-2 text-xl font-bold text-neutral-800">Eight-point scale</h2>
+      <p className="mb-6 text-sm text-neutral-500">A clean 8px rhythm from XXS through XL.</p>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button size="xxs">Button XXS</Button>
+        <Button size="xs">Button XS</Button>
+        <Button size="sm">Button SM</Button>
+        <Button size="md">Button MD</Button>
+        <Button size="lg">Button LG</Button>
+        <Button size="xl">Button XL</Button>
+      </div>
+    </div>
+  ),
+}

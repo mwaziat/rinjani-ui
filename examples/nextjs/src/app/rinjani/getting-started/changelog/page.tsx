@@ -1,59 +1,18 @@
 import React from "react"
+import { DocNavigation } from "@/components/docs/DocNavigation"
 import { PageHeader } from "@/components/docs/PageHeader"
 import { TableOfContents } from "@/components/docs/TableOfContents"
+import { releases as publicReleases, type ChangeType } from "./changelog"
 
-const tocItems = [
-  { id: "v1-0-0", label: "v1.0.0", depth: 2 as const },
-]
+const tocItems = publicReleases.map((release) => ({
+  id: `v${release.version.replace(/\./g, "-")}`,
+  label: `v${release.version}`,
+  depth: 2 as const,
+}))
 
-interface ChangeEntry {
-  type: "added" | "changed" | "fixed"
-  text: string
-}
+tocItems.push({ id: "related-docs", label: "Related documentation", depth: 2 as const })
 
-interface Release {
-  version: string
-  date: string
-  entries: ChangeEntry[]
-}
-
-const releases: Release[] = [
-  {
-    version: "1.0.0",
-    date: "2025-01-01",
-    entries: [
-      { type: "added", text: "Initial release with 20+ components" },
-      { type: "added", text: "Button, IconButton with 4 variants, 7 colors, 6 sizes" },
-      { type: "added", text: "Badge with pill support and left/right icons" },
-      { type: "added", text: "Breadcrumb with contained mode and custom separator" },
-      { type: "added", text: "Card with Header, Content, Footer sub-components" },
-      { type: "added", text: "Tooltip with floating-ui positioning and arrow" },
-      { type: "added", text: "Dropdown with Dropdown.List and Dropdown.Item composition" },
-      { type: "added", text: "Tabs with vertical placement and fullWidth alignment" },
-      { type: "added", text: "Drawer with 4 positions and percentage sizes" },
-      { type: "added", text: "Tree with drag-and-drop, async loading, and node actions" },
-      { type: "added", text: "Alert with close/minimize actions and auto-dismiss duration" },
-      { type: "added", text: "Dialog — imperative API via useDialog hook" },
-      { type: "added", text: "Toast — imperative API via useToast hook, 8 placements" },
-      { type: "added", text: "Modal with scroll modes and backdrop close" },
-      { type: "added", text: "DataTable with sorting, pagination, row selection, expandable rows" },
-      { type: "added", text: "EditDataTable with inline cell editing and save/cancel toolbar" },
-      { type: "added", text: "Panel (PanelLayout) with collapsible sidebar and navbar" },
-      { type: "added", text: "Lightbox with thumbnails, zoom, autoplay, and drag navigation" },
-      { type: "added", text: "InputField with floating label, password toggle, multiline, currency format" },
-      { type: "added", text: "Select and SelectMultiple with clearable and floating label" },
-      { type: "added", text: "Autocomplete with add-item mode" },
-      { type: "added", text: "Checkbox and Radio group components" },
-      { type: "added", text: "Switch with label placement options" },
-      { type: "added", text: "DatePicker with adapter pattern (native Date, Day.js, Moment)" },
-      { type: "added", text: "Dropzone with grid layout, file previews, and validation" },
-      { type: "added", text: "Full TypeScript definitions for every component" },
-      { type: "added", text: "CSS custom property tokens for easy theming" },
-    ],
-  },
-]
-
-const typeColors: Record<ChangeEntry["type"], string> = {
+const typeColors: Record<ChangeType, string> = {
   added: "bg-success-100 text-success-700",
   changed: "bg-warning-100 text-warning-700",
   fixed: "bg-info-100 text-info-700",
@@ -61,8 +20,8 @@ const typeColors: Record<ChangeEntry["type"], string> = {
 
 export default function ChangelogPage() {
   return (
-    <div className="flex gap-10">
-      <div className="flex-1 min-w-0 py-8 px-2">
+    <div className="flex w-full gap-10 px-6 py-10">
+      <div className="min-w-0 flex-1">
         <PageHeader
           category="Getting Started"
           title="Changelog"
@@ -70,12 +29,13 @@ export default function ChangelogPage() {
         />
 
         <div className="mt-10 space-y-12">
-          {releases.map((release) => (
+          {publicReleases.map((release) => (
             <section key={release.version} id={`v${release.version.replace(/\./g, "-")}`} className="scroll-mt-24">
               <div className="flex items-baseline gap-3 mb-4">
                 <h2 className="text-xl font-semibold text-neutral-800">v{release.version}</h2>
                 <span className="text-sm text-neutral-400">{release.date}</span>
               </div>
+              <p className="mb-5 text-sm leading-6 text-neutral-600">{release.summary}</p>
               <ul className="space-y-2">
                 {release.entries.map((entry, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-neutral-700">
@@ -89,6 +49,33 @@ export default function ChangelogPage() {
             </section>
           ))}
         </div>
+
+        <DocNavigation
+          previous={{ href: "/rinjani/getting-started/theming", title: "Theming" }}
+          next={{ href: "/rinjani/components/general/button", title: "Button" }}
+          related={[
+            {
+              href: "/rinjani/getting-started/overview",
+              title: "Overview",
+              description: "Learn how the library is structured.",
+            },
+            {
+              href: "/rinjani/getting-started/installation",
+              title: "Installation",
+              description: "Add Rinjani UI to your project.",
+            },
+            {
+              href: "/rinjani/getting-started/theming",
+              title: "Theming",
+              description: "Customize tokens and color scales.",
+            },
+            {
+              href: "/rinjani/components/data-display/data-table",
+              title: "DataTable",
+              description: "Explore a component with practical data features.",
+            },
+          ]}
+        />
       </div>
 
       <TableOfContents items={tocItems} />

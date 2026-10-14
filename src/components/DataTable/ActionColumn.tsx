@@ -2,6 +2,7 @@ import React from 'react'
 import { EyeIcon, PencilIcon, TrashIcon, MoreVerticalIcon } from '../Icons'
 import { IconButton } from '../Button'
 import { Dropdown, DropdownList, DropdownItem } from '../Dropdown'
+import { useRinjaniLocale } from '../../i18n'
 import type { ActionColumnConfig } from './DataTable.types'
 
 interface ActionColumnProps<T> {
@@ -10,6 +11,7 @@ interface ActionColumnProps<T> {
 }
 
 export function ActionColumn<T>({ config, row }: ActionColumnProps<T>) {
+  const { messages } = useRinjaniLocale()
   const {
     type = 'inline',
     variant = 'soft',
@@ -51,21 +53,21 @@ export function ActionColumn<T>({ config, row }: ActionColumnProps<T>) {
       if (key === 'detail') {
         return onDetail ? (
           <DropdownItem key="detail" leftIcon={<EyeIcon size={14} />} onClick={() => onDetail(row)}>
-            Detail
+            {messages.dataTable.detail}
           </DropdownItem>
         ) : null
       }
       if (key === 'edit') {
         return onEdit ? (
           <DropdownItem key="edit" leftIcon={<PencilIcon size={14} />} onClick={() => onEdit(row)}>
-            Edit
+            {messages.dataTable.edit}
           </DropdownItem>
         ) : null
       }
       if (key === 'delete') {
         return onDelete ? (
           <DropdownItem key="delete" leftIcon={<TrashIcon size={14} />} color="danger" onClick={() => onDelete(row)}>
-            Delete
+            {messages.dataTable.delete}
           </DropdownItem>
         ) : null
       }
@@ -114,7 +116,7 @@ export function ActionColumn<T>({ config, row }: ActionColumnProps<T>) {
           color={color}
           size={size}
           onClick={() => onDetail(row)}
-          title="Detail"
+          title={messages.dataTable.detail}
         />
       ) : null
     }
@@ -127,7 +129,7 @@ export function ActionColumn<T>({ config, row }: ActionColumnProps<T>) {
           color={color}
           size={size}
           onClick={() => onEdit(row)}
-          title="Edit"
+          title={messages.dataTable.edit}
         />
       ) : null
     }
@@ -140,7 +142,7 @@ export function ActionColumn<T>({ config, row }: ActionColumnProps<T>) {
           color="danger"
           size={size}
           onClick={() => onDelete(row)}
-          title="Delete"
+          title={messages.dataTable.delete}
         />
       ) : null
     }

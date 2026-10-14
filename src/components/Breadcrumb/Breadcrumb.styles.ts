@@ -94,6 +94,15 @@ export const activeSubtitleSizes = {
   xl: 'text-sm',
 } satisfies Record<BreadcrumbSize, string>
 
+export const radiusBySize = {
+  xxs: 'rounded',
+  xs: 'rounded',
+  sm: 'rounded-md',
+  md: 'rounded-lg',
+  lg: 'rounded-xl',
+  xl: 'rounded-xl',
+} satisfies Record<BreadcrumbSize, string>
+
 export const pathSizes = {
   xxs: 'px-1.5 py-1 text-[9px] gap-1',
   xs: 'px-2 py-1 text-[10px] gap-1',

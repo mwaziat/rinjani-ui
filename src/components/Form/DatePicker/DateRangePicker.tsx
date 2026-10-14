@@ -50,7 +50,7 @@ export function DateRangePicker<T = Date>({
   id,
   placeholder = 'Select date range',
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   isClearable = false,
 }: DateRangePickerProps<T>): React.ReactNode {

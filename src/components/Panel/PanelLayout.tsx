@@ -68,7 +68,7 @@ export const PanelLayout = ({
           toggleSidebar={handleToggleMenuMobileDesk} 
           {...navbar}
         />
-        <main className="p-4 lg:p-8 flex-1 overflow-x-hidden">
+        <main className="p-4 lg:p-8 flex-1">
           <div className="w-full">
             {children}
           </div>

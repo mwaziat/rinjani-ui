@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Card, CardHeader, CardContent, CardFooter } from './index'
+import { Card, CardMedia, CardHeader, CardContent, CardFooter } from './index'
 import { Button } from '../Button'
 import { SettingsIcon, ImageIcon } from '../Icons'
 
@@ -58,15 +58,15 @@ export const Showcase: Story = {
           </Card>
 
           <Card noPadding>
-            <div className="h-40 bg-neutral-100 flex items-center justify-center text-neutral-400">
+            <CardMedia height={160} className="bg-neutral-100 flex items-center justify-center text-neutral-400">
               <ImageIcon size={40} />
-            </div>
+            </CardMedia>
             <div className="p-6">
-              <CardHeader title="Media Card" subtitle="Card with noPadding prop" className="mb-4!" />
+              <CardHeader title="Media Card" subtitle="CardMedia with noPadding" className="mb-4!" />
               <CardContent>
                 <p className="text-neutral-600 text-sm">
-                  By passing the <code className="bg-neutral-100 px-1 py-0.5 rounded text-primary-600">noPadding</code> prop, 
-                  you can remove the default padding to allow images or other elements to stretch to the edges.
+                  Use <code className="bg-neutral-100 px-1 py-0.5 rounded text-primary-600">CardMedia</code> with
+                  <code className="ml-1 bg-neutral-100 px-1 py-0.5 rounded text-primary-600">noPadding</code> to keep media edge-to-edge.
                 </p>
               </CardContent>
             </div>

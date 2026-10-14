@@ -13,7 +13,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-icons": "^5.6.0",
-    "rinjani-ui": "file:./rinjani-ui-0.0.11.tgz",
+    "rinjani-ui": "file:../..",
     "shiki": "^1.29.2"
   },
   "devDependencies": {

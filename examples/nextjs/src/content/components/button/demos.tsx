@@ -32,12 +32,12 @@ export function ColorsDemo() {
 export function SizesDemo() {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Button size="xxs">XXSmall</Button>
-      <Button size="xs">XSmall</Button>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
-      <Button size="xl">XLarge</Button>
+      <Button size="xxs">Button XXS</Button>
+      <Button size="xs">Button XS</Button>
+      <Button size="sm">Button SM</Button>
+      <Button size="md">Button MD</Button>
+      <Button size="lg">Button LG</Button>
+      <Button size="xl">Button XL</Button>
     </div>
   )
 }
@@ -96,7 +96,7 @@ export function DisabledDemo() {
 
 export function FullWidthDemo() {
   return (
-    <div className="w-full flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <Button fullWidth>Full Width Filled</Button>
       <Button fullWidth variant="outlined">Full Width Outlined</Button>
     </div>
@@ -106,11 +106,11 @@ export function FullWidthDemo() {
 export function IconButtonDemo() {
   return (
     <div className="flex flex-wrap gap-3">
-      <IconButton icon={<FiSettings size={16} />} />
-      <IconButton icon={<FiSave size={16} />} variant="outlined" />
-      <IconButton icon={<FiTrash2 size={16} />} variant="soft" color="danger" />
-      <IconButton icon={<FiPlus size={16} />} isPill />
-      <IconButton icon={<FiDownload size={16} />} variant="soft" color="info" isPill />
+      <IconButton icon={<FiSettings size={16} />} aria-label="Settings" />
+      <IconButton icon={<FiSave size={16} />} variant="outlined" aria-label="Save" />
+      <IconButton icon={<FiTrash2 size={16} />} variant="soft" color="danger" aria-label="Delete" />
+      <IconButton icon={<FiPlus size={16} />} isPill aria-label="Add" />
+      <IconButton icon={<FiDownload size={16} />} variant="soft" color="info" isPill aria-label="Download" />
     </div>
   )
 }

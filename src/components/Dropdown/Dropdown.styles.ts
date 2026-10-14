@@ -1,20 +1,21 @@
-import type { DropdownColor, DropdownSize, DropdownVariant } from './Dropdown.types'
+import type { CSSProperties } from 'react'
+import type { DropdownColor, DropdownPlacement, DropdownSize, DropdownVariant } from './Dropdown.types'
 
 export const baseStyles = "inline-flex items-center justify-center font-semibold tracking-wide transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
 
 export const sizes: Record<DropdownSize, string> = {
-  xxs: "min-h-7 px-2 py-1 text-[10px] gap-1",
+  xxs: "min-h-6 px-2 py-1 text-[10px] gap-1",
   xs: "min-h-8 px-2.5 py-1.5 text-xs gap-1.5",
-  sm: "min-h-9 px-3 py-2 text-sm gap-1.5",
-  md: "min-h-11 px-4 py-2.5 text-base gap-2",
-  lg: "min-h-[52px] px-5 py-3 text-lg gap-2.5",
-  xl: "min-h-14 px-6 py-3.5 text-xl gap-3"
+  sm: "min-h-10 px-3 py-2 text-sm gap-1.5",
+  md: "min-h-12 px-4 py-2.5 text-base gap-2",
+  lg: "min-h-14 px-5 py-3 text-lg gap-2.5",
+  xl: "min-h-16 px-6 py-3.5 text-xl gap-3"
 }
 
 export const radiusBySize: Record<DropdownSize, string> = {
-  xxs: 'rounded-md',
-  xs: 'rounded-md',
-  sm: 'rounded-lg',
+  xxs: 'rounded',
+  xs: 'rounded',
+  sm: 'rounded-md',
   md: 'rounded-lg',
   lg: 'rounded-xl',
   xl: 'rounded-xl',
@@ -67,4 +68,38 @@ export const itemColorClasses: Record<DropdownColor, string> = {
   danger: 'text-danger-600 hover:bg-danger-50',
   info: 'text-info-600 hover:bg-info-50',
   neutral: 'text-neutral-700 hover:bg-neutral-100',
+}
+
+export const getDropdownArrowStyle = (
+  placement: Exclude<DropdownPlacement, 'auto'>,
+  offset: number,
+): CSSProperties => {
+  const isVerticalPlacement = placement.startsWith('top') || placement.startsWith('bottom')
+  const arrowStyle: CSSProperties = {
+    position: 'absolute',
+    width: '8px',
+    height: '8px',
+    backgroundColor: 'var(--color-white)',
+    borderColor: 'var(--color-neutral-200)',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    pointerEvents: 'none',
+    ...(isVerticalPlacement
+      ? { left: `${offset}px`, transform: 'translateX(-50%) rotate(45deg)' }
+      : { top: `${offset}px`, transform: 'translateY(-50%) rotate(45deg)' }),
+  }
+
+  if (placement.startsWith('top')) {
+    return { ...arrowStyle, bottom: '-5px', borderTopWidth: 0, borderLeftWidth: 0 }
+  }
+
+  if (placement.startsWith('bottom')) {
+    return { ...arrowStyle, top: '-5px', borderBottomWidth: 0, borderRightWidth: 0 }
+  }
+
+  if (placement.startsWith('left')) {
+    return { ...arrowStyle, right: '-5px', borderBottomWidth: 0, borderLeftWidth: 0 }
+  }
+
+  return { ...arrowStyle, left: '-5px', borderTopWidth: 0, borderRightWidth: 0 }
 }

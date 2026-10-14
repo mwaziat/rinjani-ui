@@ -44,6 +44,7 @@ const sizes: FormSize[] = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl']
 
 const ShowcaseDemo = () => {
     const [matrixValue, setMatrixValue] = useState('')
+    const [numberValue, setNumberValue] = useState<number | ''>(0)
 
     return (
       <div className="flex flex-col gap-8 w-full">
@@ -118,6 +119,12 @@ const ShowcaseDemo = () => {
               <InputField label="Right Icon" rightIcon={<MessageSquareIcon size={18} />} placeholder="Enter message" />
               <InputField label="Password" isPassword placeholder="Enter password" />
               <InputField label="Currency Format" format="currency" currency="IDR" locale="id-ID" placeholder="0" defaultValue="1500000" />
+              <InputField
+                label="Number with zero default"
+                type="number"
+                value={numberValue}
+                onChange={(event) => setNumberValue(event.target.value === '' ? '' : Number(event.target.value))}
+              />
             </div>
 
             <div className="flex flex-col gap-6">

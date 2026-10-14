@@ -12,6 +12,14 @@ type CurrencySelection = {
   endDigitIndex: number
 }
 
+type NumberSelection = {
+  normalizedValue: string
+  start: number
+  end: number
+}
+
+const normalizeNumberInputValue = (value: string) => value.replace(/^(-?)0+(?=\d)/, '$1')
+
 const countDigitsBefore = (value: string, position: number) =>
   (value.slice(0, position).match(/[0-9]/g) ?? []).length
 
@@ -64,7 +72,7 @@ export const InputField = ({
   locale,
   floating = false,
   variant = 'outlined',
-  size = 'md',
+  size = 'sm',
   color = 'primary',
   leftIcon,
   rightIcon,
@@ -89,8 +97,10 @@ export const InputField = ({
   const [uncontrolledCurrencyRawValue, setUncontrolledCurrencyRawValue] = useState(() => parseCurrency(String(defaultValue ?? ''), currency ?? '', locale))
   const inputRef = useRef<HTMLInputElement>(null)
   const pendingCurrencySelectionRef = useRef<CurrencySelection | null>(null)
+  const pendingNumberSelectionRef = useRef<NumberSelection | null>(null)
   const inputId = useStableInputId(id, 'input-field')
   const isCurrencyMode = format === 'currency' && !isMultiline && !isPassword && Boolean(currency?.trim())
+  const isNumberMode = type === 'number' && !isCurrencyMode && !isMultiline && !isPassword
   const isControlled = value !== undefined
 
   const rawCurrencyValue = isControlled ? parseCurrency(String(value ?? ''), currency ?? '', locale) : uncontrolledCurrencyRawValue
@@ -122,14 +132,37 @@ export const InputField = ({
   const inputProps = props as Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue' | 'onChange' | 'type' | 'inputMode'>
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = event.currentTarget
+    const selectionStart = target.selectionStart ?? target.value.length
+    const selectionEnd = target.selectionEnd ?? selectionStart
+    const nextValue = isNumberMode ? normalizeNumberInputValue(target.value) : target.value
+
+    if (isNumberMode) {
+      if (nextValue !== target.value) {
+        const removedLeadingCharacters = target.value.length - nextValue.length
+        const signOffset = target.value.startsWith('-') ? 1 : 0
+        const adjustSelection = (position: number) => (
+          position > signOffset
+            ? Math.max(signOffset, position - removedLeadingCharacters)
+            : position
+        )
+
+        target.value = nextValue
+        pendingNumberSelectionRef.current = {
+          normalizedValue: nextValue,
+          start: adjustSelection(selectionStart),
+          end: adjustSelection(selectionEnd),
+        }
+      } else {
+        pendingNumberSelectionRef.current = null
+      }
+    }
+
     if (!isControlled) {
-      setUncontrolledValue(event.target.value)
+      setUncontrolledValue(nextValue)
     }
 
     if (isCurrencyMode && currency && 'value' in event.target) {
-      const target = event.currentTarget
-      const selectionStart = target.selectionStart ?? target.value.length
-      const selectionEnd = target.selectionEnd ?? selectionStart
       const rawNextValue = parseCurrency(target.value, currency, locale)
       const formattedNextValue = formatCurrency(rawNextValue, currency, locale)
 
@@ -157,20 +190,34 @@ export const InputField = ({
   }
 
   useIsomorphicLayoutEffect(() => {
-    if (!isCurrencyMode || !inputRef.current) {
+    if (isCurrencyMode && inputRef.current) {
+      const pendingSelection = pendingCurrencySelectionRef.current
+      if (!pendingSelection || inputRef.current.value !== pendingSelection.formattedValue) {
+        return
+      }
+
+      const start = positionAfterDigitCount(inputRef.current.value, pendingSelection.startDigitIndex)
+      const end = positionAfterDigitCount(inputRef.current.value, pendingSelection.endDigitIndex)
+      inputRef.current.setSelectionRange(start, end)
       pendingCurrencySelectionRef.current = null
       return
     }
 
-    const pendingSelection = pendingCurrencySelectionRef.current
-    if (!pendingSelection || inputRef.current.value !== pendingSelection.formattedValue) {
+    pendingCurrencySelectionRef.current = null
+
+    if (!isNumberMode || !inputRef.current) {
+      pendingNumberSelectionRef.current = null
+      pendingCurrencySelectionRef.current = null
       return
     }
 
-    const start = positionAfterDigitCount(inputRef.current.value, pendingSelection.startDigitIndex)
-    const end = positionAfterDigitCount(inputRef.current.value, pendingSelection.endDigitIndex)
-    inputRef.current.setSelectionRange(start, end)
-    pendingCurrencySelectionRef.current = null
+    const pendingSelection = pendingNumberSelectionRef.current
+    if (!pendingSelection || inputRef.current.value !== pendingSelection.normalizedValue) {
+      return
+    }
+
+    inputRef.current.setSelectionRange(pendingSelection.start, pendingSelection.end)
+    pendingNumberSelectionRef.current = null
   })
 
   return (

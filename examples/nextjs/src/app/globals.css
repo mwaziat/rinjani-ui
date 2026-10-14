@@ -1,4 +1,19 @@
 @import "tailwindcss";
+@import "rinjani-ui/theme.css";
+
+pre.shiki {
+  margin: 0;
+  overflow-x: auto;
+  padding: 2.5rem 1.25rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+pre.shiki code {
+  display: block;
+  min-width: max-content;
+}
 
 @theme {
   

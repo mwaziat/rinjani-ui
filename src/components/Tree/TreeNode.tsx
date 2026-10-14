@@ -6,6 +6,7 @@ import type { TreeActionConfig, TreeNodeData, TreeNodeProps } from './Tree.types
 import {
   getRowStyle,
   actionColorClass,
+  nodeRadiusClass,
   nodeSizeClass,
   getBasePadding,
   iconButtonSizeClass,
@@ -14,6 +15,7 @@ import {
   lineColorClass,
 } from './Tree.styles'
 import { getNextPathIndexes, resolveHasChildren } from './Tree.utils'
+import { useRinjaniLocale } from '../../i18n'
 
 const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
   node,
@@ -43,6 +45,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
   nodeActions,
   siblingsHaveChildren,
 }) => {
+  const { messages } = useRinjaniLocale()
   const children = Array.isArray(node.children) ? node.children : []
   const hasChildren = resolveHasChildren(node, children)
   const reserveToggle = hasChildren || siblingsHaveChildren
@@ -73,13 +76,13 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
   let childrenWrapperClass = 'flex flex-col'
 
   if (variant === 'minimal') {
-    rowClass += ' rounded-lg'
+    rowClass += ` ${nodeRadiusClass(size)}`
     rowStyle = { paddingLeft: `${visualLevel * 24 + basePadding}px` }
   } else if (variant === 'filled') {
-    rowClass += ' rounded-lg mb-1.5'
+    rowClass += ` ${nodeRadiusClass(size)} mb-1.5`
     rowStyle = { marginLeft: `${visualLevel * 24}px` }
   } else if (variant === 'lined') {
-    rowClass += ' rounded-md'
+    rowClass += ` ${nodeRadiusClass(size)}`
     childrenWrapperClass += ` border-l border-dashed ${lineColorClass(color)}`
     childrenWrapperStyle = { marginLeft: `${lineOffset}px`, paddingLeft: '16px' }
   }
@@ -149,7 +152,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
               aria-hidden={!hasChildren}
               tabIndex={-1}
               onClick={handleToggle}
-              className={`${iconButtonSizeClass(size)} flex items-center justify-center rounded-md transition-colors ${
+              className={`${iconButtonSizeClass(size)} flex items-center justify-center ${nodeRadiusClass(size)} transition-colors ${
                 hasChildren
                   ? isActive && variant === 'filled'
                     ? 'text-white hover:bg-white/20'
@@ -203,7 +206,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
                   event.stopPropagation()
                   action.onClick?.(node)
                 }}
-                className={`tree-action-btn ${iconButtonSizeClass(size)} rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                className={`tree-action-btn ${iconButtonSizeClass(size)} ${nodeRadiusClass(size)} transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                   isActive && variant === 'filled' ? 'text-white hover:bg-white/20' : action.className || actionColorClass(color)
                 }`}
               >
@@ -262,7 +265,7 @@ const TreeNodeItemComponent: React.FC<TreeNodeProps> = ({
           ) : (
             <div className={`flex items-center gap-2 px-3 py-2 ${labelTextClass(size)} text-neutral-400`}>
               <LoaderIcon size={14} />
-              <span>Loading</span>
+              <span>{messages.tree.loading}</span>
             </div>
           )}
         </div>

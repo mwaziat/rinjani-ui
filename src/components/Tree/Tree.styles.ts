@@ -88,14 +88,21 @@ export const actionColorClass = (color: TreeColor) => {
   return 'text-neutral-600 hover:bg-neutral-100'
 }
 
+export const nodeRadiusClass = (size: TreeSize) => {
+  if (size === 'xxs' || size === 'xs') return 'rounded'
+  if (size === 'sm') return 'rounded-md'
+  if (size === 'md') return 'rounded-lg'
+  return 'rounded-xl'
+}
+
 export const nodeSizeClass = (size: TreeSize) => {
-  if (size === 'xxs') return 'min-h-7 py-1 px-2 text-[10px]'
+  if (size === 'xxs') return 'min-h-6 py-1 px-2 text-[10px]'
   if (size === 'xs') return 'min-h-8 py-1.5 px-2.5 text-xs'
-  if (size === 'sm') return 'min-h-9 py-2 px-3 text-sm'
-  if (size === 'md') return 'min-h-11 py-2.5 px-4 text-base'
-  if (size === 'lg') return 'min-h-13 py-3 px-5 text-lg'
-  if (size === 'xl') return 'min-h-14 py-3.5 px-6 text-xl'
-  return 'min-h-9 py-2 px-3 text-sm'
+  if (size === 'sm') return 'min-h-10 py-2 px-3 text-sm'
+  if (size === 'md') return 'min-h-12 py-2.5 px-4 text-base'
+  if (size === 'lg') return 'min-h-14 py-3 px-5 text-lg'
+  if (size === 'xl') return 'min-h-16 py-3.5 px-6 text-xl'
+  return 'min-h-10 py-2 px-3 text-sm'
 }
 
 export const getBasePadding = (size: TreeSize) => {
@@ -111,21 +118,21 @@ export const getBasePadding = (size: TreeSize) => {
 export const iconButtonSizeClass = (size: TreeSize) => {
   if (size === 'xxs') return 'w-5 h-5'
   if (size === 'xs') return 'w-6 h-6'
-  if (size === 'sm') return 'w-7 h-7'
-  if (size === 'md') return 'w-8 h-8'
-  if (size === 'lg') return 'w-10 h-10'
-  if (size === 'xl') return 'w-12 h-12'
-  return 'w-7 h-7'
+  if (size === 'sm') return 'w-8 h-8'
+  if (size === 'md') return 'w-10 h-10'
+  if (size === 'lg') return 'w-12 h-12'
+  if (size === 'xl') return 'w-14 h-14'
+  return 'w-8 h-8'
 }
 
 export const getIconWidth = (size: TreeSize) => {
   if (size === 'xxs') return 20
   if (size === 'xs') return 24
-  if (size === 'sm') return 28
-  if (size === 'md') return 32
-  if (size === 'lg') return 40
-  if (size === 'xl') return 48
-  return 28
+  if (size === 'sm') return 32
+  if (size === 'md') return 40
+  if (size === 'lg') return 48
+  if (size === 'xl') return 56
+  return 32
 }
 
 export const labelTextClass = (size: TreeSize) => {

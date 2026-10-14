@@ -63,7 +63,7 @@ export interface DropzoneProps {
   multiple?: boolean
   /** The main title text inside the dropzone container. */
   title?: React.ReactNode
-  /** The size of the component. @default "md" */
+  /** The size of the component. @default "sm" */
   size?: DropzoneSize
   /** The visual variant style. @default "outlined" */
   variant?: DropzoneVariant

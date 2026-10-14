@@ -18,9 +18,14 @@ export interface DrawerProps {
   isOpen: boolean
   /** 
    * Callback fired when the user attempts to close the drawer 
-   * (e.g., clicking the backdrop or pressing the Escape key).
+   * by clicking the backdrop or using a consumer-provided close control.
    */
   onClose: () => void
+  /**
+   * If true, clicking the shaded backdrop calls onClose.
+   * @default true
+   */
+  closeOnBackdrop?: boolean
   /** 
    * The content to be rendered inside the drawer.
    * Typically composed of Drawer.Header, Drawer.Content, and Drawer.Footer.

@@ -50,17 +50,17 @@ export const floatingActiveSizeMap: Record<FormSize, string> = {
 }
 
 export const singleSizeMap: Record<FormSize, string> = {
-  xxs: `min-h-7 py-1 ${textSizeMap.xxs}`,
+  xxs: `min-h-6 py-1 ${textSizeMap.xxs}`,
   xs: `min-h-8 py-1.5 ${textSizeMap.xs}`,
-  sm: `min-h-9 py-1.5 ${textSizeMap.sm}`,
-  md: `min-h-11 py-2 ${textSizeMap.md}`,
-  lg: `min-h-[52px] py-2.5 ${textSizeMap.lg}`,
-  xl: `min-h-14 py-3 ${textSizeMap.xl}`,
+  sm: `min-h-10 py-2 ${textSizeMap.sm}`,
+  md: `min-h-12 py-2.5 ${textSizeMap.md}`,
+  lg: `min-h-14 py-3 ${textSizeMap.lg}`,
+  xl: `min-h-16 py-3.5 ${textSizeMap.xl}`,
 }
 
 export const radiusMap: Record<FormSize, string> = {
   xxs: 'rounded',
-  xs: 'rounded-md',
+  xs: 'rounded',
   sm: 'rounded-md',
   md: 'rounded-lg',
   lg: 'rounded-xl',
@@ -125,12 +125,12 @@ export const multiLineActive: Record<FormColor, string> = {
 }
 
 export const multiSizeMap: Record<FormSize, string> = {
-  xxs: 'min-h-7 py-1 text-[10px]',
+  xxs: 'min-h-6 py-1 text-[10px]',
   xs: 'min-h-8 py-1.5 text-[10px]',
-  sm: 'min-h-9 py-2 text-[11px]',
-  md: 'min-h-11 py-2.5 text-xs',
-  lg: 'min-h-[52px] py-3 text-sm',
-  xl: 'min-h-14 py-3.5 text-base',
+  sm: 'min-h-10 py-2 text-[11px]',
+  md: 'min-h-12 py-2.5 text-xs',
+  lg: 'min-h-14 py-3 text-sm',
+  xl: 'min-h-16 py-3.5 text-base',
 }
 
 export const chipSizes: Record<FormSize, string> = {

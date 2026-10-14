@@ -39,6 +39,8 @@ export interface DropdownContentPosition {
   top: number
   left: number
   isPositioned: boolean
+  currentPlacement: Exclude<DropdownPlacement, 'auto'>
+  arrowOffset: number
 }
 
 export interface DropdownProps {
@@ -76,7 +78,7 @@ export interface DropdownProps {
    */
   placement?: DropdownPlacement
   /**
-   * If true, displays a small chevron arrow on the trigger button.
+   * If true, displays a chevron on the trigger and a directional arrow on the menu panel.
    * @default true
    */
   showArrow?: boolean

@@ -1,4 +1,5 @@
-import type { TooltipColor, TooltipSize, TooltipVariant } from './Tooltip.types'
+import type { CSSProperties } from 'react'
+import type { TooltipColor, TooltipPlacement, TooltipSize, TooltipVariant } from './Tooltip.types'
 
 export const baseTooltipStyles = "fixed z-[160] whitespace-nowrap font-medium transition-opacity duration-200 animate-in fade-in zoom-in-95"
 
@@ -23,7 +24,7 @@ export const radiusBySize = {
   xxs: 'rounded',
   xs: 'rounded',
   sm: 'rounded-md',
-  md: 'rounded-md',
+  md: 'rounded-lg',
   lg: 'rounded-lg',
   xl: 'rounded-xl',
 } satisfies Record<TooltipSize, string>
@@ -57,3 +58,85 @@ export const variants = {
     neutral: "bg-neutral-100 border border-neutral-200 text-neutral-800 shadow-sm",
   }
 } satisfies Record<TooltipVariant, Record<TooltipColor, string>>
+
+const tooltipColorVariables = {
+  primary: {
+    filled: 'var(--color-primary-600)',
+    soft: 'var(--color-primary-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-primary-500)',
+  },
+  secondary: {
+    filled: 'var(--color-secondary-600)',
+    soft: 'var(--color-secondary-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-secondary-500)',
+  },
+  success: {
+    filled: 'var(--color-success-600)',
+    soft: 'var(--color-success-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-success-500)',
+  },
+  warning: {
+    filled: 'var(--color-warning-600)',
+    soft: 'var(--color-warning-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-warning-500)',
+  },
+  danger: {
+    filled: 'var(--color-danger-600)',
+    soft: 'var(--color-danger-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-danger-500)',
+  },
+  info: {
+    filled: 'var(--color-info-600)',
+    soft: 'var(--color-info-50)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-info-500)',
+  },
+  neutral: {
+    filled: 'var(--color-neutral-800)',
+    soft: 'var(--color-neutral-100)',
+    outlined: 'var(--color-white)',
+    border: 'var(--color-neutral-300)',
+  },
+} satisfies Record<TooltipColor, Record<'filled' | 'soft' | 'outlined' | 'border', string>>
+
+export const getTooltipArrowStyle = (
+  placement: Exclude<TooltipPlacement, 'auto'>,
+  variant: TooltipVariant,
+  color: TooltipColor,
+  offset: number,
+): CSSProperties => {
+  const isVerticalPlacement = placement.startsWith('top') || placement.startsWith('bottom')
+  const isFilled = variant === 'filled'
+  const arrowStyle: CSSProperties = {
+    position: 'absolute',
+    width: '8px',
+    height: '8px',
+    backgroundColor: tooltipColorVariables[color][variant],
+    borderColor: tooltipColorVariables[color].border,
+    borderStyle: 'solid',
+    borderWidth: isFilled ? 0 : '1px',
+    pointerEvents: 'none',
+    ...(isVerticalPlacement
+      ? { left: `${offset}px`, transform: 'translateX(-50%) rotate(45deg)' }
+      : { top: `${offset}px`, transform: 'translateY(-50%) rotate(45deg)' }),
+  }
+
+  if (placement.startsWith('top')) {
+    return { ...arrowStyle, bottom: isFilled ? '-4px' : '-5px', ...(isFilled ? {} : { borderTopWidth: 0, borderLeftWidth: 0 }) }
+  }
+
+  if (placement.startsWith('bottom')) {
+    return { ...arrowStyle, top: isFilled ? '-4px' : '-5px', ...(isFilled ? {} : { borderBottomWidth: 0, borderRightWidth: 0 }) }
+  }
+
+  if (placement.startsWith('left')) {
+    return { ...arrowStyle, right: isFilled ? '-4px' : '-5px', ...(isFilled ? {} : { borderBottomWidth: 0, borderLeftWidth: 0 }) }
+  }
+
+  return { ...arrowStyle, left: isFilled ? '-4px' : '-5px', ...(isFilled ? {} : { borderTopWidth: 0, borderRightWidth: 0 }) }
+}

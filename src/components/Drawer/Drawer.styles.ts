@@ -8,4 +8,4 @@ export const positionStyles: Record<DrawerPosition, string> = {
 }
 
 export const baseBackdropClasses = "absolute inset-0 bg-neutral-950/40 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
-export const baseDrawerClasses = "absolute bg-white border-neutral-200 shadow-2xl transition-transform duration-300 ease-out flex flex-col"
+export const baseDrawerClasses = "absolute bg-white border-neutral-200 shadow-2xl duration-300 ease-out flex flex-col"
