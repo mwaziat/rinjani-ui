@@ -6,6 +6,7 @@ import { XIcon, ChevronLeftIcon, ChevronRightIcon, ZoomInIcon, ZoomOutIcon, Play
 import type { LightboxProps } from './Lightbox.types'
 import { getNextIndex, getPrevIndex, canGoNext, canGoPrev } from './Lightbox.utils'
 import { useIsHydrated } from '../../hooks/useIsHydrated'
+import { LIGHTBOX_Z_INDEX } from '../../utils/layers'
 
 /**
  * A highly interactive, full-screen image gallery and image viewing component.
@@ -178,7 +179,10 @@ export const Lightbox: React.FC<LightboxProps> = ({
   }
 
   const portalContent = (
-    <div className={`fixed inset-0 z-9999 flex flex-col ${open ? 'visible' : 'invisible delay-300'}`}>
+    <div
+      className={`fixed inset-0 flex flex-col ${open ? 'visible' : 'invisible delay-300'}`}
+      style={{ zIndex: LIGHTBOX_Z_INDEX }}
+    >
       <div 
         className={`absolute inset-0 bg-black/95 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`} 
       />
